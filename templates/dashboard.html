@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>
+        Dashboard
+    </title>
+
+</head>
+<body>
+    <h1>
+        Tender Comparison & Analysis System
+    </h1>
+
+    <hr>
+
+    <h2>
+        Upload Tender Files
+    </h2>
+
+    <form
+        method="POST"
+        action="/upload"
+        enctype="multipart/form-data">
+
+        <input
+            type="file"
+            name="tender_files"
+            multiple
+            required>
+
+        <br><br>
+
+        <button type="submit">
+            Upload Files
+        </button>
+    </form>
+
+    <hr>
+
+    <h2>
+        Uploaded Tenders
+    </h2>
+
+    {% if tenders %}
+
+        <form
+            method="POST"
+            action="/compare">
+
+            {% for tender in tenders %}
+
+                <input
+                    type="checkbox"
+                    name="selected_tenders"
+                    value="{{ tender[0] }}">
+
+                {{ tender[1] }}
+
+                <br>
+
+            {% endfor %}
+
+            <br>
+
+            <button type="submit">
+                Compare Selected Tenders
+            </button>
+
+        </form>
+
+    {% else %}
+
+        <p>
+            No tenders uploaded yet.
+        </p>
+
+    {% endif %}
+    <hr>
+
+    <a href="/logout">
+        Logout
+    </a>
+
+</body>
+</html>

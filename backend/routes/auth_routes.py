@@ -1,0 +1,74 @@
+from flask import Blueprint, render_template,request
+import bcrypt
+from flask import session, redirect
+from backend.utils.db import get_connection
+
+auth_bp = Blueprint('auth', __name__)
+
+@auth_bp.route('/')
+def home():
+    return render_template('index.html')
+
+@auth_bp.route('/login', methods=['GET','POST'])
+def login():
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+        
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        query = """
+        SELECT id,password
+        FROM users
+        WHERE email=%s
+        """
+
+        cursor.execute(query,(email,))
+
+        user = cursor.fetchone()
+
+        cursor.close()
+        conn.close()
+
+        if user:
+            stored_hash = user[1]
+            if bcrypt.checkpw(
+                password.encode('utf-8'),
+                stored_hash.encode('utf-8')):
+                
+                session['user_id'] = user[0]
+                return redirect('/dashboard')
+            return "Invalid Login"
+    return render_template('login.html')
+
+@auth_bp.route('/register', methods=['GET','POST'])
+def register():
+    if request.method == 'POST':
+        username = request.form['username']
+        email = request.form['email']
+        password = request.form['password']
+        
+        hashed_password = bcrypt.hashpw(
+            password.encode('utf-8'),
+            bcrypt.gensalt())
+
+        conn = get_connection()
+        cursor = conn.cursor()
+        
+        query = """
+        INSERT INTO users
+        (username,email,password)
+        VALUES (%s,%s,%s)
+        """
+        
+        cursor.execute(query,(username,email,hashed_password))
+        
+        conn.commit()
+        return "User Registered"
+    return render_template('register.html')
+
+@auth_bp.route('/logout')
+def logout():
+    session.clear()
+    return redirect('/login')
