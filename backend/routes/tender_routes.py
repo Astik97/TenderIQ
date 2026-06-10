@@ -5,6 +5,11 @@ from flask import redirect
 import os
 from flask import request
 from backend.utils.db import get_connection
+from backend.services.document_service import (
+    extract_pdf,
+    extract_docx,
+    extract_txt
+)
 
 tender_bp = Blueprint('tender', __name__)
 
@@ -47,11 +52,26 @@ def upload():
         filepath = os.path.join('uploads',file.filename)
         file.save(filepath)
 
-        query = """
-        INSERT INTO tenders 
-        (user_id, tender_name,file_name) 
-        VALUES (%s,%s,%s)
-        """
+        extension = file.filename.split('.')[-1].lower()
+
+        if extension == "pdf":
+            extracted_text = extract_pdf(filepath)
+        
+        elif extension == "docx":
+            extracted_text = extract_docx(filepath)
+            
+        elif extension == "txt":
+            extracted_text = extract_txt(filepath)
+        
+        else:
+            extracted_text = ""
+
+            query = """
+            INSERT INTO tenders
+            (user_id,tender_name,file_name,extracted_text)
+            VALUES(%s,%s,%s,%s)
+            """
+
         cursor.execute(query,(session['user_id'],file.filename,filepath))
 
     conn.commit()
