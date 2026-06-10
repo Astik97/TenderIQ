@@ -62,17 +62,21 @@ def upload():
             
         elif extension == "txt":
             extracted_text = extract_txt(filepath)
-        
+
         else:
             extracted_text = ""
 
-            query = """
-            INSERT INTO tenders
-            (user_id,tender_name,file_name,extracted_text)
-            VALUES(%s,%s,%s,%s)
-            """
+        query = """
+        INSERT INTO tenders
+        (user_id,tender_name,file_name,extracted_text)
+        VALUES(%s,%s,%s,%s)
+        """
 
-        cursor.execute(query,(session['user_id'],file.filename,filepath))
+        cursor.execute(query,
+                   (session['user_id'],
+                    file.filename,
+                    filepath,
+                    extracted_text))
 
     conn.commit()
 
