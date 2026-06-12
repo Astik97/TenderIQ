@@ -1,0 +1,12 @@
+body{
+    font-family: Arial;
+    max-width: 1000px;
+    margin: auto;
+    padding: 20px;
+}
+
+.container{
+    border:1px solid #ddd;
+    padding:20px;
+    border-radius:10px;
+}

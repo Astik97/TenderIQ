@@ -1,21 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>
-        Dashboard
-    </title>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <title>Dashboard</title>
 </head>
 <body>
-    <h1>
-        Tender Comparison & Analysis System
-    </h1>
+
+    <h1>Tender Comparison & Analysis System</h1>
 
     <hr>
 
-    <h2>
-        Upload Tender Files
-    </h2>
+    <h2>Upload Tender Files</h2>
 
     <form
         method="POST"
@@ -30,16 +27,13 @@
 
         <br><br>
 
-        <button type="submit">
-            Upload Files
-        </button>
+        <button type="submit">Upload Files</button>
+
     </form>
 
     <hr>
 
-    <h2>
-        Uploaded Tenders
-    </h2>
+    <h2>Uploaded Tenders</h2>
 
     {% if tenders %}
 
@@ -62,24 +56,63 @@
 
             <br>
 
-            <button type="submit">
-                Compare Selected Tenders
-            </button>
+            <button type="submit">Compare Selected Tenders</button>
 
         </form>
 
     {% else %}
 
-        <p>
-            No tenders uploaded yet.
-        </p>
+    <p>No tenders uploaded yet.</p>
 
     {% endif %}
     <hr>
 
-    <a href="/logout">
-        Logout
-    </a>
+    <a href="/logout">Logout</a>
+    <script>
+    
+    document.getElementById('uploadForm').addEventListener('submit', async function(e) {
+        e.preventDefault(); // Prevent page reload
+        
+        const form = document.getElementById('uploadForm');
+        const formData = new FormData(form);
+        const statusDiv = document.getElementById('statusMessage');
+        const submitBtn = document.getElementById('submitBtn');
+        
+        // UI Updates during upload
+        submitBtn.disabled = true;
+        submitBtn.innerText = "Processing...";
+        statusDiv.style.display = 'none';
+        statusDiv.className = '';
+
+        try {
+            // Send asynchronous POST request to Flask
+            const response = await fetch('/api/upload', {
+                method: 'POST',
+                body: formData
+            });
+            
+            const result = await response.json();
+            
+            statusDiv.style.display = 'block';
+            if (response.ok) {
+                statusDiv.className = 'success';
+                statusDiv.innerHTML = `<strong>Success!</strong> ${result.message}<br>Tender ID: ${result.tender_id}`;
+                form.reset(); // Clear form on success
+            } else {
+                statusDiv.className = 'error';
+                statusDiv.innerHTML = `<strong>Error:</strong> ${result.error}`;
+            }
+        } catch (error) {
+            statusDiv.style.display = 'block';
+            statusDiv.className = 'error';
+            statusDiv.innerHTML = `<strong>Network Error:</strong> Could not connect to the server.`;
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.innerText = "Upload & Process";
+        }
+    });
+    
+</script>
 
 </body>
 </html>
