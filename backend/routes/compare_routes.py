@@ -1,15 +1,19 @@
 from flask import Blueprint
 from flask import request
+from flask import render_template
+
 from backend.utils.db import get_connection
-from backend.services.compare_service import (
-    compare_tenders)
+from backend.services.compare_service import compare_tenders
+from backend.services.report_service import generate_report
 
 compare_bp = Blueprint('compare',__name__)
 
 @compare_bp.route('/compare',methods=['POST'])
 def compare():
-    
-    selected = request.form.getlist('selected_tenders')
+
+    selected = request.form.getlist(
+        'selected_tenders'
+    )
 
     if len(selected) != 2:
 
@@ -22,21 +26,44 @@ def compare():
     cursor = conn.cursor()
 
     query = """
-    SELECT extracted_text
+    SELECT tender_name, extracted_text
     FROM tenders
     WHERE id=%s
     """
 
-    cursor.execute(query,(selected[0],))
+    cursor.execute(query, (selected[0],))
+    row1 = cursor.fetchone()
 
-    text1 = cursor.fetchone()[0]
+    tender_name1 = row1[0]
+    text1 = row1[1]
 
-    cursor.execute(query,(selected[1],))
+    cursor.execute(query, (selected[1],))
+    row2 = cursor.fetchone()
 
-    text2 = cursor.fetchone()[0]
+    tender_name2 = row2[0]
+    text2 = row2[1]
 
-    similarity = compare_tenders(text1,text2)
+    cursor.close()
+    conn.close()
 
-    return f"""Similarity Score:{similarity}%"""
+    similarity = compare_tenders(
+        text1,
+        text2
+    )
 
-    # return f"""Selected Tender IDs:{selected}"""
+    # tender_name1 = tender_name1,
+    # tender_name2 = tender_name2,
+
+    report = generate_report(
+        tender_name1,
+        tender_name2,
+        similarity
+    )
+
+    return render_template(
+        "compare.html",
+        similarity=similarity,
+        tender1=tender_name1,
+        tender2=tender_name2,
+        report=report
+    )
