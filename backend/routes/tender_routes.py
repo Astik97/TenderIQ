@@ -1,8 +1,9 @@
+import os
+import uuid
 from flask import Blueprint
 from flask import render_template
 from flask import session
 from flask import redirect
-import os
 from flask import request
 from backend.utils.db import get_connection
 from backend.services.document_service import (
@@ -10,6 +11,7 @@ from backend.services.document_service import (
     extract_docx,
     extract_txt
 )
+from backend.services.text_preprocessing import clean_text
 
 tender_bp = Blueprint('tender', __name__)
 
@@ -46,13 +48,23 @@ def upload():
     cursor = conn.cursor()
 
     for file in files:
-        if file.filename == '':
-            continue
+        try:
+            if file.filename == '':
+                continue
+        except Exception as e:
+            print(f"Error processing file: {e}")
 
-        filepath = os.path.join('uploads',file.filename)
+        unique_filename = str(uuid.uuid4()) + "_" + file.filename
+        filepath = os.path.join('uploads', unique_filename)
         file.save(filepath)
 
+        allowed_extensions = ["pdf", "docx", "txt"]
+
         extension = file.filename.split('.')[-1].lower()
+
+        if extension not in allowed_extensions:
+            print(f"{file.filename} is not a supported file type.")
+            continue
 
         if extension == "pdf":
             extracted_text = extract_pdf(filepath)
@@ -66,6 +78,8 @@ def upload():
         else:
             extracted_text = ""
 
+        extracted_text = clean_text(extracted_text)
+
         query = """
         INSERT INTO tenders
         (user_id,tender_name,file_name,extracted_text)
@@ -75,7 +89,7 @@ def upload():
         cursor.execute(query,
                    (session['user_id'],
                     file.filename,
-                    filepath,
+                    unique_filename,
                     extracted_text))
 
     conn.commit()
