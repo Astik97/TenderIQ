@@ -60,7 +60,7 @@ def find_clause_heading(line):
 
         for keyword in keywords:
 
-            if line == keyword:
+            if keyword in line:
                 return clause
 
     return None
