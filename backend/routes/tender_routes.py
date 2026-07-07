@@ -1,4 +1,5 @@
 import os
+import uuid
 from flask import Blueprint
 from flask import render_template
 from flask import session
@@ -23,6 +24,14 @@ ALLOWED_EXTENSIONS = {
     "docx",
     "txt"
 }
+def allowed_file(filename):
+
+    if "." not in filename:
+        return False
+
+    extension = filename.rsplit(".", 1)[1].lower()
+
+    return extension in ALLOWED_EXTENSIONS
 
 # -------------------------------------------------
 # Dashboard
@@ -83,6 +92,12 @@ def upload():
         if file.filename == "":
             continue
 
+        if not allowed_file(file.filename):
+            return (
+            "Only PDF, DOCX and TXT files are allowed.",
+            400
+        )
+
         filename = secure_filename(file.filename)
 
         # -----------------------------
@@ -118,13 +133,15 @@ def upload():
             print(f"{filename} is not supported.")
             continue
 
+        unique_filename = str(uuid.uuid4()) + "_" + file.filename
+
         # -----------------------------
         # Save file
         # -----------------------------
 
         filepath = os.path.join(
             UPLOAD_FOLDER,
-            filename
+            unique_filename
         )
 
         file.save(filepath)
@@ -202,12 +219,12 @@ def upload():
             (
                 session["user_id"],
                 filename,
-                filename,
+                unique_filename,
                 extracted_text
             )
         )
 
-        uploaded_files.append(filename)
+        uploaded_files.append(unique_filename)
 
     conn.commit()
 
