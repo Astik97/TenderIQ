@@ -37,22 +37,58 @@
 
     {% if tenders %}
 
-        <form
+    <form
             method="POST"
             action="/compare">
 
+    <table border="1" cellpadding="10">
+        <tr>
+            
+            <th>ID</th>
+
+            <th>Tender Name</th>
+
+            <th>File Type</th>
+
+            <th>Upload Date</th>
+
+            <th>Actions</th>
+
+        </tr>
+
             {% for tender in tenders %}
 
-                <input
-                    type="checkbox"
-                    name="selected_tenders"
-                    value="{{ tender[0] }}">
+            <tr>
+                <td>{{ tender[0] }}</td>
 
-                {{ tender[1] }}
+                <td>{{ tender[1] }}</td>
 
-                <br>
+                <td>{{ tender[2].split('.')[-1].upper() }}</td>
+
+                <td>{{ tender[3] }}</td>
+
+                <td>
+                    <input
+                        type="checkbox"
+                        name="selected_tenders"
+                        value="{{ tender[0] }}">
+
+                        <a style="text-decoration: none;" href="/view/{{ tender[0] }}">
+                            <button type="button">View</button>
+                        </a>
+
+                        <br><br>
+
+                        <a style="color:red;font-weight:bold;" href="/delete/{{ tender[0] }}" onclick="return confirm('Are you sure you want to delete this tender?')">
+                            <button type="button">Delete</button>
+                        </a>
+                    
+                </td>
+            </tr>
 
             {% endfor %}
+
+            </table>
 
             <br>
 
@@ -65,54 +101,10 @@
     <p>No tenders uploaded yet.</p>
 
     {% endif %}
+
     <hr>
 
     <a href="/logout">Logout</a>
-    <script>
     
-    document.getElementById('uploadForm').addEventListener('submit', async function(e) {
-        e.preventDefault(); // Prevent page reload
-        
-        const form = document.getElementById('uploadForm');
-        const formData = new FormData(form);
-        const statusDiv = document.getElementById('statusMessage');
-        const submitBtn = document.getElementById('submitBtn');
-        
-        // UI Updates during upload
-        submitBtn.disabled = true;
-        submitBtn.innerText = "Processing...";
-        statusDiv.style.display = 'none';
-        statusDiv.className = '';
-
-        try {
-            // Send asynchronous POST request to Flask
-            const response = await fetch('/api/upload', {
-                method: 'POST',
-                body: formData
-            });
-            
-            const result = await response.json();
-            
-            statusDiv.style.display = 'block';
-            if (response.ok) {
-                statusDiv.className = 'success';
-                statusDiv.innerHTML = `<strong>Success!</strong> ${result.message}<br>Tender ID: ${result.tender_id}`;
-                form.reset(); // Clear form on success
-            } else {
-                statusDiv.className = 'error';
-                statusDiv.innerHTML = `<strong>Error:</strong> ${result.error}`;
-            }
-        } catch (error) {
-            statusDiv.style.display = 'block';
-            statusDiv.className = 'error';
-            statusDiv.innerHTML = `<strong>Network Error:</strong> Could not connect to the server.`;
-        } finally {
-            submitBtn.disabled = false;
-            submitBtn.innerText = "Upload & Process";
-        }
-    });
-    
-</script>
-
 </body>
 </html>

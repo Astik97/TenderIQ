@@ -47,9 +47,10 @@ def dashboard():
     cursor = conn.cursor()
 
     cursor.execute("""
-        SELECT id, tender_name
+        SELECT id, tender_name,file_name, upload_date
         FROM tenders
         WHERE user_id=%s
+        ORDER BY upload_date DESC
     """, (session["user_id"],))
 
     tenders = cursor.fetchall()
@@ -61,6 +62,102 @@ def dashboard():
         "dashboard.html",
         tenders=tenders
     )
+
+@tender_bp.route('/view/<int:tender_id>')
+def view_tender(tender_id):
+
+    if 'user_id' not in session:
+        return redirect('/login')
+
+    conn = get_connection()
+
+    cursor = conn.cursor()
+
+    query = """
+    SELECT
+        tender_name,
+        file_name,
+        extracted_text,
+        upload_date
+        FROM tenders
+        WHERE id=%s
+        AND user_id=%s
+    """
+
+    cursor.execute(
+        query,
+        (tender_id, session['user_id'])
+    )
+
+    tender = cursor.fetchone()
+
+    cursor.close()
+
+    conn.close()
+
+    if not tender:
+        return "Tender not found."
+
+    return render_template(
+        "view_tender.html",
+        tender=tender
+    )
+
+@tender_bp.route('/delete/<int:tender_id>')
+def delete_tender(tender_id):
+
+    if 'user_id' not in session:
+        return redirect('/login')
+
+    conn = get_connection()
+
+    cursor = conn.cursor()
+
+    cursor.execute(
+        """
+        SELECT file_name
+        FROM tenders
+        WHERE id=%s
+        AND user_id=%s
+        """,
+        (tender_id, session['user_id'])
+    )
+
+    result = cursor.fetchone()
+
+    if not result:
+
+        cursor.close()
+
+        conn.close()
+
+        return "Tender not found."
+
+    filepath = os.path.join(
+        "uploads",
+        result[0]
+    )
+
+    if os.path.exists(filepath):
+
+        os.remove(filepath)
+
+    cursor.execute(
+        """
+        DELETE FROM tenders
+        WHERE id=%s
+        AND user_id=%s
+        """,
+        (tender_id, session['user_id'])
+    )
+
+    conn.commit()
+
+    cursor.close()
+
+    conn.close()
+
+    return redirect('/dashboard')
 
 # -------------------------------------------------
 # Upload Tender Files
@@ -93,10 +190,8 @@ def upload():
             continue
 
         if not allowed_file(file.filename):
-            return (
-            "Only PDF, DOCX and TXT files are allowed.",
-            400
-        )
+            invalid_files.append(file.filename)
+            continue
 
         filename = secure_filename(file.filename)
 
@@ -128,12 +223,7 @@ def upload():
 
         extension = filename.split(".")[-1].lower()
 
-        if extension not in ALLOWED_EXTENSIONS:
-            invalid_files.append(filename)
-            print(f"{filename} is not supported.")
-            continue
-
-        unique_filename = str(uuid.uuid4()) + "_" + file.filename
+        unique_filename = str(uuid.uuid4()) + "_" + filename
 
         # -----------------------------
         # Save file
