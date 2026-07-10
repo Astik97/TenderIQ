@@ -1,18 +1,205 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    
-    <title>Index</title>
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>TenderIQ</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
 </head>
+
 <body>
 
-    <h1>Tender Comparison & Analysis System</h1>
-    
-    <a href="/login">Login</a>
-    <a href="/register">Register</a>
+<div class="hero-container">
+
+    <div class="hero-card">
+
+        <h1 class="logo">
+            TenderIQ
+        </h1>
+
+        <p class="subtitle">
+
+            AI-Powered Tender Comparison &
+            Analysis System
+
+        </p>
+
+        <p class="description">
+
+            Upload multiple tender documents,
+            compare them intelligently,
+            identify similarities,
+            detect missing clauses,
+            rank tenders,
+            generate executive summaries
+            and export professional reports.
+
+        </p>
+
+        <div class="hero-buttons">
+
+            <a href="/login"
+               class="btn btn-primary">
+
+                Login
+
+            </a>
+
+            <a href="/register"
+               class="btn btn-secondary">
+
+                Register
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+<section class="features">
+
+    <h2>
+
+        Why TenderIQ?
+
+    </h2>
+
+    <div class="feature-grid">
+
+        <div class="feature-card">
+
+            <h3>
+
+                📂 Upload
+
+            </h3>
+
+            <p>
+
+                Upload PDF,
+                DOCX and TXT
+                tender documents.
+
+            </p>
+
+        </div>
+
+        <div class="feature-card">
+
+            <h3>
+
+                🤖 AI Comparison
+
+            </h3>
+
+            <p>
+
+                Compare multiple
+                tenders using
+                NLP and LLM.
+
+            </p>
+
+        </div>
+
+        <div class="feature-card">
+
+            <h3>
+
+                📊 Clause Analysis
+
+            </h3>
+
+            <p>
+
+                Extract important
+                clauses automatically.
+
+            </p>
+
+        </div>
+
+        <div class="feature-card">
+
+            <h3>
+
+                📑 Executive Summary
+
+            </h3>
+
+            <p>
+
+                Generate concise
+                AI summaries.
+
+            </p>
+
+        </div>
+
+        <div class="feature-card">
+
+            <h3>
+
+                🏆 Tender Ranking
+
+            </h3>
+
+            <p>
+
+                Rank tenders
+                according to
+                similarity and quality.
+
+            </p>
+
+        </div>
+
+        <div class="feature-card">
+
+            <h3>
+
+                📄 PDF Reports
+
+            </h3>
+
+            <p>
+
+                Export professional
+                comparison reports.
+
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+<footer>
+
+    <p>
+
+        © 2026 TenderIQ |
+        AI-Powered Tender Comparison &
+        Analysis System
+
+    </p>
+
+</footer>
+
+<script src="{{ url_for('static', filename='js/scripts.js') }}">
+</script>
 
 </body>
+
 </html>
