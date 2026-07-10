@@ -326,6 +326,7 @@ body{
 }
 
 .password-box input{
+    width:100%;
 
     padding-right:45px;
 
@@ -343,7 +344,17 @@ body{
 
     cursor:pointer;
 
-    user-select:none;
+    color:#777;
+
+    font-size:20px;
+
+    transition:0.25s ease;
+
+}
+
+.toggle-password:hover{
+
+    color:#2563eb;
 
 }
 
