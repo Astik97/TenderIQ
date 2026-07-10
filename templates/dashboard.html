@@ -1,110 +1,230 @@
 <!DOCTYPE html>
-<html>
+
+<html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
-    <title>Dashboard</title>
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>
+        TenderIQ Dashboard
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/dashboard.css') }}">
+
 </head>
+
 <body>
 
-    <h1>Tender Comparison & Analysis System</h1>
+<div class="container">
+
+    <header>
+
+        <h1>
+            TenderIQ
+        </h1>
+
+        <p>
+            Tender Comparison & Analysis System
+        </p>
+
+        <a
+            href="/logout"
+            class="logout-btn">
+
+            Logout
+
+        </a>
+
+    </header>
 
     <hr>
 
-    <h2>Upload Tender Files</h2>
+    <!-- ========================================== -->
+    <!-- Upload Section                             -->
+    <!-- ========================================== -->
 
-    <form
-        method="POST"
-        action="/upload"
-        enctype="multipart/form-data">
+    <section>
 
-        <input
-            type="file"
-            name="tender_files"
-            multiple
-            required>
+        <h2>
 
-        <br><br>
+            Upload Tender Documents
 
-        <button type="submit">Upload Files</button>
+        </h2>
 
-    </form>
-
-    <hr>
-
-    <h2>Uploaded Tenders</h2>
-
-    {% if tenders %}
-
-    <form
+        <form
+            action="/upload"
             method="POST"
-            action="/compare">
+            enctype="multipart/form-data">
 
-    <table border="1" cellpadding="10">
-        <tr>
-            
-            <th>ID</th>
+            <input
+                type="file"
+                name="tender_files"
+                multiple
+                required>
 
-            <th>Tender Name</th>
+            <button
+                type="submit">
 
-            <th>File Type</th>
+                Upload Files
 
-            <th>Upload Date</th>
+            </button>
 
-            <th>Actions</th>
+        </form>
 
-        </tr>
+    </section>
+
+    <hr>
+
+    <!-- ========================================== -->
+    <!-- Uploaded Tender Table                      -->
+    <!-- ========================================== -->
+
+    <section>
+
+        <h2>
+
+            Uploaded Tender Documents
+
+        </h2>
+
+        {% if tenders %}
+
+        <form
+            action="/compare"
+            method="POST">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>Select</th>
+
+                    <th>ID</th>
+
+                    <th>Tender Name</th>
+
+                    <th>File Type</th>
+
+                    <th>Upload Date</th>
+
+                    <th>View</th>
+
+                    <th>Delete</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
 
             {% for tender in tenders %}
 
             <tr>
-                <td>{{ tender[0] }}</td>
-
-                <td>{{ tender[1] }}</td>
-
-                <td>{{ tender[2].split('.')[-1].upper() }}</td>
-
-                <td>{{ tender[3] }}</td>
 
                 <td>
+
                     <input
                         type="checkbox"
                         name="selected_tenders"
                         value="{{ tender[0] }}">
 
-                        <a style="text-decoration: none;" href="/view/{{ tender[0] }}">
-                            <button type="button">View</button>
-                        </a>
-
-                        <br><br>
-
-                        <a style="color:red;font-weight:bold;" href="/delete/{{ tender[0] }}" onclick="return confirm('Are you sure you want to delete this tender?')">
-                            <button type="button">Delete</button>
-                        </a>
-                    
                 </td>
+
+                <td>
+
+                    {{ tender[0] }}
+
+                </td>
+
+                <td>
+
+                    {{ tender[1] }}
+
+                </td>
+
+                <td>
+
+                    {{ tender[2].split('.')[-1].upper() }}
+
+                </td>
+
+                <td>
+
+                    {{ tender[3] }}
+
+                </td>
+
+                <td>
+
+                    <a
+                        href="/view/{{ tender[0] }}"
+                        class="view-btn">
+
+                        View
+
+                    </a>
+
+                </td>
+
+                <td>
+
+                    <a
+                        href="/delete/{{ tender[0] }}"
+                        class="delete-btn"
+                        onclick="return confirm('Are you sure you want to delete this tender?')">
+
+                        Delete
+
+                    </a>
+
+                </td>
+
             </tr>
 
             {% endfor %}
 
-            </table>
+            </tbody>
 
-            <br>
+        </table>
 
-            <button type="submit">Compare Selected Tenders</button>
+        <br>
+
+        <button
+            type="submit"
+            class="compare-btn">
+
+            Compare Selected Tenders
+
+        </button>
 
         </form>
 
-    {% else %}
+        {% else %}
 
-    <p>No tenders uploaded yet.</p>
+        <p>
 
-    {% endif %}
+            No tender documents uploaded yet.
 
-    <hr>
+        </p>
 
-    <a href="/logout">Logout</a>
-    
+        {% endif %}
+
+    </section>
+
+</div>
+
+<script src="{{ url_for('static', filename='js/dashboard.js') }}">
+</script>
+
 </body>
+
 </html>
