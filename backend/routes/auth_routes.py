@@ -80,6 +80,7 @@ def register():
             conn.close()
 
             flash("Email already exists. Please use a different email.", "error")
+            
             return redirect("/register")
 
         # ----------------------------
