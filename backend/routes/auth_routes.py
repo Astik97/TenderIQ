@@ -39,7 +39,8 @@ def login():
                 
                 session['user_id'] = user[0]
                 return redirect('/dashboard')
-            return "Invalid Login"
+            
+            flash("Invalid login credentials.", "error")
     return render_template('login.html')
 
 @auth_bp.route("/register", methods=["GET", "POST"])
@@ -121,6 +122,8 @@ def register():
         cursor.close()
 
         conn.close()
+
+        flash("Registration successful! Please log in.", "success")
 
         return redirect("/login")
 
