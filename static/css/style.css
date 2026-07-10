@@ -520,4 +520,30 @@ footer{
 
 }
 
+.flash-message{
+
+    padding:12px;
+    margin-bottom:20px;
+    border-radius:8px;
+    font-weight:600;
+    text-align:center;
+
+}
+
+.success{
+
+    background:#d4edda;
+    color:#155724;
+    border:1px solid #28a745;
+
+}
+
+.error{
+
+    background:#f8d7da;
+    color:#721c24;
+    border:1px solid #dc3545;
+
+}
+
 }
