@@ -58,18 +58,23 @@
 
         </h2>
 
+        <p id="selectedFiles"></p>
+
         <form
+            id="uploadForm"
             action="/upload"
             method="POST"
             enctype="multipart/form-data">
 
             <input
+                id="tenderFiles"
                 type="file"
                 name="tender_files"
                 multiple
                 required>
 
             <button
+                id="uploadButton"
                 type="submit">
 
                 Upload Files
@@ -180,7 +185,7 @@
                     <a
                         href="/delete/{{ tender[0] }}"
                         class="delete-btn"
-                        onclick="return confirm('Are you sure you want to delete this tender?')">
+                        class="delete-btn delete-link">
 
                         Delete
 
@@ -199,6 +204,7 @@
         <br>
 
         <button
+            id="compareButton"
             type="submit"
             class="compare-btn">
 
