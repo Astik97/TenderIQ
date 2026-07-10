@@ -1,35 +1,88 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Comparison Report | TenderIQ</title>
+
     <link rel="stylesheet" href="{{ url_for('static', filename='css/compare.css') }}">
-    <title>Comparison Report</title>
+
 </head>
 
 <body>
 
-<h1>Comparison Result</h1>
+<div class="container">
 
-<hr>
+    <div class="header">
 
-<p>Tender 1 ID: {{ tender1 }}</p>
+        <h1>Comparison Report</h1>
 
-<p>Tender 2 ID: {{ tender2 }}</p>
+        <p>
+            AI-Powered Tender Comparison Result
+        </p>
 
-<hr>
+    </div>
 
-<h2>Similarity Score</h2>
+    <div class="summary-card">
 
-<h1>{{ similarity }}%</h1>
+        <div class="info-box">
 
-<h2>Analysis Report</h2>
+            <h3>Tender 1</h3>
 
-<pre>{{ report }}</pre>
+            <p>ID : {{ tender1 }}</p>
 
-<br>
+        </div>
 
-<a href="/dashboard">Back to Dashboard</a>
+        <div class="info-box">
+
+            <h3>Tender 2</h3>
+
+            <p>ID : {{ tender2 }}</p>
+
+        </div>
+
+    </div>
+
+    <div class="similarity-card">
+
+        <h2>Overall Similarity Score</h2>
+
+        <div class="score-circle">
+
+            {{ similarity }}%
+
+        </div>
+
+    </div>
+
+    <div class="report-card">
+
+        <h2>AI Analysis Report</h2>
+
+        <pre>{{ report }}</pre>
+
+    </div>
+
+    <div class="buttons">
+
+        <a href="/dashboard"
+           class="btn">
+
+            ← Back to Dashboard
+
+        </a>
+
+    </div>
+
+</div>
+
+<script src="{{ url_for('static', filename='js/compare.js') }}">
+</script>
 
 </body>
+
 </html>
