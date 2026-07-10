@@ -93,7 +93,7 @@ Upcoming
 
 ## Home Page
 
-![Home](screenshots/index.png)
+![Home](screenshots/home.png)
 
 ---
 
