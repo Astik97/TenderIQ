@@ -1,89 +1,135 @@
 <!DOCTYPE html>
-
-<html>
+<html lang="en">
 
 <head>
 
-<title>
+    <meta charset="UTF-8">
 
-Tender Details
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-</title>
+    <title>View Tender | TenderIQ</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/view_tender.css') }}">
 
 </head>
 
 <body>
 
-<h1>
+<div class="container">
 
-Tender Details
+    <header>
 
-</h1>
+        <h1>📄 Tender Details</h1>
 
-<hr>
+        <p>Review uploaded tender information</p>
 
-<h3>
+    </header>
 
-Tender Name
+    <div class="card">
 
-</h3>
+        <div class="info">
 
-<p>
+            <div>
 
-{{ tender[0] }}
+                <label>Tender Name</label>
 
-</p>
+                <p>{{ tender[0] }}</p>
 
-<h3>
+            </div>
 
-Stored File
+            <div>
 
-</h3>
+                <label>Stored File</label>
 
-<p>
+                <p>{{ tender[1] }}</p>
 
-{{ tender[1] }}
+            </div>
 
-</p>
+            <div>
 
-<h3>
+                <label>Upload Date</label>
 
-Upload Date
+                <p>{{ tender[3] }}</p>
 
-</h3>
+            </div>
 
-<p>
+            <div>
 
-{{ tender[3] }}
+                <label>File Type</label>
 
-</p>
+                <span class="badge">
 
-<h3>
+                    {{ tender[1].split('.')[-1].upper() }}
 
-Extracted Text
+                </span>
 
-</h3>
+            </div>
 
-<textarea
-rows="20"
-cols="120"
-readonly>
+        </div>
 
-{{ tender[2] }}
+    </div>
 
-</textarea>
+    <div class="card">
 
-<br><br>
+        <div class="text-header">
 
-<a href="/dashboard">
+            <h2>Extracted Tender Text</h2>
 
-<button>
+            <div>
 
-Back
+                <button id="copyBtn">
 
-</button>
+                    📋 Copy
 
-</a>
+                </button>
+
+                <button id="downloadBtn">
+
+                    ⬇ Download
+
+                </button>
+
+            </div>
+
+        </div>
+
+        <textarea
+            id="tenderText"
+            readonly>{{ tender[2] }}</textarea>
+
+        <div class="stats">
+
+            <span id="wordCount"></span>
+
+            <span id="charCount"></span>
+
+        </div>
+
+    </div>
+
+    <div class="actions">
+
+        <a href="/dashboard">
+
+            <button>
+
+                ← Back to Dashboard
+
+            </button>
+
+        </a>
+
+    </div>
+
+</div>
+
+<div id="toast">
+
+Copied Successfully!
+
+</div>
+
+<script src="{{ url_for('static', filename='js/view_tender.js') }}"></script>
 
 </body>
 

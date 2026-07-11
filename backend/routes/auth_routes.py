@@ -1,6 +1,12 @@
-from flask import Blueprint, render_template,request
+from flask import (
+    Blueprint, 
+    render_template,
+    request,
+    session, 
+    redirect, 
+    flash
+)
 import bcrypt
-from flask import session, redirect, flash
 from backend.utils.db import get_connection
 
 auth_bp = Blueprint('auth', __name__)
@@ -11,8 +17,11 @@ def home():
 
 @auth_bp.route('/login', methods=['GET','POST'])
 def login():
+
     if request.method == 'POST':
-        email = request.form['email']
+
+        email = request.form['email'].strip().lower()
+        
         password = request.form['password']
         
         conn = get_connection()
@@ -32,15 +41,23 @@ def login():
         conn.close()
 
         if user:
+
             stored_hash = user[1]
-            if bcrypt.checkpw(
+
+            if bcrypt.checkpw (
                 password.encode('utf-8'),
                 stored_hash.encode('utf-8')):
                 
                 session['user_id'] = user[0]
+
+                session["username"] = user[1]
+
+                flash(f"Welcome back, {user[1]}!","success")
+
                 return redirect('/dashboard')
             
-            flash("Invalid login credentials.", "error")
+            flash("Unable to login. Please try again.", "error")
+
     return render_template('login.html')
 
 @auth_bp.route("/register", methods=["GET", "POST"])
@@ -50,13 +67,24 @@ def register():
 
         username = request.form["username"].strip()
 
-        email = request.form["email"].strip()
+        email = request.form["email"].strip().lower()
 
         password = request.form["password"]
 
         conn = get_connection()
 
         cursor = conn.cursor()
+
+        # ----------------------------
+        # Validate Password Length
+        # ----------------------------
+        
+        if len(password) < 8:
+            
+            flash("Password must be at least 8 characters long.","error")
+
+            return redirect("/register")
+
 
         # ----------------------------
         # Check if email already exists
@@ -132,5 +160,9 @@ def register():
 
 @auth_bp.route('/logout')
 def logout():
+
     session.clear()
+
+    flash("Logged out successfully.","success")
+
     return redirect('/login')
