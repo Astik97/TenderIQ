@@ -1,12 +1,15 @@
 from flask import Flask
 import os
+from config import Config
 from dotenv import load_dotenv
 
 app = Flask(__name__)
 
-load_dotenv()
+app.config.from_object(Config)
 
-app.secret_key = os.getenv("SECRET_KEY")
+# load_dotenv()
+
+# app.secret_key = os.getenv("SECRET_KEY")
 
 from backend.routes.auth_routes import auth_bp
 from backend.routes.tender_routes import tender_bp
