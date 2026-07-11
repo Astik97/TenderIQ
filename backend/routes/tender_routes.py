@@ -1,10 +1,12 @@
-import os
-import uuid
-from flask import Blueprint
-from flask import render_template
-from flask import session
-from flask import redirect
-from flask import request
+import os, uuid
+from flask import (
+    Blueprint,
+    render_template,
+    flash,
+    redirect,
+    session,
+    request
+    )
 from werkzeug.utils import secure_filename
 from backend.utils.db import get_connection
 from backend.services.document_service import (
