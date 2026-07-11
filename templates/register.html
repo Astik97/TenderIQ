@@ -30,8 +30,10 @@
             {% if messages %}
                 {% for category, message in messages %}
 
-                    <div class="flash-message {{ category }}">
+                    <div class="alert {{ category }}">
+
                         {{ message }}
+                        
                     </div>
                     
                 {% endfor %}

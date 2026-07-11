@@ -1,6 +1,10 @@
-from flask import Blueprint
-from flask import request
-from flask import render_template
+from flask import (
+    Blueprint,
+    request,
+    render_template,
+    flash,
+    redirect
+)
 
 from backend.utils.db import get_connection
 from backend.services.compare_service import compare_tenders
@@ -17,10 +21,9 @@ def compare():
 
     if len(selected) != 2:
 
-        return """
-        Please select exactly
-        two tenders.
-        """
+        flash("Please select exactly two tenders.", "error")
+        
+        return redirect('/dashboard')
 
     conn = get_connection()
     cursor = conn.cursor()

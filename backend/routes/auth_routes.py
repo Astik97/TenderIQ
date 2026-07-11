@@ -28,7 +28,7 @@ def login():
         cursor = conn.cursor()
 
         query = """
-        SELECT id,password
+        SELECT id,username,password
         FROM users
         WHERE email=%s
         """
@@ -42,7 +42,7 @@ def login():
 
         if user:
 
-            stored_hash = user[1]
+            stored_hash = user[2]
 
             if bcrypt.checkpw (
                 password.encode('utf-8'),
