@@ -121,6 +121,11 @@ Upcoming
 
 ---
 
+## View Tenders
+![Tender Details](screenshots/view_tenders.png)
+
+---
+
 # ⚙ System Workflow
 
 ```
