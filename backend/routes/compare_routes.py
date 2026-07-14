@@ -3,7 +3,8 @@ from flask import (
     request,
     render_template,
     flash,
-    redirect
+    redirect,
+    session
 )
 
 from backend.utils.db import get_connection
@@ -106,14 +107,6 @@ def compare():
 
         return redirect("/dashboard")
 
-    finally:
-
-        if cursor:
-            cursor.close()
-
-        if conn:
-            conn.close()
-
     # -----------------------------------------
     # Compare
     # -----------------------------------------
@@ -146,6 +139,42 @@ def compare():
         similarity
 
     )
+
+    cursor.execute(
+    """
+    INSERT INTO comparison_reports
+    (
+        user_id,
+        tender1_id,
+        tender2_id,
+        similarity_score,
+        match_level,
+        analysis_report
+    )
+    VALUES
+    (
+        %s,
+        %s,
+        %s,
+        %s,
+        %s,
+        %s
+    )
+    """,
+    (
+        session["user_id"],
+        selected[0],
+        selected[1],
+        similarity,
+        level,
+        report
+    )
+)
+    
+    conn.commit()
+    
+    cursor.close()
+    conn.close()
 
     # -----------------------------------------
     # Render Compare Page
