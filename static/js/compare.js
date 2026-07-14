@@ -53,11 +53,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const progress = progressBar.dataset.progress;
 
-        setTimeout(function () {
+        progressBar.style.width = "0%";
+
+        setTimeout(() => {
 
             progressBar.style.width = progress + "%";
 
-        }, 300);
+        }, 100);
 
     }
 

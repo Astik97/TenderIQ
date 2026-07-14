@@ -77,16 +77,16 @@ def get_similarity_level(score):
     if score >= 90:
         return "Excellent Match"
 
-    elif score >= 75:
+    elif score >= 70:
         return "Good Match"
 
     elif score >= 50:
         return "Moderate Match"
 
-    elif score >= 25:
+    elif score >= 30:
         return "Low Match"
 
-    return "Very Low Match"
+    return "Poor Match"
 
 def get_similarity_color(score):
     """
@@ -94,15 +94,15 @@ def get_similarity_color(score):
     """
 
     if score >= 90:
-        return "green"
+        return "Excellent Match"
 
-    elif score >= 75:
-        return "limegreen"
+    elif score >= 70:
+        return "Good Match"
 
     elif score >= 50:
-        return "orange"
+        return "Moderate Match"
 
-    elif score >= 25:
-        return "darkorange"
+    elif score >= 30:
+        return "Low Match"
 
-    return "red"
+    return "Poor Match"

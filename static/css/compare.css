@@ -251,19 +251,23 @@ body{
    Dynamic Colors
 ===================================================== */
 
-.green{
+.Excellent{
     background:#16a34a;
 }
 
-.orange{
+.Good{
+    background:#65a30d;
+}
+
+.Moderate{
     background:#f59e0b;
 }
 
-.darkorange{
-    background:#ea580c;
+.Low{
+    background:#e8840b;
 }
 
-.red{
+.Poor{
     background:#dc2626;
 }
 
