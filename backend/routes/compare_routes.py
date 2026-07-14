@@ -7,6 +7,7 @@ from flask import (
     session
 )
 
+from backend.models import comparison
 from backend.utils.db import get_connection
 from backend.services.compare_service import compare_tenders
 from backend.services.report_service import generate_report
@@ -44,8 +45,8 @@ def compare():
 
         query = """
         SELECT
-            tender_name,
-            extracted_text
+        tender_name,
+        extracted_text
         FROM tenders
         WHERE id=%s
         """
@@ -113,18 +114,21 @@ def compare():
 
     comparison = compare_tenders(
         text1,
-        text2
+        text2,
+
     )
 
     print("\n========== COMPARISON RESULT ==========\n")
     
     print(comparison)
-
+    
     similarity = comparison["similarity"]
-
+    
     level = comparison["level"]
-
+    
     color = comparison["color"]
+    
+    clause_results = comparison["clause_results"]
 
     # -----------------------------------------
     # Report
@@ -136,7 +140,7 @@ def compare():
 
         tender_name2,
 
-        similarity
+        comparison
 
     )
 
@@ -152,14 +156,7 @@ def compare():
         analysis_report
     )
     VALUES
-    (
-        %s,
-        %s,
-        %s,
-        %s,
-        %s,
-        %s
-    )
+    (%s,%s,%s,%s,%s,%s)
     """,
     (
         session["user_id"],
@@ -188,11 +185,15 @@ def compare():
 
         tender2=tender_name2,
 
+        comparison=comparison,
+
         similarity=similarity,
 
         level=level,
 
         color=color,
+
+        clause_results=clause_results,
 
         report=report
 
