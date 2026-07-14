@@ -1,15 +1,20 @@
 <!DOCTYPE html>
+
 <html lang="en">
 
 <head>
 
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport"content="width=device-width, initial-scale=1.0">
 
-    <title>Comparison Report | TenderIQ</title>
+<title>
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/compare.css') }}">
+Tender Comparison Report
+
+</title>
+
+<link rel="stylesheet"href="{{ url_for('static',filename='css/compare.css') }}">
 
 </head>
 
@@ -17,71 +22,259 @@
 
 <div class="container">
 
+    <!-- ========================= -->
+    <!-- Header -->
+    <!-- ========================= -->
+
     <div class="header">
 
-        <h1>Comparison Report</h1>
+        <h1>
+
+            Tender Comparison Report
+
+        </h1>
 
         <p>
-            AI-Powered Tender Comparison Result
+
+            AI Powered Tender Comparison & Analysis
+
         </p>
 
     </div>
+
+    <!-- ========================= -->
+    <!-- Tender Summary -->
+    <!-- ========================= -->
 
     <div class="summary-card">
 
         <div class="info-box">
 
-            <h3>Tender 1</h3>
+            <h3>
 
-            <p>ID : {{ tender1 }}</p>
+                Tender A
+
+            </h3>
+
+            <p>
+
+                {{ tender1 }}
+
+            </p>
 
         </div>
 
         <div class="info-box">
 
-            <h3>Tender 2</h3>
+            <h3>
 
-            <p>ID : {{ tender2 }}</p>
+                Tender B
+
+            </h3>
+
+            <p>
+
+                {{ tender2 }}
+
+            </p>
 
         </div>
 
     </div>
 
+    <!-- ========================= -->
+    <!-- Similarity -->
+    <!-- ========================= -->
+
     <div class="similarity-card">
 
-        <h2>Overall Similarity Score</h2>
+        <h2>
 
-        <div class="score-circle">
+            Overall Similarity
+
+        </h2>
+
+        <div class="score-circle {{ color }}">
 
             {{ similarity }}%
 
         </div>
 
+        <div class="progress-container">
+
+            <div
+                id="progressBar"
+                class="progress-bar {{ color }}"
+                data-progress="{{ similarity }}">
+
+            </div>
+
+        </div>
+
+        <br>
+
+        <span class="badge {{ color }}">
+
+            {{ level }}
+
+        </span>
+
     </div>
+
+    <!-- ========================= -->
+    <!-- Statistics -->
+    <!-- ========================= -->
+
+    <div class="stats-grid">
+
+        <div class="stat-card">
+
+            <h4>
+
+                Similarity
+
+            </h4>
+
+            <p>
+
+                {{ similarity }}%
+
+            </p>
+
+        </div>
+
+        <div class="stat-card">
+
+            <h4>
+
+                Engine
+
+            </h4>
+
+            <p>
+
+                TF-IDF
+
+            </p>
+
+        </div>
+
+        <div class="stat-card">
+
+            <h4>
+
+                Status
+
+            </h4>
+
+            <p>
+
+                Completed
+
+            </p>
+
+        </div>
+
+        <div class="stat-card">
+
+            <h4>
+
+                Match Level
+
+            </h4>
+
+            <p>
+
+                {{ level }}
+
+            </p>
+
+        </div>
+
+    </div>
+
+    <!-- ========================= -->
+    <!-- Recommendation -->
+    <!-- ========================= -->
+
+    <div class="recommendation-card">
+
+        <h2>
+
+            Recommendation
+
+        </h2>
+
+        <p>
+
+        {% if similarity >= 90 %}
+
+            These tenders are almost identical.
+
+        {% elif similarity >= 70 %}
+
+            High similarity detected. Review minor differences.
+
+        {% elif similarity >= 50 %}
+
+            Moderate similarity detected. Manual verification is recommended.
+
+        {% else %}
+
+            Low similarity detected. These tenders differ significantly.
+
+        {% endif %}
+
+        </p>
+
+    </div>
+
+    <!-- ========================= -->
+    <!-- AI Report -->
+    <!-- ========================= -->
 
     <div class="report-card">
 
-        <h2>AI Analysis Report</h2>
+        <h2>
 
-        <pre>{{ report }}</pre>
+            AI Analysis Report
+
+        </h2>
+
+        <pre>
+            
+            {{ report }}
+
+        </pre>
 
     </div>
+
+    <!-- ========================= -->
+    <!-- Buttons -->
+    <!-- ========================= -->
 
     <div class="buttons">
 
         <a href="/dashboard"
            class="btn">
 
-            ← Back to Dashboard
+            ← Back Dashboard
 
         </a>
+
+        <button
+            onclick="window.print()"
+            class="btn print-btn">
+
+            🖨 Print Report
+
+        </button>
 
     </div>
 
 </div>
 
-<script src="{{ url_for('static', filename='js/compare.js') }}">
-</script>
+<script src="{{ url_for('static',filename='js/compare.js') }}"></script>
 
 </body>
 
