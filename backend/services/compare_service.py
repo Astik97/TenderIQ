@@ -1,25 +1,40 @@
-from sentence_transformers import SentenceTransformer
-from sklearn.metrics.pairwise import cosine_similarity
+"""
+==========================================
+Compare Service
+------------------------------------------
+Responsible for
 
-model = SentenceTransformer(
-    'all-MiniLM-L6-v2'
+1. Calling Similarity Engine
+2. Preparing Comparison Result
+3. Returning Complete Report
+==========================================
+"""
+
+from backend.services.similarity_service import (
+    calculate_similarity,
+    get_similarity_level,
+    get_similarity_color
 )
 
 def compare_tenders(text1, text2):
 
-    if not text1 or not text2:
-        return 0
-
-    embeddings = model.encode(
-        [text1, text2]
+    score = calculate_similarity(
+        text1,
+        text2
     )
 
-    similarity = cosine_similarity(
-        [embeddings[0]],
-        [embeddings[1]]
-    )[0][0]
+    level = get_similarity_level(score)
 
-    return round(
-        similarity * 100,
-        2
-    )
+    color = get_similarity_color(score)
+
+    comparison_result = {
+
+        "similarity": score,
+
+        "level": level,
+
+        "color": color
+
+    }
+
+    return comparison_result
