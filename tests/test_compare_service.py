@@ -1,38 +1,64 @@
 from backend.services.compare_service import compare_tenders
 
 text1 = """
-Python
-Flask
-MySQL
-Docker
+Eligibility Criteria
+
+Company should have 5 years experience.
+
+Technical Specification
+
+ISO Certified.
+
+Payment Terms
+
+30 days.
 """
 
 text2 = """
-Python
-Flask
-PostgreSQL
-Docker
+Eligibility
+
+Minimum experience 4 years.
+
+Technical
+
+ISO Certified Company.
+
+Payment
+
+Payment within 45 days.
 """
 
-result = compare_tenders(
-    text1,
-    text2
-)
+result = compare_tenders(text1, text2)
 
-print("="*50)
-
-print("Comparison Result")
-
-print("="*50)
-
-print()
-
-print(result)
-
-print()
+print("=" * 60)
+print("OVERALL RESULT")
+print("=" * 60)
 
 print("Similarity :", result["similarity"])
+print("Level      :", result["level"])
+print("Color      :", result["color"])
 
-print("Level :", result["level"])
+print("\n")
 
-print("Color :", result["color"])
+print("=" * 60)
+print("CLAUSE COMPARISON")
+print("=" * 60)
+
+for i, clause in enumerate(result["clause_results"], start=1):
+
+    print(f"\nClause {i}")
+
+    print("-" * 40)
+
+    print("Original :")
+
+    print(clause["clause"])
+
+    print("\nMatched With :")
+
+    print(clause["best_match"])
+
+    print("\nSimilarity :", clause["similarity"])
+
+    print("Level      :", clause["level"])
+    
