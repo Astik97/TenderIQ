@@ -10,63 +10,161 @@ from backend.utils.db import get_connection
 from backend.services.compare_service import compare_tenders
 from backend.services.report_service import generate_report
 
-compare_bp = Blueprint('compare',__name__)
+compare_bp = Blueprint("compare",__name__)
 
-@compare_bp.route('/compare',methods=['POST'])
+@compare_bp.route("/compare", methods=["POST"])
 def compare():
 
+    # -----------------------------------------
+    # Get Selected Tender IDs
+    # -----------------------------------------
+
     selected = request.form.getlist(
-        'selected_tenders'
+        "selected_tenders"
     )
 
     if len(selected) != 2:
 
-        flash("Please select exactly two tenders.", "error")
-        
-        return redirect('/dashboard')
+        flash(
+            "Please select exactly two tenders.",
+            "error"
+        )
 
-    conn = get_connection()
-    cursor = conn.cursor()
+        return redirect("/dashboard")
 
-    query = """
-    SELECT tender_name, extracted_text
-    FROM tenders
-    WHERE id=%s
-    """
+    conn = None
+    cursor = None
 
-    cursor.execute(query, (selected[0],))
-    row1 = cursor.fetchone()
+    try:
 
-    tender_name1 = row1[0]
-    text1 = row1[1]
+        conn = get_connection()
 
-    cursor.execute(query, (selected[1],))
-    row2 = cursor.fetchone()
+        cursor = conn.cursor()
 
-    tender_name2 = row2[0]
-    text2 = row2[1]
+        query = """
+        SELECT
+            tender_name,
+            extracted_text
+        FROM tenders
+        WHERE id=%s
+        """
 
-    cursor.close()
-    conn.close()
+        # -----------------------------
+        # Tender 1
+        # -----------------------------
 
-    similarity = compare_tenders(
+        cursor.execute(
+            query,
+            (selected[0],)
+        )
+
+        row1 = cursor.fetchone()
+
+        if row1 is None:
+
+            flash(
+                "First tender not found.",
+                "error"
+            )
+
+            return redirect("/dashboard")
+
+        tender_name1 = row1[0]
+
+        text1 = row1[1]
+
+        # -----------------------------
+        # Tender 2
+        # -----------------------------
+
+        cursor.execute(
+            query,
+            (selected[1],)
+        )
+
+        row2 = cursor.fetchone()
+
+        if row2 is None:
+
+            flash(
+                "Second tender not found.",
+                "error"
+            )
+
+            return redirect("/dashboard")
+
+        tender_name2 = row2[0]
+
+        text2 = row2[1]
+
+    except Exception as e:
+
+        flash(
+            f"Database Error : {e}",
+            "error"
+        )
+
+        return redirect("/dashboard")
+
+    finally:
+
+        if cursor:
+            cursor.close()
+
+        if conn:
+            conn.close()
+
+    # -----------------------------------------
+    # Compare
+    # -----------------------------------------
+
+    comparison = compare_tenders(
         text1,
         text2
     )
 
-    # tender_name1 = tender_name1,
-    # tender_name2 = tender_name2,
+    print("\n========== COMPARISON RESULT ==========\n")
+    
+    print(comparison)
+
+    similarity = comparison["similarity"]
+
+    level = comparison["level"]
+
+    color = comparison["color"]
+
+    # -----------------------------------------
+    # Report
+    # -----------------------------------------
 
     report = generate_report(
+
         tender_name1,
+
         tender_name2,
+
         similarity
+
     )
 
+    # -----------------------------------------
+    # Render Compare Page
+    # -----------------------------------------
+
     return render_template(
+
         "compare.html",
-        similarity=similarity,
+
         tender1=tender_name1,
+
         tender2=tender_name2,
+
+        similarity=similarity,
+
+        level=level,
+
+        color=color,
+
         report=report
+
     )
