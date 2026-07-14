@@ -1,44 +1,130 @@
+// =====================================================
+// TenderIQ Compare Report
+// compare.js
+// =====================================================
 
 document.addEventListener("DOMContentLoaded", function () {
 
-    console.log("Comparison Report Loaded");
+    console.log("✅ Comparison Report Loaded");
 
-    const score = document.querySelector(".score-circle");
+    // ==========================================
+    // Score Circle Animation
+    // ==========================================
 
-    if(score){
+    const scoreCircle = document.querySelector(".score-circle");
 
-        score.animate(
+    if (scoreCircle) {
+
+        scoreCircle.animate(
 
             [
 
                 {
-
-                    transform:"scale(0.5)",
-
-                    opacity:0
-
+                    transform: "scale(0.5)",
+                    opacity: 0
                 },
 
                 {
-
-                    transform:"scale(1)",
-
-                    opacity:1
-
+                    transform: "scale(1)",
+                    opacity: 1
                 }
 
             ],
 
             {
 
-                duration:700,
+                duration: 700,
 
-                easing:"ease-out"
+                easing: "ease-out"
 
             }
 
         );
 
     }
+
+    // ==========================================
+    // Progress Bar Animation
+    // ==========================================
+
+    const progressBar = document.getElementById("progressBar");
+
+    if (progressBar) {
+
+        const progress = progressBar.dataset.progress;
+
+        setTimeout(function () {
+
+            progressBar.style.width = progress + "%";
+
+        }, 300);
+
+    }
+
+    // ==========================================
+    // Animated Percentage Counter
+    // ==========================================
+
+    if (scoreCircle) {
+
+        const finalValue = parseFloat(
+
+            scoreCircle.innerText.replace("%", "")
+
+        );
+
+        let current = 0;
+
+        const interval = setInterval(function () {
+
+            current += 1;
+
+            scoreCircle.innerHTML = current + "%";
+
+            if (current >= finalValue) {
+
+                scoreCircle.innerHTML = finalValue + "%";
+
+                clearInterval(interval);
+
+            }
+
+        }, 20);
+
+    }
+
+    // ==========================================
+    // Print Button
+    // ==========================================
+
+    const printButton = document.querySelector(".print-btn");
+
+    if (printButton) {
+
+        printButton.addEventListener(
+
+            "click",
+
+            function () {
+
+                const confirmPrint = confirm(
+
+                    "Do you want to print this comparison report?"
+
+                );
+
+                if (confirmPrint) {
+
+                    window.print();
+
+                }
+
+            }
+
+        );
+
+    }
+
+    console.log("✅ Compare Module Ready");
 
 });
