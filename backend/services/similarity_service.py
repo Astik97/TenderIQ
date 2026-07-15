@@ -94,15 +94,15 @@ def get_similarity_color(score):
     """
 
     if score >= 90:
-        return "Excellent"
+        return "Green"
 
     elif score >= 70:
-        return "Good"
+        return "Blue"
 
     elif score >= 50:
-        return "Moderate"
+        return "Orange"
 
     elif score >= 30:
-        return "Low"
+        return "Yellow"
 
-    return "Poor"
+    return "Red"
