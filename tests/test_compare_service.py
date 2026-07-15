@@ -62,3 +62,38 @@ for i, clause in enumerate(result["clause_results"], start=1):
 
     print("Level      :", clause["level"])
     
+    print("Changed :")
+
+    print(
+        clause["difference"]["changed"]
+    )
+
+    print("Added :")
+
+    print(
+        clause["difference"]["added"]
+    )
+
+    print("Removed :")
+
+    print(
+        clause["difference"]["removed"]
+    )
+
+    print("Summary :")
+
+    print(
+        clause["difference"]["summary"]
+    )
+
+print()
+
+print(result["clause_results"][0].keys())
+
+print("=" * 60)
+
+print("Returned Dictionary Keys")
+
+print("=" * 60)
+
+print(result.keys())
