@@ -17,6 +17,10 @@ Responsibilities
 
 from backend.services.clause_service import extract_clauses
 
+from backend.services.difference_service import (
+    compare_clauses as compare_clause_difference
+)
+
 from backend.services.similarity_service import (
     calculate_similarity,
     get_similarity_level,
@@ -67,6 +71,11 @@ def compare_clauses(clauses1, clauses2):
 
                 best_clause = clause2
 
+        difference = compare_clause_difference(
+            clause1,
+            best_clause
+        )
+
         comparison_results.append({
 
             "clause": clause1,
@@ -77,7 +86,9 @@ def compare_clauses(clauses1, clauses2):
 
             "level": get_similarity_level(best_score),
 
-            "color": get_similarity_color(best_score)
+            "color": get_similarity_color(best_score),
+
+            "difference": difference
 
         })
 

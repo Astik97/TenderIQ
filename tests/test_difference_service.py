@@ -13,9 +13,17 @@ result = compare_clauses(
     clause2
 )
 
+print("\nDifference Summary")
+
 print("=" * 50)
 print("Difference Result")
 print("=" * 50)
+
+print(
+
+    result["difference"]["summary"]
+
+)
 
 for key, value in result.items():
     print(f"{key}: {value}")
