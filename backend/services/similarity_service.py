@@ -97,7 +97,7 @@ def get_similarity_color(score):
         return "Green"
 
     elif score >= 70:
-        return "Navy"
+        return "SkyBlue"
 
     elif score >= 50:
         return "Orange"
