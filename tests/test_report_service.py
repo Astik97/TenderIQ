@@ -29,10 +29,7 @@ Payment
 Payment within 45 days.
 """
 
-comparison = compare_tenders(
-    text1,
-    text2
-)
+comparison = compare_tenders(text1, text2)
 
 report = generate_report(
     "Bridge Tender",
@@ -40,6 +37,4 @@ report = generate_report(
     comparison
 )
 
-print("=" * 60)
 print(report)
-print("=" * 60)
