@@ -65,30 +65,92 @@ for i, clause in enumerate(result["clause_results"], start=1):
     print("Changed :")
 
     print(
+
         clause["difference"]["changed"]
+
     )
 
     print("Added :")
 
     print(
+
         clause["difference"]["added"]
+
     )
 
     print("Removed :")
 
     print(
+
         clause["difference"]["removed"]
+
     )
 
     print("Summary :")
 
     print(
+
         clause["difference"]["summary"]
+
+    )
+
+    print()
+    
+    print("Risk Score :")
+
+    print(
+
+        clause["risk"]["score"]
+
+    )
+
+    print()
+
+    print("Risk Level :")
+
+    print(
+
+        clause["risk"]["level"]
+
+    )
+
+    print()
+
+    print("Risk Color :")
+
+    print(
+
+        clause["risk"]["color"]
+
+    )
+
+    print()
+
+    print("Risk Reason :")
+
+    print(
+
+        clause["risk"]["reason"]
+
+    )
+
+    print()
+
+    print("Recommendation :")
+
+    print(
+
+        clause["risk"]["recommendation"]
+
     )
 
 print()
 
-print(result["clause_results"][0].keys())
+print(
+    
+    result["clause_results"][0].keys()
+    
+    )
 
 print("=" * 60)
 

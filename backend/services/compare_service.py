@@ -1,8 +1,6 @@
 """
 =========================================================
-TenderIQ
-Compare Service
-Milestone 5
+TenderIQ Compare Service
 =========================================================
 
 Responsibilities
@@ -19,6 +17,10 @@ from backend.services.clause_service import extract_clauses
 
 from backend.services.difference_service import (
     compare_clauses as compare_clause_difference
+)
+
+from backend.services.risk_service import (
+    analyze_risk
 )
 
 from backend.services.similarity_service import (
@@ -73,7 +75,16 @@ def compare_clauses(clauses1, clauses2):
 
         difference = compare_clause_difference(
             clause1,
+
             best_clause
+        )
+        
+        risk = analyze_risk(
+            
+            similarity=best_score,
+            
+            difference=difference
+            
         )
 
         comparison_results.append({
@@ -88,7 +99,9 @@ def compare_clauses(clauses1, clauses2):
 
             "color": get_similarity_color(best_score),
 
-            "difference": difference
+            "difference": difference,
+
+            "risk":risk
 
         })
 
