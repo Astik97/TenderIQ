@@ -1,11 +1,8 @@
 // =====================================================
 // TenderIQ Compare Report
-// compare.js
 // =====================================================
 
 document.addEventListener("DOMContentLoaded", function () {
-
-    console.log("✅ Comparison Report Loaded");
 
     // ==========================================
     // Score Circle Animation
@@ -75,24 +72,54 @@ document.addEventListener("DOMContentLoaded", function () {
 
         );
 
+        const step = finalValue / 50;
+
         let current = 0;
 
         const interval = setInterval(function () {
 
-            current += 1;
+            current += step;
 
-            scoreCircle.innerHTML = current + "%";
+            // scoreCircle.innerHTML = current + "%";
 
             if (current >= finalValue) {
 
-                scoreCircle.innerHTML = finalValue + "%";
+                current = finalValue;
 
                 clearInterval(interval);
 
             }
 
+            scoreCircle.innerHTML = current.toFixed(2) + "%";
+
         }, 20);
 
+    }
+
+    // =======================================
+    // Search Box
+    // =======================================
+
+    const searchInput=document.getElementById("clauseSearch");
+    
+    if(searchInput){
+        
+        searchInput.addEventListener("keyup",function(){
+
+        const value=this.value.toLowerCase();
+
+        const cards=document.querySelectorAll(".clause-card");
+
+        cards.forEach(card=>{
+
+        const text=card.innerText.toLowerCase();
+
+        card.style.display=text.includes(value)?"block":"none";
+
+        });
+
+        });
+    
     }
 
     // ==========================================
@@ -109,16 +136,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
             function () {
 
-                const confirmPrint = confirm(
-
-                    "Do you want to print this comparison report?"
-
-                );
-
-                if (confirmPrint) {
-
+                if (
+                    confirm("Do you want to print this comparison report?")
+                ) {
+                    
                     window.print();
-
                 }
 
             }
@@ -127,6 +149,26 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }
 
-    console.log("✅ Compare Module Ready");
+    document.querySelectorAll(".risk-box").forEach(card=>{
+        
+        if(card.dataset.risk==="Critical Risk"){
+            
+            card.animate([
+                
+                {transform:"translateX(-5px)"},
+                
+                {transform:"translateX(5px)"},
+                
+                {transform:"translateX(0px)"}
+            
+            ],{
+                
+                duration:400
+            
+            });
+        
+        }
+    
+    });
 
 });

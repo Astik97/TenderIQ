@@ -94,7 +94,7 @@ Tender Comparison Report
 
         </h2>
 
-        <div class="score-circle {{ color }}">
+        <div class="score-circle {{ comparison.color }}">
 
             {{ comparison.similarity }}%
 
@@ -104,8 +104,8 @@ Tender Comparison Report
 
             <div
                 id="progressBar"
-                class="progress-bar {{ color }}"
-                data-progress="{{ similarity }}">
+                class="progress-bar {{ comparison.color }}"
+                data-progress="{{ comparison.similarity }}">
 
             </div>
 
@@ -113,7 +113,7 @@ Tender Comparison Report
 
         <br>
 
-        <span class="badge {{ color }}">
+        <span class="badge {{ comparison.color }}">
 
             {{ comparison.level }}
 
@@ -219,7 +219,7 @@ Tender Comparison Report
         
         <input
         type="text"
-        id="searchClause"
+        id="clauseSearch"
         placeholder="Search Clause...">
     
     </div>
@@ -235,140 +235,116 @@ Tender Comparison Report
             Clause Analysis
         
         </h2>
-        
+
         {% for clause in comparison.clause_results %}
         
         <div class="clause-card">
             
             <h3>
-                
                 Clause {{ loop.index }}
-            
             </h3>
             
             <p>
-                
-                <strong>Original</strong>
-            
-            </p>
-            
-            <p>
-                
-                {{ clause.clause }}
-
-            </p>
-            
-            <hr>
-            
-            <p>
-                
-                <strong>Best Match</strong>
-
-            </p>
-            
-            <p>
-                
-                {{ clause.best_match }}
-
-            </p>
-            
-            <hr>
-
-            <p>
-                
-                Similarity
-                
                 <strong>
-                    
-                    {{ clause.similarity }}%
-                
+                    Original
                 </strong>
             </p>
             
             <p>
+                {{ clause.clause }}
+            </p>
+            
+            <hr>
+            
+            <p>
+                <strong>
+                    Matched Clause
+                </strong>
+            </p>
+            
+            <p>
+                {{ clause.best_match }}
+            </p>
+
+            <hr>
+            
+            <p>
+                Similarity :
                 
-                Match Level
-                
+                <strong>
+                    {{ clause.similarity }}%
+                </strong>
+            </p>
+
+            <p>
+                Match Level :
                 <span class="badge {{ clause.color }}">
-                    
                     {{ clause.level }}
-                
                 </span>
-            
             </p>
             
             <p>
-                
                 Difference Summary
-
             </p>
 
             <p>
-
                 {{ clause.difference.summary }}
-
             </p>
+            
+            <div class="risk-box" data-risk="{{ clause.risk.level }}">
+                
+                <h4>Risk Analysis</h4>
+
+                <p>
+
+                    <strong>Risk Score</strong>
+
+                    {{ clause.risk.score }}
+
+                </p>
+
+                <p>
+
+                    <strong>Risk Level</strong>
+
+                    <span class="badge {{ clause.risk.color }}">
+
+                        {{ clause.risk.level }}
+
+                    </span>
+
+                </p>
+
+                <p>
+
+                    <strong>Reason</strong>
+
+                </p>
+
+                <p>
+
+                    {{ clause.risk.reason }}
+
+                </p>
+
+                <p>
+
+                    <strong>Recommendation</strong>
+
+                </p>
+
+                <p>
+
+                    {{ clause.risk.recommendation }}
+
+                </p>
+            
+            </div>
         
         </div>
         
         {% endfor %}
-    
-    </div>
-    
-    <div class="risk-box">
         
-        <h4>
-            
-            Risk Analysis
-
-        </h4>
-
-        <p>
-
-            Risk Score :
-            
-            {{ clause.risk.score }}
-
-        </p>
-
-        <p>
-
-            Risk Level :
-            
-            <span class="badge {{ clause.risk.color }}">
-                
-                {{ clause.risk.level }}
-
-            </span>
-        
-        </p>
-
-        <p>
-            
-            Reason
-
-        </p>
-        
-        <p>
-            
-            {{ clause.risk.reason }}
-    
-        </p>
-
-        <p>
-
-            Recommendation
-
-        </p>
-
-        <p>
-
-            {{ clause.risk.recommendation }}
-
-        </p>
-    
-    </div>
-
     <!-- ========================= -->
     <!-- Recommendation -->
     <!-- ========================= -->
@@ -383,15 +359,15 @@ Tender Comparison Report
 
         <p>
 
-        {% if similarity >= 90 %}
+        {% if comparison.similarity >= 90 %}
 
             These tenders are almost identical.
 
-        {% elif similarity >= 70 %}
+        {% elif comparison.similarity >= 70 %}
 
             High similarity detected. Review minor differences.
 
-        {% elif similarity >= 50 %}
+        {% elif comparison.similarity >= 50 %}
 
             Moderate similarity detected. Manual verification is recommended.
 
