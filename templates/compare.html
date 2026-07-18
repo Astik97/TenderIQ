@@ -6,7 +6,7 @@
 
 <meta charset="UTF-8">
 
-<meta name="viewport"content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>
 
@@ -96,7 +96,7 @@ Tender Comparison Report
 
         <div class="score-circle {{ color }}">
 
-            {{ similarity }}%
+            {{ comparison.similarity }}%
 
         </div>
 
@@ -115,66 +115,64 @@ Tender Comparison Report
 
         <span class="badge {{ color }}">
 
-            {{ level }}
+            {{ comparison.level }}
 
         </span>
 
     </div>
 
     <!-- ========================= -->
-    <!-- Statistics -->
+    <!-- Statistics Dashboard -->
     <!-- ========================= -->
-
+     
     <div class="stats-grid">
+        
+        <div class="stat-card">
+            
+            <h4>Overall Similarity</h4>
 
+            <p>{{ comparison.similarity }}%</p>
+        
+        </div>
+        
         <div class="stat-card">
 
-            <h4>
+            <h4>Total Clauses</h4>
 
-                Similarity
-
-            </h4>
-
-            <p>
-
-                {{ similarity }}%
-
-            </p>
-
+            <p>{{ comparison.total_clauses }}</p>
+        
         </div>
+        
+        <div class="stat-card">
+            
+            <h4>Matched Clauses</h4>
 
+            <p>{{ comparison.matched_clauses }}</p>
+        
+        </div>
+        
         <div class="stat-card">
 
-            <h4>
+            <h4>AI Engine</h4>
 
-                Engine
-
-            </h4>
-
-            <p>
-
-                TF-IDF
-
-            </p>
-
+            <p>MiniLM-L6-v2</p>
+        
         </div>
-
-        <div class="stat-card">
-
-            <h4>
-
-                Status
-
-            </h4>
-
-            <p>
-
-                Completed
-
-            </p>
-
-        </div>
-
+    
+    </div>
+    
+    <!-- ========================= -->
+    <!-- Executive Summary -->
+    <!-- ========================= -->
+     
+    <div class="summary-box">
+        
+        <h2>
+            
+            Executive Summary
+        
+        </h2>
+        
         <div class="stat-card">
 
             <h4>
@@ -183,14 +181,192 @@ Tender Comparison Report
 
             </h4>
 
-            <p>
+            <strong>
 
-                {{ level }}
+                {{ comparison.level }}
+
+            </strong>
+            
+            <p>
+                
+                The AI comparison engine analyzed
+                
+                <strong>
+                    
+                    {{ comparison.total_clauses }}
+                
+                </strong>
+                
+                clauses and matched
+                
+                <strong>
+                    
+                    {{ comparison.matched_clauses }}
+                
+                </strong>
+                
+                clauses using semantic similarity.
+            
+            </p>
+        
+        </div>
+    
+    </div>
+
+    <!-- Clause Search -->
+
+    <div class="search-box">
+        
+        <input
+        type="text"
+        id="searchClause"
+        placeholder="Search Clause...">
+    
+    </div>
+
+    <!-- ========================= -->
+    <!-- Clause Analysis -->
+    <!-- ========================= -->
+     
+    <div class="clause-section">
+        
+        <h2>
+            
+            Clause Analysis
+        
+        </h2>
+        
+        {% for clause in comparison.clause_results %}
+        
+        <div class="clause-card">
+            
+            <h3>
+                
+                Clause {{ loop.index }}
+            
+            </h3>
+            
+            <p>
+                
+                <strong>Original</strong>
+            
+            </p>
+            
+            <p>
+                
+                {{ clause.clause }}
+
+            </p>
+            
+            <hr>
+            
+            <p>
+                
+                <strong>Best Match</strong>
+
+            </p>
+            
+            <p>
+                
+                {{ clause.best_match }}
+
+            </p>
+            
+            <hr>
+
+            <p>
+                
+                Similarity
+                
+                <strong>
+                    
+                    {{ clause.similarity }}%
+                
+                </strong>
+            </p>
+            
+            <p>
+                
+                Match Level
+                
+                <span class="badge {{ clause.color }}">
+                    
+                    {{ clause.level }}
+                
+                </span>
+            
+            </p>
+            
+            <p>
+                
+                Difference Summary
 
             </p>
 
-        </div>
+            <p>
 
+                {{ clause.difference.summary }}
+
+            </p>
+        
+        </div>
+        
+        {% endfor %}
+    
+    </div>
+    
+    <div class="risk-box">
+        
+        <h4>
+            
+            Risk Analysis
+
+        </h4>
+
+        <p>
+
+            Risk Score :
+            
+            {{ clause.risk.score }}
+
+        </p>
+
+        <p>
+
+            Risk Level :
+            
+            <span class="badge {{ clause.risk.color }}">
+                
+                {{ clause.risk.level }}
+
+            </span>
+        
+        </p>
+
+        <p>
+            
+            Reason
+
+        </p>
+        
+        <p>
+            
+            {{ clause.risk.reason }}
+    
+        </p>
+
+        <p>
+
+            Recommendation
+
+        </p>
+
+        <p>
+
+            {{ clause.risk.recommendation }}
+
+        </p>
+    
     </div>
 
     <!-- ========================= -->
@@ -235,11 +411,11 @@ Tender Comparison Report
 
     <div class="report-card">
 
-        <h2>
+        <summary>
 
             AI Analysis Report
 
-        </h2>
+        </summary>
 
         <pre>
             

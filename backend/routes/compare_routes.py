@@ -7,7 +7,6 @@ from flask import (
     session
 )
 
-from backend.models import comparison
 from backend.utils.db import get_connection
 from backend.services.compare_service import compare_tenders
 from backend.services.report_service import generate_report
@@ -119,16 +118,16 @@ def compare():
     )
 
     print("\n========== COMPARISON RESULT ==========\n")
+
+    print(f"Similarity : {comparison['similarity']}%")
     
-    print(comparison)
-    
-    similarity = comparison["similarity"]
-    
-    level = comparison["level"]
-    
-    color = comparison["color"]
-    
-    clause_results = comparison["clause_results"]
+    print(f"Match Level : {comparison['level']}")
+
+    print(f"Total Clauses : {comparison['total_clauses']}")
+
+    print(f"Matched Clauses : {comparison['matched_clauses']}")
+
+    print(f"Total Risks : {len(comparison['clause_results'])}")
 
     # -----------------------------------------
     # Report
@@ -162,8 +161,8 @@ def compare():
         session["user_id"],
         selected[0],
         selected[1],
-        similarity,
-        level,
+        comparison["similarity"],
+        comparison["level"],
         report
     )
 )
@@ -171,6 +170,7 @@ def compare():
     conn.commit()
     
     cursor.close()
+
     conn.close()
 
     # -----------------------------------------
@@ -186,14 +186,6 @@ def compare():
         tender2=tender_name2,
 
         comparison=comparison,
-
-        similarity=similarity,
-
-        level=level,
-
-        color=color,
-
-        clause_results=clause_results,
 
         report=report
 
