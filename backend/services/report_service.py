@@ -1,261 +1,25 @@
 """
 =========================================================
 TenderIQ Report Service
-=========================================================
+---------------------------------------------------------
+Responsible for
 
-Responsibilities
-
-1. Generate Overall Report
-2. Generate Clause Analysis
-3. Generate Recommendation
-4. Return Complete Report
+1. Executive Summary
+2. Statistics
+3. Clause Analysis
+4. Risk Summary
+5. Recommendations
+6. Final Report Generation
 =========================================================
 """
 
 # =========================================================
-# Report Header
+# Header
 # =========================================================
 
-def generate_header():
+def generate_header(tender1_name, tender2_name):
 
-    return (
-        "\n"
-        "=========================================================\n"
-        "TenderIQ AI Comparison Report\n"
-        "=========================================================\n"
-    )
-
-
-# =========================================================
-# Executive Summary
-# =========================================================
-
-def generate_summary(
-        tender1,
-        tender2,
-        comparison
-):
-
-    summary = (
-        f"\nTender 1 : {tender1}\n"
-        f"Tender 2 : {tender2}\n\n"
-        f"Overall Similarity : {comparison['similarity']}%\n"
-        f"Overall Match      : {comparison['level']}\n"
-    )
-
-    return summary
-
-# =========================================================
-# Statistics
-# =========================================================
-
-def generate_statistics(comparison):
-
-    stats = (
-        "\n=========================================================\n"
-        "Statistics\n"
-        "=========================================================\n"
-        f"Total Clauses     : {comparison['total_clauses']}\n"
-        f"Matched Clauses   : {comparison['matched_clauses']}\n"
-        f"Overall Similarity: {comparison['similarity']}%\n"
-    )
-
-    return stats
-
-# =========================================================
-# Clause Analysis
-# =========================================================
-
-def generate_clause_analysis(comparison):
-
-    report = (
-        "\n=========================================================\n"
-        "Clause Analysis\n"
-        "=========================================================\n"
-    )
-
-    for index, clause in enumerate(
-        comparison["clause_results"],
-        start=1
-    ):
-
-        difference = clause["difference"]
-
-        report += (
-            f"\n---------------------------------------------------------\n"
-            f"Clause {index}\n"
-            f"---------------------------------------------------------\n"
-
-            f"Original Clause\n"
-            f"{clause['clause']}\n\n"
-
-            f"Best Match\n"
-            f"{clause['best_match']}\n\n"
-
-            f"Similarity\n"
-            f"{clause['similarity']}%\n\n"
-
-            f"Match Level\n"
-            f"{clause['level']}\n\n"
-
-            f"Changed\n"
-            f"{difference['changed']}\n\n"
-
-            f"Added\n"
-            f"{', '.join(difference['added']) if difference['added'] else 'None'}\n\n"
-
-            f"Removed\n"
-            f"{', '.join(difference['removed']) if difference['removed'] else 'None'}\n\n"
-
-            f"Difference Summary\n"
-            f"{difference['summary']}\n"
-        )
-
-    return report
-
-
-# =========================================================
-# Overall Conclusion
-# =========================================================
-
-def get_conclusion(similarity):
-
-    if similarity >= 90:
-        return "Excellent Match"
-
-    elif similarity >= 70:
-        return "Good Match"
-
-    elif similarity >= 50:
-        return "Moderate Match"
-
-    elif similarity >= 30:
-        return "Low Match"
-    
-    else:
-        return "Poor Match"
-
-# =========================================================
-# Recommendation
-# =========================================================
-
-def generate_recommendation(comparison):
-
-    score = comparison["similarity"]
-
-    if score >= 90:
-
-        recommendation = (
-            "Excellent Match.\n"
-            "Only minor verification is recommended."
-        )
-
-    elif score >= 70:
-
-        recommendation = (
-            "Good Match.\n"
-            "Review important commercial clauses."
-        )
-
-    elif score >= 50:
-
-        recommendation = (
-            "Moderate Match.\n"
-            "Carefully review technical and eligibility sections."
-        )
-
-    elif score >= 30:
-
-        recommendation = (
-            "Low Match.\n"
-            "Significant manual review is recommended."
-        )
-
-    else:
-
-        recommendation = (
-            "Poor match.\n"
-            "These tenders appear substantially different."
-        )
-
-    return (
-        f"{recommendation}\n"
-    )
-    
-# =========================================================
-# Clause Report
-# =========================================================
-
-def generate_clause_report(clause_results):
-
-    report = ""
-
-    for index, clause in enumerate(clause_results, start=1):
-
-        difference = clause["difference"]
-
-        report += f"""
-----------------------------------------------------
-Clause {index}
-----------------------------------------------------
-
-Original Clause
-
-{clause['clause']}
-
-Best Match
-
-{clause['best_match']}
-
-Similarity
-
-{clause['similarity']} %
-
-Level
-
-{clause['level']}
-
-Changed
-
-{difference['changed']}
-
-Added
-
-{', '.join(difference["added"]) if difference["added"] else "None"}
-
-Removed
-
-{', '.join(difference["removed"]) if difference["removed"] else "None"}
-
-Difference Summary
-
-{difference["summary"]}
-"""
-   
-    return report
-
-# =========================================================
-# Main Report Generator
-# =========================================================
-
-def generate_report(
-
-        tender1_name,
-        tender2_name,
-        comparison_result
-    ):
-
-    similarity = comparison_result["similarity"]
-
-    clause_results = comparison_result["clause_results"]
-
-    conclusion = get_conclusion(similarity)
-
-    recommendation = generate_recommendation(comparison_result)
-
-    clause_report = generate_clause_report(clause_results)
-
-    report = f"""
+    return f"""
 =========================================================
 TenderIQ AI Comparison Report
 =========================================================
@@ -269,14 +33,71 @@ Tender 2
 {tender2_name}
 
 =========================================================
+"""
 
+# =========================================================
+# Executive Summary
+# =========================================================
+
+def generate_summary(comparison):
+
+    similarity = comparison["similarity"]
+
+    level = comparison["level"]
+
+    if similarity >= 90:
+
+        conclusion = "Highly Similar Documents"
+
+        recommendation = (
+            "These tenders are almost identical.\n"
+            "Only a quick manual verification is recommended."
+        )
+
+    elif similarity >= 70:
+
+        conclusion = "Good Overall Match"
+
+        recommendation = (
+            "Most clauses match successfully.\n"
+            "Review financial and commercial clauses."
+        )
+
+    elif similarity >= 50:
+
+        conclusion = "Moderately Similar Documents"
+
+        recommendation = (
+            "Several clauses differ.\n"
+            "Carefully review eligibility and technical sections."
+        )
+
+    elif similarity >= 30:
+
+        conclusion = "Low Similarity"
+
+        recommendation = (
+            "Large differences detected.\n"
+            "Detailed manual verification is recommended."
+        )
+
+    else:
+
+        conclusion = "Very Low Similarity"
+
+        recommendation = (
+            "The tenders differ significantly.\n"
+            "Perform a complete clause-by-clause review."
+        )
+
+    return f"""
 Overall Similarity
 
 {similarity} %
 
 Overall Match
 
-{comparison_result['level']}
+{level}
 
 =========================================================
 
@@ -291,20 +112,258 @@ Recommendation
 {recommendation}
 
 =========================================================
+"""
 
-Clause Analysis
+# =========================================================
+# Statistics
+# =========================================================
 
-{clause_report}
+def generate_statistics(comparison):
+
+    clause_results = comparison["clause_results"]
+
+    high_risk = 0
+    medium_risk = 0
+    low_risk = 0
+
+    excellent = 0
+    good = 0
+    moderate = 0
+    low = 0
+    poor = 0
+
+    for clause in clause_results:
+
+        risk = clause["risk"]["level"]
+
+        match = clause["level"]
+
+        if risk == "Critical Risk":
+            high_risk += 1
+
+        elif risk == "High Risk":
+            high_risk += 1
+
+        elif risk == "Medium Risk":
+            medium_risk += 1
+
+        else:
+            low_risk += 1
+
+        if match == "Excellent Match":
+            excellent += 1
+
+        elif match == "Good Match":
+            good += 1
+
+        elif match == "Moderate Match":
+            moderate += 1
+
+        elif match == "Low Match":
+            low += 1
+
+        else:
+            poor += 1
+
+    return f"""
+Statistics
+
+Total Clauses
+
+{comparison["total_clauses"]}
+
+Matched Clauses
+
+{comparison["matched_clauses"]}
+
+Excellent Matches
+
+{excellent}
+
+Good Matches
+
+{good}
+
+Moderate Matches
+
+{moderate}
+
+Low Matches
+
+{low}
+
+Poor Matches
+
+{poor}
+
+High Risk Clauses
+
+{high_risk}
+
+Medium Risk Clauses
+
+{medium_risk}
+
+Low Risk Clauses
+
+{low_risk}
+
+=========================================================
+"""
+
+# =========================================================
+# Clause Analysis
+# =========================================================
+
+def generate_clause_analysis(comparison):
+
+    report = "\nClause Analysis\n"
+
+    for index, clause in enumerate(
+        comparison["clause_results"],
+        start=1
+    ):
+
+        difference = clause["difference"]
+
+        risk = clause["risk"]
+
+        added = ", ".join(
+            difference["added"]
+        ) if difference["added"] else "None"
+
+        removed = ", ".join(
+            difference["removed"]
+        ) if difference["removed"] else "None"
+
+        report += f"""
+
+----------------------------------------------------
+Clause {index}
+----------------------------------------------------
+
+Original Clause
+
+{clause["clause"]}
+
+Matched Clause
+
+{clause["best_match"]}
+
+Similarity
+
+{clause["similarity"]} %
+
+Match Level
+
+{clause["level"]}
+
+Difference Summary
+
+{difference["summary"]}
+
+Added Keywords
+
+{added}
+
+Removed Keywords
+
+{removed}
+
+==================== RISK ====================
+
+Risk Score
+
+{risk["score"]}
+
+Risk Level
+
+{risk["level"]}
+
+Risk Reason
+
+{risk["reason"]}
+
+Recommendation
+
+{risk["recommendation"]}
+
+====================================================
+"""
+
+    return report
+
+# =========================================================
+# Footer
+# =========================================================
+
+def generate_footer(comparison):
+
+    return f"""
 
 =========================================================
 
 Total Clauses Compared
 
-{comparison_result['matched_clauses']}
+{comparison["matched_clauses"]}
+
+Overall Similarity
+
+{comparison["similarity"]} %
 
 =========================================================
+
 End of Report
+
 =========================================================
 """
+
+# =========================================================
+# Main Generator
+# =========================================================
+
+def generate_report(
+
+    tender1_name,
+
+    tender2_name,
+
+    comparison
+
+):
+
+    report = ""
+
+    report += generate_header(
+
+        tender1_name,
+
+        tender2_name
+
+    )
+
+    report += generate_summary(
+
+        comparison
+
+    )
+
+    report += generate_statistics(
+
+        comparison
+
+    )
+
+    report += generate_clause_analysis(
+
+        comparison
+
+    )
+
+    report += generate_footer(
+
+        comparison
+
+    )
 
     return report
