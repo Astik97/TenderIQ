@@ -5,11 +5,16 @@ from dotenv import load_dotenv
 
 app = Flask(__name__)
 
+@app.before_request
+def debug_request():
+    from flask import request
+
+    print("\n")
+    print("=" * 80)
+    print(request.method, request.path)
+    print("=" * 80)
+
 app.config.from_object(Config)
-
-# load_dotenv()
-
-# app.secret_key = os.getenv("SECRET_KEY")
 
 from backend.routes.auth_routes import auth_bp
 from backend.routes.tender_routes import tender_bp

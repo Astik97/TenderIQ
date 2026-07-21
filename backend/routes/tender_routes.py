@@ -168,6 +168,11 @@ def delete_tender(tender_id):
 @tender_bp.route("/upload", methods=["POST"])
 def upload():
 
+    print("\n")
+    print("=" * 80)
+    print("UPLOAD ROUTE HIT")
+    print("=" * 80)
+
     if "user_id" not in session:
         return redirect("/login")
 
@@ -241,6 +246,11 @@ def upload():
         # -----------------------------
         # Extract text
         # -----------------------------
+
+        print("=" * 80)
+        print("ABOUT TO CALL extract_pdf()")
+        print(filepath)
+        print("=" * 80)
 
         if extension == "pdf":
             raw_text = extract_pdf(filepath)
