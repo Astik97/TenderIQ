@@ -228,13 +228,19 @@ def generate_clause_analysis(comparison):
 
         risk = clause["risk"]
 
-        added = ", ".join(
-            difference["added"]
-        ) if difference["added"] else "None"
+        added = ", ".join(difference["added"][:5])
 
-        removed = ", ".join(
-            difference["removed"]
-        ) if difference["removed"] else "None"
+        if len(difference["added"]) > 5:
+            added += "..." 
+        else:
+            "None"
+
+        removed = ", ".join(difference["removed"][:5])
+
+        if len(difference["removed"]) > 5:
+            removed += "..."
+        else:
+            "None"
 
         report += f"""
 
