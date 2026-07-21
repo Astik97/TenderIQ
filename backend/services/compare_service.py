@@ -149,6 +149,24 @@ def compare_tenders(text1, text2):
 
     clauses2 = extract_clauses(text2)
 
+    print("\n" + "=" * 70)
+    print("Tender 1 Clauses")
+    print("=" * 70)
+
+    print(f"Total: {len(clauses1)}")
+
+    for i, clause in enumerate(clauses1, 1):
+
+        print(f"\nClause {i}")
+
+        print(clause[:200])
+
+    print("\n" + "=" * 70)
+    print("Tender 2 Clauses")
+    print("=" * 70)
+
+    print(f"Total: {len(clauses2)}")
+
     # --------------------------------------
     # Clause Comparison
     # --------------------------------------
@@ -183,7 +201,9 @@ def compare_tenders(text1, text2):
 
         "color": get_similarity_color(overall_similarity),
 
-        "total_clauses": len(clauses1),
+        "tender1_clauses": len(clauses1),
+
+        "tender2_clauses": len(clauses2),
 
         "matched_clauses": len(clause_results),
 

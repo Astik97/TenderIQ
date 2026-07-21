@@ -1,7 +1,7 @@
 """
 ====================================================
 TenderIQ - Clause Extraction Service
-Milestone 5
+
 ====================================================
 
 This service is responsible for:
@@ -11,9 +11,6 @@ This service is responsible for:
 3. Removing empty clauses
 4. Returning a clean clause list
 
-This service DOES NOT compare clauses.
-
-Comparison is handled later by compare_service.py
 """
 
 import re
@@ -61,6 +58,96 @@ def clean_text(text):
     return text.strip()
 
 # ==================================================
+# Remove Page Numbers
+# ==================================================
+
+def remove_page_numbers(text):
+    """
+    Remove common page number patterns.
+    """
+
+    if not text:
+        return ""
+
+    patterns = [
+
+        r"Page\s+\d+\s+of\s+\d+",
+        r"Page\s+\d+",
+        r"Page No\.?\s*\d+",
+        r"^\d+$",
+        r"^\d+\s+of\s+\d+$"
+
+    ]
+
+    for pattern in patterns:
+
+        text = re.sub(
+            pattern,
+            "",
+            text,
+            flags=re.IGNORECASE | re.MULTILINE
+        )
+
+    return text
+
+# ==================================================
+# Remove Repeated Headers & Footers
+# ==================================================
+
+def remove_headers_and_footers(text):
+    """
+    Remove common repeated headers and footers.
+    """
+
+    if not text:
+        return ""
+
+    patterns = [
+
+        r"Government of India",
+        r"Tender Document",
+        r"Confidential",
+        r"Page Header",
+        r"Footer",
+        r"Digitally Signed",
+        r"This is a computer generated document"
+
+    ]
+
+    for pattern in patterns:
+
+        text = re.sub(
+            pattern,
+            "",
+            text,
+            flags=re.IGNORECASE
+        )
+
+    return text
+
+# ==================================================
+# Remove Table of Contents
+# ==================================================
+
+def remove_table_of_contents(text):
+    """
+    Remove table of contents section.
+    """
+
+    if not text:
+        return ""
+
+    toc_pattern = re.compile(
+
+        r"contents.*?(?=\n\s*(1\.|section|chapter|introduction))",
+
+        flags=re.IGNORECASE | re.DOTALL
+
+    )
+
+    return toc_pattern.sub("", text)
+
+# ==================================================
 # Split Into Clauses
 # ==================================================
 
@@ -85,8 +172,28 @@ def split_into_clauses(text):
     if not text:
         return []
 
-    clauses = re.split(r"\n\s*\n", text)
+    clauses = re.split(
 
+    r"""
+    (?=
+        \n\d+(\.\d+)*\.?\s
+        |
+        \nSECTION\s+[IVXLC0-9]+
+        |
+        \nANNEXURE
+        |
+        \nAPPENDIX
+        |
+        \n[A-Z][A-Z\s]{5,}
+    )
+    """,
+
+    text,
+
+    flags=re.VERBOSE | re.IGNORECASE
+
+)
+    
     cleaned = []
     
     for clause in clauses:
@@ -98,9 +205,6 @@ def split_into_clauses(text):
         
         if not clause:
             continue
-
-        # if len(clause) < 20:
-        #     continue
         
         cleaned.append(clause)
 
@@ -120,11 +224,13 @@ def merge_short_clauses(clauses):
 
         current = clauses[i].strip()
 
-        if (
-            HEADING_PATTERN.match(current)
-            and i + 1 < len(clauses)
-            and not HEADING_PATTERN.match(clauses[i + 1].strip())
-        ):
+        if len(current.split()) < 8 and i + 1 < len(clauses):
+
+        # if (
+        #     HEADING_PATTERN.match(current)
+        #     and i + 1 < len(clauses)
+        #     and not HEADING_PATTERN.match(clauses[i + 1].strip())
+        # ):
 
             current += "\n\n" + clauses[i + 1].strip()
 
@@ -175,6 +281,12 @@ def extract_clauses(text):
     """
 
     text = clean_text(text)
+
+    text = remove_page_numbers(text)
+
+    text = remove_headers_and_footers(text)
+
+    text = remove_table_of_contents(text)
 
     clauses = split_into_clauses(text)
 
