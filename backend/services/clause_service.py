@@ -282,13 +282,37 @@ def extract_clauses(text):
 
     text = clean_text(text)
 
+    print("\n" + "=" * 80)
+    print("AFTER CLEANING")
+    print("=" * 80)
+
+    print(text[:1000])
+
     text = remove_page_numbers(text)
 
     text = remove_headers_and_footers(text)
 
     text = remove_table_of_contents(text)
 
+    print("\n" + "=" * 80)
+    print("AFTER REMOVING HEADERS")
+    print("=" * 80)
+
+    print(text[:1000])
+
     clauses = split_into_clauses(text)
+
+    print("\n" + "=" * 80)
+    print("AFTER SPLITTING")
+    print("=" * 80)
+
+    print("Total Clauses:", len(clauses))
+
+    for i, clause in enumerate(clauses, 1):
+
+        print(f"\nClause {i}")
+
+        print(clause[:300])
 
     clauses = remove_empty_clauses(clauses)
 

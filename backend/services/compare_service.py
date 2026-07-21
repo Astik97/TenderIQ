@@ -201,7 +201,7 @@ def compare_tenders(text1, text2):
 
         "color": get_similarity_color(overall_similarity),
 
-        "tender1_clauses": len(clauses1),
+        "total_clauses": len(clauses1),
 
         "tender2_clauses": len(clauses2),
 
