@@ -63,7 +63,7 @@ def clean_text(text):
 
 def remove_page_numbers(text):
     """
-    Remove common page number patterns.
+    Remove common  number patterns.
     """
 
     if not text:
@@ -225,12 +225,6 @@ def merge_short_clauses(clauses):
         current = clauses[i].strip()
 
         if len(current.split()) < 8 and i + 1 < len(clauses):
-
-        # if (
-        #     HEADING_PATTERN.match(current)
-        #     and i + 1 < len(clauses)
-        #     and not HEADING_PATTERN.match(clauses[i + 1].strip())
-        # ):
 
             current += "\n\n" + clauses[i + 1].strip()
 
