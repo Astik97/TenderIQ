@@ -257,7 +257,7 @@ def upload():
 
         print("\n========== EXTRACTED CLAUSES ==========\n")
 
-        print("\nTotal Extracted Clauses:", len(clauses[:100]))
+        print("\nTotal Extracted Clauses:", len(clauses))
 
         # -----------------------------
         # Store in Database
