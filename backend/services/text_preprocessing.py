@@ -5,7 +5,18 @@ def normalize_whitespace(text):
     Remove extra spaces, tabs and blank lines.
     """
 
-    text = re.sub(r'\s+', ' ', text)
+    # Normalize line endings
+    text = text.replace("\r\n", "\n")
+    text = text.replace("\r", "\n")
+
+    # Remove repeated spaces and tabs
+    text = re.sub(r"[ \t]+", " ", text)
+
+    # Remove spaces around newlines
+    text = re.sub(r" *\n *", "\n", text)
+
+    # Keep paragraph spacing
+    text = re.sub(r"\n{3,}", "\n\n", text)
 
     return text.strip()
 
