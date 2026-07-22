@@ -61,9 +61,8 @@ def clean_text(text):
 # ==================================================
 
 def remove_page_numbers(text):
-    """
-    Remove common  number patterns.
-    """
+
+    """Remove common  number patterns."""
 
     if not text:
         return ""
@@ -94,9 +93,8 @@ def remove_page_numbers(text):
 # ==================================================
 
 def remove_headers_and_footers(text):
-    """
-    Remove common repeated headers and footers.
-    """
+
+    """Remove common repeated headers and footers."""
 
     if not text:
         return ""
@@ -129,9 +127,8 @@ def remove_headers_and_footers(text):
 # ==================================================
 
 def remove_table_of_contents(text):
-    """
-    Remove table of contents section.
-    """
+
+    """Remove table of contents section."""
 
     if not text:
         return ""
@@ -240,9 +237,8 @@ def merge_short_clauses(clauses):
 # ==================================================
 
 def remove_empty_clauses(clauses):
-    """
-    Remove empty clauses.
-    """
+    
+    """Remove empty clauses."""
 
     cleaned = []
 
@@ -275,31 +271,13 @@ def extract_clauses(text):
 
     text = clean_text(text)
 
-    print("\n" + "=" * 80)
-    print("AFTER CLEANING")
-    print("=" * 80)
-
-    print(text[:500])
-
     text = remove_page_numbers(text)
 
     text = remove_headers_and_footers(text)
 
     text = remove_table_of_contents(text)
 
-    print("\n" + "=" * 80)
-    print("AFTER REMOVING HEADERS")
-    print("=" * 80)
-
-    print(text[:5000])
-
     clauses = split_into_clauses(text)
-
-    print("\n" + "=" * 80)
-    print("AFTER SPLITTING")
-    print("=" * 80)
-
-    print("Total Clauses:", len(clauses))
 
     for i, clause in enumerate(clauses, 1):
 

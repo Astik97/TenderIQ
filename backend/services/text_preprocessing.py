@@ -32,16 +32,12 @@ def remove_special_characters(text):
     return text
 
 def convert_to_lowercase(text):
-    """
-    Convert everything to lowercase.
-    """
+    """Convert everything to lowercase."""
 
     return text.lower()
 
 def clean_text(text):
-    """
-    Complete preprocessing pipeline.
-    """
+    """Complete preprocessing pipeline."""
 
     text = convert_to_lowercase(text)
 

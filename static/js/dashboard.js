@@ -84,8 +84,11 @@ if(compareForm){
 
 compareForm.addEventListener("submit",function(e){
 
-    const checked=document.querySelectorAll(
+    const checked=document.querySelectorAll
+    (
+
         'input[name="selected_tenders"]:checked'
+        
     );
 
     if(checked.length!==2){
@@ -93,9 +96,7 @@ compareForm.addEventListener("submit",function(e){
         e.preventDefault();
 
         alert("Please select exactly TWO tenders.");
-
     }
-
 });
 
 }
@@ -110,13 +111,11 @@ deleteButtons.forEach(function(button){
 
 button.addEventListener("click",function(e){
 
-const answer=confirm(
-"Do you really want to delete this tender?"
-);
+const answer=confirm("Do you really want to delete this tender?");
 
 if(!answer){
-
-e.preventDefault();
+    
+    e.preventDefault();
 
 }
 

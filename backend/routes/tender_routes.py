@@ -21,11 +21,8 @@ tender_bp = Blueprint("tender", __name__)
 
 UPLOAD_FOLDER = "uploads"
 
-ALLOWED_EXTENSIONS = {
-    "pdf",
-    "docx",
-    "txt"
-}
+ALLOWED_EXTENSIONS = {"pdf","docx","txt"}
+
 def allowed_file(filename):
 
     if "." not in filename:
@@ -46,6 +43,7 @@ def dashboard():
         return redirect("/login")
 
     conn = get_connection()
+
     cursor = conn.cursor()
 
     cursor.execute("""
@@ -58,12 +56,10 @@ def dashboard():
     tenders = cursor.fetchall()
 
     cursor.close()
+
     conn.close()
 
-    return render_template(
-        "dashboard.html",
-        tenders=tenders
-    )
+    return render_template("dashboard.html",tenders=tenders)
 
 @tender_bp.route('/view/<int:tender_id>')
 def view_tender(tender_id):
@@ -86,10 +82,7 @@ def view_tender(tender_id):
         AND user_id=%s
     """
 
-    cursor.execute(
-        query,
-        (tender_id, session['user_id'])
-    )
+    cursor.execute(query,(tender_id, session['user_id']))
 
     tender = cursor.fetchone()
 
@@ -100,10 +93,7 @@ def view_tender(tender_id):
     if not tender:
         return "Tender not found."
 
-    return render_template(
-        "view_tender.html",
-        tender=tender
-    )
+    return render_template("view_tender.html",tender=tender)
 
 @tender_bp.route('/delete/<int:tender_id>')
 def delete_tender(tender_id):
@@ -135,13 +125,9 @@ def delete_tender(tender_id):
 
         return "Tender not found."
 
-    filepath = os.path.join(
-        "uploads",
-        result[0]
-    )
+    filepath = os.path.join("uploads",result[0])
 
     if os.path.exists(filepath):
-
         os.remove(filepath)
 
     cursor.execute(
@@ -150,8 +136,7 @@ def delete_tender(tender_id):
         WHERE id=%s
         AND user_id=%s
         """,
-        (tender_id, session['user_id'])
-    )
+        (tender_id, session['user_id']))
 
     conn.commit()
 
@@ -167,11 +152,6 @@ def delete_tender(tender_id):
 
 @tender_bp.route("/upload", methods=["POST"])
 def upload():
-
-    print("\n")
-    print("=" * 60)
-    print("UPLOAD ROUTE HIT")
-    print("=" * 60)
 
     if "user_id" not in session:
         return redirect("/login")
@@ -213,10 +193,7 @@ def upload():
             WHERE user_id=%s
             AND tender_name=%s
         """,
-        (
-            session["user_id"],
-            filename
-        ))
+        (session["user_id"],filename))
 
         existing = cursor.fetchone()
 
@@ -238,21 +215,13 @@ def upload():
         # Save file
         # -----------------------------
 
-        filepath = os.path.join(
-            UPLOAD_FOLDER,
-            unique_filename
-        )
+        filepath = os.path.join(UPLOAD_FOLDER,unique_filename)
 
         file.save(filepath)
 
         # -----------------------------
         # Extract text
         # -----------------------------
-
-        print("=" * 80)
-        print("ABOUT TO CALL extract_pdf()")
-        print(filepath)
-        print("=" * 80)
 
         if extension == "pdf":
             raw_text = extract_pdf(filepath)
@@ -265,37 +234,6 @@ def upload():
 
         else:
             raw_text = ""
-
-        # =============================
-        # TEMPORARY DEBUG
-        # =============================
-
-        print("=" * 60)
-        print("FIRST 60 LINES")
-        print("=" * 60)
-
-        lines = raw_text.split("\n")
-
-        for i, line in enumerate(lines[:60], start=1):
-            print(f"{i:02d}: {repr(line)}")
-
-        blocks = split_into_blocks(raw_text)
-
-        print("=" * 60)
-        print("BLOCKS")
-        print("=" * 60)
-
-        print("Total Blocks:", len(blocks))
-
-        for i, block in enumerate(blocks[:10]):
-
-            print()
-
-            print(f"BLOCK {i+1}")
-
-            print("-" * 60)
-
-            print(block[:500])
 
         # -----------------------------
         # Text Preprocessing
@@ -315,19 +253,11 @@ def upload():
 
         print("\n========== CLEANED TEXT ==========\n")
 
-        print(extracted_text[:500])
-
         print("\nLength:", len(extracted_text))
 
         print("\n========== EXTRACTED CLAUSES ==========\n")
 
-        print("\nTotal Extracted Clauses:", len(clauses))
-
-        for clause, content in clauses.items():
-
-            print(clause)
-
-            print(content)
+        print("\nTotal Extracted Clauses:", len(clauses[:100]))
 
         # -----------------------------
         # Store in Database
@@ -342,12 +272,7 @@ def upload():
             extracted_text
         )
         VALUES
-        (
-            %s,
-            %s,
-            %s,
-            %s
-        )
+        (%s,%s,%s,%s)
         """
 
         cursor.execute(

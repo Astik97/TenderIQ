@@ -46,9 +46,7 @@ def calculate_similarity(text1, text2):
 
     vectorizer = TfidfVectorizer()
 
-    vectors = vectorizer.fit_transform(
-        [text1, text2]
-    )
+    vectors = vectorizer.fit_transform([text1, text2])
 
     # -----------------------------
     # Cosine Similarity
@@ -64,10 +62,7 @@ def calculate_similarity(text1, text2):
 
     similarity_percentage = similarity_score * 100
 
-    return round(
-        similarity_percentage,
-        2
-    )
+    return round(similarity_percentage,2)
 
 def get_similarity_level(score):
     """
@@ -86,7 +81,8 @@ def get_similarity_level(score):
     elif score >= 30:
         return "Low Match"
 
-    return "Poor Match"
+    else:
+        return "Poor Match"
 
 def get_similarity_color(score):
     """
@@ -105,4 +101,5 @@ def get_similarity_color(score):
     elif score >= 30:
         return "Yellow"
 
-    return "Red"
+    else:
+        return "Red"

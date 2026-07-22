@@ -65,10 +65,7 @@ def get_risk_color(level):
 
 def calculate_risk_score(similarity):
 
-    """
-    Higher similarity
-    means lower risk.
-    """
+    """ Higher similarity means lower risk. """
 
     return round(100 - similarity, 2)
 
@@ -90,19 +87,11 @@ def get_risk_reason(difference):
 
     if added:
 
-        reason.append(
-
-            f"Added keywords: {', '.join(added)}"
-
-        )
+        reason.append(f"Added keywords: {', '.join(added)}")
 
     if removed:
 
-        reason.append(
-
-            f"Removed keywords: {', '.join(removed)}"
-
-        )
+        reason.append(f"Removed keywords: {', '.join(removed)}")
 
     return " | ".join(reason)
 
@@ -136,13 +125,7 @@ def get_recommendation(level):
 
     }
 
-    return recommendations.get(
-
-        level,
-
-        "Review manually."
-
-    )
+    return recommendations.get(level,"Review manually.")
 
 # =========================================================
 # Main Risk Analyzer
@@ -150,38 +133,18 @@ def get_recommendation(level):
 
 def analyze_risk(similarity, difference):
 
-    level = get_risk_level(
-
-        similarity
-
-    )
+    level = get_risk_level(similarity)
 
     return {
 
-        "score": calculate_risk_score(
-
-            similarity
-
-        ),
+        "score": calculate_risk_score(similarity),
 
         "level": level,
 
-        "color": get_risk_color(
+        "color": get_risk_color(level),
 
-            level
+        "reason": get_risk_reason(difference),
 
-        ),
-
-        "reason": get_risk_reason(
-
-            difference
-
-        ),
-
-        "recommendation": get_recommendation(
-
-            level
-
-        )
+        "recommendation": get_recommendation(level)
 
     }

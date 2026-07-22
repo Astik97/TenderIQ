@@ -7,39 +7,36 @@ const downloadBtn=document.getElementById("downloadBtn");
 const toast=document.getElementById("toast");
 
 copyBtn.onclick=function(){
-
-navigator.clipboard.writeText(textArea.value);
-
-toast.classList.add("show");
+    
+    navigator.clipboard.writeText(textArea.value);
+    
+    toast.classList.add("show");
 
 setTimeout(()=>{
-
-toast.classList.remove("show");
+    
+    toast.classList.remove("show");
 
 },2000);
 
 }
 
 downloadBtn.onclick=function(){
+    
+    const blob=new Blob([textArea.value],
+        {type:"text/plain"});
+    
+    const link=document.createElement("a");
 
-const blob=new Blob([textArea.value],{type:"text/plain"});
+    link.href=URL.createObjectURL(blob);
 
-const link=document.createElement("a");
+    link.download="Extracted_Tender.txt";
 
-link.href=URL.createObjectURL(blob);
-
-link.download="Extracted_Tender.txt";
-
-link.click();
+    link.click();
 
 }
 
 const text=textArea.value;
 
-document.getElementById("charCount").innerHTML=
+document.getElementById("charCount").innerHTML="Characters : "+text.length;
 
-"Characters : "+text.length;
-
-document.getElementById("wordCount").innerHTML=
-
-"Words : "+text.trim().split(/\s+/).length;
+document.getElementById("wordCount").innerHTML="Words : "+text.trim().split(/\s+/).length;

@@ -30,132 +30,59 @@ Payment within 45 days.
 
 result = compare_tenders(text1, text2)
 
-print("=" * 60)
-print("OVERALL RESULT")
-print("=" * 60)
+print("\nSimilarity :", result["similarity"])
 
-print("Similarity :", result["similarity"])
-print("Level      :", result["level"])
-print("Color      :", result["color"])
+print("\nLevel :", result["level"])
 
-print("\n")
+print("\nColor :", result["color"])
 
-print("=" * 60)
-print("CLAUSE COMPARISON")
-print("=" * 60)
-
-for i, clause in enumerate(result["clause_results"], start=1):
+for i, clause in enumerate(result["clause_results"], 
+                           start=1):
 
     print(f"\nClause {i}")
 
-    print("-" * 40)
+    print("="*50)
 
-    print("Original :")
+    print("COMPARISON CLAUSE METRICS")
 
-    print(clause["clause"])
+    print("="*50)
 
-    print("\nMatched With :")
+    print("\nOriginal :",clause["clause"])
 
-    print(clause["best_match"])
+    print("\nMatched With :",clause["best_match"])
 
     print("\nSimilarity :", clause["similarity"])
 
-    print("Level      :", clause["level"])
+    print("\nLevel :", clause["level"])
+
+    print("\nColor :",clause["color"])
+
+    print("="*50)
+
+    print("COMPARISON DIFFERENCE METRICS")
+
+    print("="*50)
     
-    print("Changed :")
+    print("\nChanged :",clause["difference"]["changed"])
 
-    print(
+    print("\nAdded :",clause["difference"]["added"])
 
-        clause["difference"]["changed"]
+    print("\nRemoved :",clause["difference"]["removed"])
 
-    )
+    print("\nSummary :",clause["difference"]["summary"])
 
-    print("Added :")
+    print("="*50)
 
-    print(
+    print("COMPARISON RISK METRICS")
 
-        clause["difference"]["added"]
-
-    )
-
-    print("Removed :")
-
-    print(
-
-        clause["difference"]["removed"]
-
-    )
-
-    print("Summary :")
-
-    print(
-
-        clause["difference"]["summary"]
-
-    )
-
-    print()
+    print("="*50)
     
-    print("Risk Score :")
+    print("\nRisk Score :",clause["risk"]["score"])
 
-    print(
+    print("\nRisk Level :",clause["risk"]["level"])
 
-        clause["risk"]["score"]
+    print("\nRisk Color :",clause["risk"]["color"])
 
-    )
+    print("\nRisk Reason :",clause["risk"]["reason"])
 
-    print()
-
-    print("Risk Level :")
-
-    print(
-
-        clause["risk"]["level"]
-
-    )
-
-    print()
-
-    print("Risk Color :")
-
-    print(
-
-        clause["risk"]["color"]
-
-    )
-
-    print()
-
-    print("Risk Reason :")
-
-    print(
-
-        clause["risk"]["reason"]
-
-    )
-
-    print()
-
-    print("Recommendation :")
-
-    print(
-
-        clause["risk"]["recommendation"]
-
-    )
-
-print()
-
-print(
-    
-    result["clause_results"][0].keys()
-    
-    )
-
-print("=" * 60)
-
-print("Returned Dictionary Keys")
-
-print("=" * 60)
-
-print(result.keys())
+    print("\nRecommendation :",clause["risk"]["recommendation"])

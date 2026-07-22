@@ -19,9 +19,7 @@ from backend.services.difference_service import (
     compare_clauses as compare_clause_difference
 )
 
-from backend.services.risk_service import (
-    analyze_risk
-)
+from backend.services.risk_service import analyze_risk
 
 from backend.services.similarity_service import (
     calculate_similarity,
@@ -62,25 +60,16 @@ def compare_clauses(clauses1, clauses2):
 
     for clause2 in clauses2:
 
-        score = calculate_similarity(
-            clause1,
-            clause2
-        )
+        score = calculate_similarity(clause1,clause2)
 
         if score > best_score:
             
             best_score = score
             best_clause = clause2
 
-    difference = compare_clause_difference(
-        clause1,
-        best_clause
-    )
+    difference = compare_clause_difference(clause1,best_clause)
 
-    risk = analyze_risk(
-        similarity=best_score,
-        difference=difference
-    )
+    risk = analyze_risk(similarity=best_score,difference=difference)
 
     comparison_results.append({
         "clause": clause1,
@@ -99,10 +88,8 @@ def compare_clauses(clauses1, clauses2):
 # =========================================================
 
 def calculate_overall_similarity(clause_results):
-    """
-    Average similarity
-    of all matched clauses.
-    """
+
+    """Average similarity of all matched clauses."""
 
     if not clause_results:
         return 0
@@ -113,20 +100,15 @@ def calculate_overall_similarity(clause_results):
 
         total += result["similarity"]
 
-    return round(
-        total / len(clause_results),
-        2
-    )
+    return round(total / len(clause_results),2)
 
 # =========================================================
 # Main Compare Function
 # =========================================================
 
 def compare_tenders(text1, text2):
-    """
-    Main function called
-    from compare_routes.py
-    """
+
+    """Main function called from compare_routes.py"""
 
     # --------------------------------------
     # Extract Clauses
@@ -140,14 +122,7 @@ def compare_tenders(text1, text2):
     # Clause Comparison
     # --------------------------------------
 
-    print("Starting comparison...")
-
-    clause_results = compare_clauses(
-        clauses1,
-        clauses2
-    )
-
-    print("Comparison finished.")
+    clause_results = compare_clauses(clauses1,clauses2)
 
     # --------------------------------------
     # Overall Similarity
@@ -168,6 +143,8 @@ def compare_tenders(text1, text2):
         "color": get_similarity_color(overall_similarity),
 
         "total_clauses": len(clauses1),
+
+        "tender1_clauses":len(clauses1),
 
         "tender2_clauses": len(clauses2),
 

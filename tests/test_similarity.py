@@ -18,10 +18,7 @@ PostgreSQL
 Docker
 """
 
-score = calculate_similarity(
-    text1,
-    text2
-)
+score = calculate_similarity(text1,text2)
 
 print("=" * 50)
 print("Similarity Score")
@@ -31,10 +28,8 @@ print(score)
 
 print()
 
-print("Level :",
-      get_similarity_level(score))
+print("Level :",get_similarity_level(score))
 
 print()
 
-print("Color :",
-      get_similarity_color(score))
+print("Color :",get_similarity_color(score))

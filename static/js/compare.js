@@ -1,8 +1,8 @@
 // =====================================================
-// TenderIQ Compare Report
+// Compare JavaScript
 // =====================================================
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function(){
 
     // ==========================================
     // Score Circle Animation
@@ -10,34 +10,25 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const scoreCircle = document.querySelector(".score-circle");
 
-    if (scoreCircle) {
+    if (scoreCircle){
 
         scoreCircle.animate(
-
+            
             [
 
-                {
-                    transform: "scale(0.5)",
-                    opacity: 0
-                },
+                {transform: "scale(0.5)",opacity: 0},
 
-                {
-                    transform: "scale(1)",
-                    opacity: 1
-                }
-
+                {transform: "scale(1)",opacity: 1}
+            
             ],
-
+                
             {
-
                 duration: 700,
-
                 easing: "ease-out"
-
             }
 
         );
-
+    
     }
 
     // ==========================================
@@ -46,7 +37,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const progressBar = document.getElementById("progressBar");
 
-    if (progressBar) {
+    if (progressBar){
 
         const progress = progressBar.dataset.progress;
 
@@ -57,7 +48,7 @@ document.addEventListener("DOMContentLoaded", function () {
             progressBar.style.width = progress + "%";
 
         }, 100);
-
+    
     }
 
     // ==========================================
@@ -66,11 +57,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (scoreCircle) {
 
-        const finalValue = parseFloat(
-
-            scoreCircle.innerText.replace("%", "")
-
-        );
+        const finalValue = parseFloat(scoreCircle.innerText.replace("%", ""));
 
         const step = finalValue / 50;
 
@@ -80,14 +67,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
             current += step;
 
-            // scoreCircle.innerHTML = current + "%";
-
-            if (current >= finalValue) {
-
+            if (current >= finalValue)
+                
+            {
+                
                 current = finalValue;
 
                 clearInterval(interval);
-
             }
 
             scoreCircle.innerHTML = current.toFixed(2) + "%";
@@ -102,7 +88,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const searchInput=document.getElementById("clauseSearch");
     
-    if(searchInput){
+    if(searchInput)
+        
+    {
         
         searchInput.addEventListener("keyup",function(){
 
@@ -115,12 +103,11 @@ document.addEventListener("DOMContentLoaded", function () {
         const text=card.innerText.toLowerCase();
 
         card.style.display=text.includes(value)?"block":"none";
-
-        });
-
-        });
     
-    }
+    });
+    
+    });
+}
 
     // ==========================================
     // Print Button
@@ -128,47 +115,48 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const printButton = document.querySelector(".print-btn");
 
-    if (printButton) {
+    if (printButton){
 
-        printButton.addEventListener(
+        printButton.addEventListener("click",
 
-            "click",
+            function(){
 
-            function () {
-
-                if (
+                if
+                (
                     confirm("Do you want to print this comparison report?")
-                ) {
-                    
-                    window.print();
+                )
+
+                { 
+                    window.print(); 
                 }
 
-            }
+            });
 
-        );
-
-    }
+        }
 
     document.querySelectorAll(".risk-box").forEach(card=>{
         
         if(card.dataset.risk==="Critical Risk"){
             
-            card.animate([
+            card.animate(
+            
+            [
                 
                 {transform:"translateX(-5px)"},
                 
                 {transform:"translateX(5px)"},
                 
                 {transform:"translateX(0px)"}
-            
-            ],{
+            ],
                 
+            {
                 duration:400
-            
-            });
-        
-        }
+            }
+
+        );
     
+    }
+
     });
 
 });

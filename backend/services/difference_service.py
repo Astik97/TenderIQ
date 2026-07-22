@@ -144,7 +144,8 @@ def compare_clauses(original, matched):
     "removed": removed,
 
     "summary": build_summary(
-        added,removed
+        added,
+        removed
     ),
 
     "added_count": len(added),

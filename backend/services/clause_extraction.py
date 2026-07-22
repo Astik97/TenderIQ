@@ -98,26 +98,25 @@ def split_into_blocks(text):
     )
     """
 
-    blocks = re.split(
-        pattern,
-        text,
-        flags=re.VERBOSE | re.IGNORECASE
-    )
+    blocks = re.split(pattern,text,flags=re.VERBOSE | re.IGNORECASE)
 
     cleaned = []
 
     for block in blocks:
 
         if block is None:
+            
             continue
 
         block = block.strip()
 
         if len(block) > 50:
+
             cleaned.append(block)
 
     # If nothing matched, keep the entire document
     if not cleaned:
+
         cleaned.append(text.strip())
 
     return cleaned
@@ -150,6 +149,7 @@ def extract_clauses(text):
             extracted_clauses[current_clause].append(line)
 
     for clause in extracted_clauses:
+
         extracted_clauses[clause] = " ".join(extracted_clauses[clause])
 
     return extracted_clauses

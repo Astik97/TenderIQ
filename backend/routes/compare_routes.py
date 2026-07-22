@@ -1,11 +1,10 @@
-from flask import (
+from flask import(
     Blueprint,
     request,
     render_template,
     flash,
     redirect,
-    session
-)
+    session)
 
 from backend.utils.db import get_connection
 from backend.services.compare_service import compare_tenders
@@ -20,16 +19,11 @@ def compare():
     # Get Selected Tender IDs
     # -----------------------------------------
 
-    selected = request.form.getlist(
-        "selected_tenders"
-    )
+    selected = request.form.getlist("selected_tenders")
 
     if len(selected) != 2:
 
-        flash(
-            "Please select exactly two tenders.",
-            "error"
-        )
+        flash("Please select exactly two tenders.","error")
 
         return redirect("/dashboard")
 
@@ -54,19 +48,13 @@ def compare():
         # Tender 1
         # -----------------------------
 
-        cursor.execute(
-            query,
-            (selected[0],)
-        )
+        cursor.execute(query,(selected[0],))
 
         row1 = cursor.fetchone()
 
         if row1 is None:
 
-            flash(
-                "First tender not found.",
-                "error"
-            )
+            flash("First tender not found.","error")
 
             return redirect("/dashboard")
 
@@ -78,19 +66,13 @@ def compare():
         # Tender 2
         # -----------------------------
 
-        cursor.execute(
-            query,
-            (selected[1],)
-        )
+        cursor.execute(query,(selected[1],))
 
         row2 = cursor.fetchone()
 
         if row2 is None:
 
-            flash(
-                "Second tender not found.",
-                "error"
-            )
+            flash("Second tender not found.","error")
 
             return redirect("/dashboard")
 
@@ -100,10 +82,7 @@ def compare():
 
     except Exception as e:
 
-        flash(
-            f"Database Error : {e}",
-            "error"
-        )
+        flash(f"Database Error : {e}","error")
 
         return redirect("/dashboard")
 
@@ -113,9 +92,7 @@ def compare():
 
     comparison = compare_tenders(
         text1,
-        text2,
-
-    )
+        text2,)
 
     print("\n========== COMPARISON RESULT ==========\n")
 
@@ -139,9 +116,7 @@ def compare():
 
         tender_name2,
 
-        comparison
-
-    )
+        comparison)
 
     cursor.execute(
     """
@@ -164,8 +139,7 @@ def compare():
         comparison["similarity"],
         comparison["level"],
         report
-    )
-)
+    ))
     
     conn.commit()
     
@@ -187,6 +161,4 @@ def compare():
 
         comparison=comparison,
 
-        report=report
-
-    )
+        report=report)

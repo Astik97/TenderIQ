@@ -1,9 +1,7 @@
 import os
-
 from dotenv import load_dotenv
 
 load_dotenv()
-
 
 class Config:
 
@@ -21,12 +19,4 @@ class Config:
 
     MAX_CONTENT_LENGTH = 20 * 1024 * 1024
 
-    ALLOWED_EXTENSIONS = {
-
-        "pdf",
-
-        "docx",
-
-        "txt"
-
-    }
+    ALLOWED_EXTENSIONS = {"pdf","docx","txt"}

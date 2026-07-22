@@ -7,8 +7,7 @@ class Tender:
         tender_name,
         file_name,
         extracted_text,
-        upload_date
-    ):
+        upload_date):
 
         self.id = id
 
@@ -25,4 +24,3 @@ class Tender:
     def __repr__(self):
 
         return f"Tender({self.tender_name})"
-    

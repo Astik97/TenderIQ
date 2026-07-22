@@ -2,13 +2,14 @@
    Show / Hide Password
 ========================================== */
 
-function togglePassword(inputId, icon) {
+function togglePassword(inputId, icon){
 
     const input = document.getElementById(inputId);
 
     const eye = icon.querySelector("i");
 
-    if (input.type === "password") {
+    if (input.type === "password") 
+    {
 
         input.type = "text";
 
@@ -36,7 +37,7 @@ const passwordInput = document.getElementById("password");
 const strengthBox = document.getElementById("passwordStrength");
 
 
-if (passwordInput && strengthBox) {
+if (passwordInput && strengthBox){
 
     passwordInput.addEventListener("input", function () {
 
@@ -46,13 +47,14 @@ if (passwordInput && strengthBox) {
 
         let color = "";
 
-        if (password.length === 0) {
-
+        if (password.length === 0)
+        {
+            
             strength = "";
-
         }
 
-        else if (password.length < 6) {
+        else if (password.length < 6)
+        {
 
             strength = "Weak Password";
 
@@ -60,13 +62,15 @@ if (passwordInput && strengthBox) {
 
         }
 
-        else if (
+        else if 
+        (
 
             password.match(/[A-Z]/) &&
             password.match(/[a-z]/) &&
             password.match(/[0-9]/)
 
-        ) {
+        ) 
+        {
 
             strength = "Strong Password";
 
@@ -74,7 +78,8 @@ if (passwordInput && strengthBox) {
 
         }
 
-        else {
+        else 
+        {
 
             strength = "Medium Password";
 
@@ -96,16 +101,17 @@ if (passwordInput && strengthBox) {
 
 const registerForm = document.getElementById("registerForm");
 
-if (registerForm) {
+if (registerForm){
 
-    registerForm.addEventListener("submit", function (event) {
+    registerForm.addEventListener("submit", function (event) 
+    {
 
         const password = document.getElementById("password").value;
 
-        const confirmPassword =
-            document.getElementById("confirm_password").value;
+        const confirmPassword = document.getElementById("confirm_password").value;
 
-        if (password !== confirmPassword) {
+        if (password !== confirmPassword) 
+        {
 
             alert("Passwords do not match.");
 
@@ -123,9 +129,10 @@ if (registerForm) {
 
 const loginForm = document.getElementById("loginForm");
 
-if (loginForm) {
+if (loginForm){
 
-    loginForm.addEventListener("submit", function () {
+    loginForm.addEventListener("submit", function ()
+    {
 
         const button = loginForm.querySelector("button");
 
@@ -137,9 +144,10 @@ if (loginForm) {
 
 }
 
-if (registerForm) {
+if (registerForm){
 
-    registerForm.addEventListener("submit", function () {
+    registerForm.addEventListener("submit", function () 
+    {
 
         const button = registerForm.querySelector("button");
 

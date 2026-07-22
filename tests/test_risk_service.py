@@ -1,20 +1,8 @@
 from backend.services.risk_service import analyze_risk
 
-difference = {
+difference = {"added": ["payment", "45"],"removed": ["30"]}
 
-    "added": ["payment", "45"],
-
-    "removed": ["30"]
-
-}
-
-risk = analyze_risk(
-
-    similarity=22.03,
-
-    difference=difference
-
-)
+risk = analyze_risk(similarity=22.03,difference=difference)
 
 print("=" * 60)
 
@@ -24,5 +12,4 @@ print("=" * 60)
 
 for key, value in risk.items():
 
-    print(f"{key} : {value}")
-    
+    print(f"{key} : {value}")   

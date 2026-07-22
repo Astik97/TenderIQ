@@ -85,7 +85,6 @@ def register():
 
             return redirect("/register")
 
-
         # ----------------------------
         # Check if email already exists
         # ----------------------------
@@ -96,8 +95,7 @@ def register():
             FROM users
             WHERE email=%s
             """,
-            (email,)
-        )
+            (email,))
 
         existing_user = cursor.fetchone()
 
@@ -117,8 +115,7 @@ def register():
 
         hashed_password = bcrypt.hashpw(
             password.encode("utf-8"),
-            bcrypt.gensalt()
-        ).decode("utf-8")
+            bcrypt.gensalt()).decode("utf-8")
 
         # ----------------------------
         # Insert User
@@ -133,18 +130,13 @@ def register():
                 password
             )
             VALUES
-            (
-                %s,
-                %s,
-                %s
-            )
+            (%s,%s,%s)
             """,
             (
                 username,
                 email,
                 hashed_password
-            )
-        )
+            ))
 
         conn.commit()
 
