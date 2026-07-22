@@ -15,7 +15,7 @@ from backend.services.document_service import (
     extract_txt
 )
 from backend.services.text_preprocessing import clean_text
-from backend.services.clause_extraction import extract_clauses
+from backend.services.clause_extraction import extract_clauses, split_into_blocks
 
 tender_bp = Blueprint("tender", __name__)
 
@@ -264,6 +264,37 @@ def upload():
         else:
             raw_text = ""
 
+        # =============================
+        # TEMPORARY DEBUG
+        # =============================
+
+        print("=" * 80)
+        print("FIRST 60 LINES")
+        print("=" * 80)
+
+        lines = raw_text.split("\n")
+
+        for i, line in enumerate(lines[:60], start=1):
+            print(f"{i:02d}: {repr(line)}")
+
+        blocks = split_into_blocks(raw_text)
+
+        print("=" * 80)
+        print("BLOCKS")
+        print("=" * 80)
+
+        print("Total Blocks:", len(blocks))
+
+        for i, block in enumerate(blocks[:10]):
+
+            print()
+
+            print(f"BLOCK {i+1}")
+
+            print("-" * 60)
+
+            print(block[:500])
+
         # -----------------------------
         # Text Preprocessing
         # -----------------------------
@@ -280,20 +311,19 @@ def upload():
         # Debug Output
         # -----------------------------
 
-        print("\n========== CLEANED TEXT ==========\n")
-        print(extracted_text)
+        # print("\n========== CLEANED TEXT ==========\n")
+        # print(extracted_text[:500])
+        # print("\nLength:", len(extracted_text))
 
-        print("\n========== EXTRACTED CLAUSES ==========\n")
+        # print("\n========== EXTRACTED CLAUSES ==========\n")
 
-        for clause, content in clauses.items():
+        # print("\nTotal Extracted Clauses:", len(clauses))
 
-            print(clause)
+        # for clause, content in clauses.items():
 
-            print("-" * 40)
+        #     print(clause)
 
-            print(content)
-
-            print("=" * 60)
+        #     print(content)
 
         # -----------------------------
         # Store in Database

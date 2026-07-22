@@ -7,6 +7,7 @@ def normalize_whitespace(text):
 
     # Normalize line endings
     text = text.replace("\r\n", "\n")
+
     text = text.replace("\r", "\n")
 
     # Remove repeated spaces and tabs
