@@ -1,3 +1,5 @@
+import re
+
 CLAUSES = {
 
     "Eligibility": [
@@ -64,6 +66,24 @@ def find_clause_heading(line):
                 return clause
 
     return None
+
+def split_into_blocks(text):
+    """
+    Split document into logical paragraphs.
+    """
+
+    blocks = re.split(r"\n\s*\n", text)
+
+    cleaned = []
+
+    for block in blocks:
+
+        block = block.strip()
+
+        if len(block) > 20:
+            cleaned.append(block)
+
+    return cleaned
         
 def extract_clauses(text):
     extracted_clauses = {}

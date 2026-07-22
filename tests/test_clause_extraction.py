@@ -23,14 +23,13 @@ Payment Terms
 
 Submission Deadline
 
-15 August 2026
-"""
+15 August 2026 """
 
 result = extract_clauses(sample_text)
 
 for clause, value in result.items():
 
-    print("=" * 50)
+    print("-" * 50)
 
     print(clause)
 
@@ -39,4 +38,3 @@ for clause, value in result.items():
     print(value)
 
     print()
-    
