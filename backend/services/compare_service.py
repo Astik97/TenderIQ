@@ -53,57 +53,44 @@ def compare_clauses(clauses1, clauses2):
 
     comparison_results = []
 
-    for clause1 in clauses1:
+    for i, clause1 in enumerate(clauses1):
+
+        print(f"Comparing clause {i+1}/{len(clauses1)}")
 
         best_score = 0
-
         best_clause = ""
 
-        # Compare with every clause
-        for clause2 in clauses2:
+    for clause2 in clauses2:
 
-            score = calculate_similarity(
-                clause1,
-                clause2
-            )
-
-            if score > best_score:
-
-                best_score = score
-
-                best_clause = clause2
-
-        difference = compare_clause_difference(
+        score = calculate_similarity(
             clause1,
-
-            best_clause
-        )
-        
-        risk = analyze_risk(
-            
-            similarity=best_score,
-            
-            difference=difference
-            
+            clause2
         )
 
-        comparison_results.append({
+        if score > best_score:
+            
+            best_score = score
+            best_clause = clause2
 
-            "clause": clause1,
+    difference = compare_clause_difference(
+        clause1,
+        best_clause
+    )
 
-            "best_match": best_clause,
+    risk = analyze_risk(
+        similarity=best_score,
+        difference=difference
+    )
 
-            "similarity": best_score,
-
-            "level": get_similarity_level(best_score),
-
-            "color": get_similarity_color(best_score),
-
-            "difference": difference,
-
-            "risk":risk
-
-        })
+    comparison_results.append({
+        "clause": clause1,
+        "best_match": best_clause,
+        "similarity": best_score,
+        "level": get_similarity_level(best_score),
+        "color": get_similarity_color(best_score),
+        "difference": difference,
+        "risk": risk
+    })
 
     return comparison_results
 
@@ -153,13 +140,14 @@ def compare_tenders(text1, text2):
     # Clause Comparison
     # --------------------------------------
 
+    print("Starting comparison...")
+
     clause_results = compare_clauses(
-
         clauses1,
-
         clauses2
-
     )
+
+    print("Comparison finished.")
 
     # --------------------------------------
     # Overall Similarity
