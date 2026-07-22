@@ -1,5 +1,6 @@
-from flask import Flask
 import os
+from flask import Flask
+from flask import request
 from config import Config
 from dotenv import load_dotenv
 
@@ -7,8 +8,7 @@ app = Flask(__name__)
 
 @app.before_request
 def debug_request():
-    from flask import request
-
+    
     print("\n")
     print("=" * 80)
     print(request.method, request.path)

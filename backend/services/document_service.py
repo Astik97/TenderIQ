@@ -1,10 +1,6 @@
 import pdfplumber
 import docx2txt
 
-print("=" * 80)
-print("DOCUMENT SERVICE LOADED")
-print("=" * 80)
-
 def extract_pdf(path):
 
     print("=" * 80)
