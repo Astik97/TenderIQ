@@ -259,7 +259,6 @@ def upload():
 
         print("\nTotal Extracted Clauses:", len(clauses))
 
-
         # -----------------------------
         # Store in Database
         # -----------------------------
