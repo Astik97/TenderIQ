@@ -149,24 +149,6 @@ def compare_tenders(text1, text2):
 
     clauses2 = extract_clauses(text2)
 
-    print("\n" + "=" * 70)
-    print("Tender 1 Clauses")
-    print("=" * 70)
-
-    print(f"Total: {len(clauses1)}")
-
-    for i, clause in enumerate(clauses1, 1):
-
-        print(f"\nClause {i}")
-
-        print(clause[:200])
-
-    print("\n" + "=" * 70)
-    print("Tender 2 Clauses")
-    print("=" * 70)
-
-    print(f"Total: {len(clauses2)}")
-
     # --------------------------------------
     # Clause Comparison
     # --------------------------------------
@@ -183,11 +165,7 @@ def compare_tenders(text1, text2):
     # Overall Similarity
     # --------------------------------------
 
-    overall_similarity = calculate_overall_similarity(
-
-        clause_results
-
-    )
+    overall_similarity = calculate_overall_similarity(clause_results)
 
     # --------------------------------------
     # Final Result

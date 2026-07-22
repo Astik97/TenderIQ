@@ -1,7 +1,6 @@
 """
 ====================================================
 TenderIQ - Clause Extraction Service
-
 ====================================================
 
 This service is responsible for:
@@ -280,7 +279,7 @@ def extract_clauses(text):
     print("AFTER CLEANING")
     print("=" * 80)
 
-    print(text[:1000])
+    print(text[:500])
 
     text = remove_page_numbers(text)
 
@@ -292,7 +291,7 @@ def extract_clauses(text):
     print("AFTER REMOVING HEADERS")
     print("=" * 80)
 
-    print(text[:1000])
+    print(text[:5000])
 
     clauses = split_into_clauses(text)
 
@@ -306,7 +305,7 @@ def extract_clauses(text):
 
         print(f"\nClause {i}")
 
-        print(clause[:300])
+        print(clause[:500])
 
     clauses = remove_empty_clauses(clauses)
 

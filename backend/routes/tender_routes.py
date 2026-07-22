@@ -169,9 +169,9 @@ def delete_tender(tender_id):
 def upload():
 
     print("\n")
-    print("=" * 80)
+    print("=" * 60)
     print("UPLOAD ROUTE HIT")
-    print("=" * 80)
+    print("=" * 60)
 
     if "user_id" not in session:
         return redirect("/login")
@@ -197,6 +197,7 @@ def upload():
             continue
 
         if not allowed_file(file.filename):
+
             invalid_files.append(file.filename)
             continue
 
@@ -221,6 +222,7 @@ def upload():
 
         if existing:
             duplicate_files.append(filename)
+            
             print(f"{filename} already exists.")
             continue
 
@@ -268,9 +270,9 @@ def upload():
         # TEMPORARY DEBUG
         # =============================
 
-        print("=" * 80)
+        print("=" * 60)
         print("FIRST 60 LINES")
-        print("=" * 80)
+        print("=" * 60)
 
         lines = raw_text.split("\n")
 
@@ -279,9 +281,9 @@ def upload():
 
         blocks = split_into_blocks(raw_text)
 
-        print("=" * 80)
+        print("=" * 60)
         print("BLOCKS")
-        print("=" * 80)
+        print("=" * 60)
 
         print("Total Blocks:", len(blocks))
 
@@ -311,19 +313,21 @@ def upload():
         # Debug Output
         # -----------------------------
 
-        # print("\n========== CLEANED TEXT ==========\n")
-        # print(extracted_text[:500])
-        # print("\nLength:", len(extracted_text))
+        print("\n========== CLEANED TEXT ==========\n")
 
-        # print("\n========== EXTRACTED CLAUSES ==========\n")
+        print(extracted_text[:500])
 
-        # print("\nTotal Extracted Clauses:", len(clauses))
+        print("\nLength:", len(extracted_text))
 
-        # for clause, content in clauses.items():
+        print("\n========== EXTRACTED CLAUSES ==========\n")
 
-        #     print(clause)
+        print("\nTotal Extracted Clauses:", len(clauses))
 
-        #     print(content)
+        for clause, content in clauses.items():
+
+            print(clause)
+
+            print(content)
 
         # -----------------------------
         # Store in Database
@@ -376,20 +380,26 @@ def upload():
 
     if uploaded_files:
         print("Uploaded Files")
+
     for file in uploaded_files:
         print("✔", file)
+
     print()
 
     if duplicate_files:
         print("Duplicate Files")
+
     for file in duplicate_files:
         print("✖", file)
+
     print()
     
     if invalid_files:
         print("Invalid Files")
+
     for file in invalid_files:
         print("✖", file)
+
     print()
 
     if not uploaded_files and not duplicate_files and not invalid_files:

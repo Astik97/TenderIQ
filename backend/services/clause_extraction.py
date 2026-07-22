@@ -69,35 +69,84 @@ def find_clause_heading(line):
 
 def split_into_blocks(text):
     """
-    Split document into logical paragraphs.
+    Split a tender document into logical blocks.
+
+    Detects:
+    - Numbered sections
+    - SECTION headings
+    - ANNEXURE
+    - APPENDIX
+    - Large uppercase headings
+
+    Falls back to the entire document if no headings are found.
     """
 
-    blocks = re.split(r"\n\s*\n", text)
+    if not text:
+        return []
+
+    pattern = r"""
+    (?=
+        \n\d+(\.\d+)*\.?\s
+        |
+        \nSECTION\s+[A-Z0-9IVXLC]+
+        |
+        \nANNEXURE[-\sA-Z0-9]*
+        |
+        \nAPPENDIX[-\sA-Z0-9]*
+        |
+        \n[A-Z][A-Z\s(),/&:-]{8,}
+    )
+    """
+
+    blocks = re.split(
+        pattern,
+        text,
+        flags=re.VERBOSE | re.IGNORECASE
+    )
 
     cleaned = []
 
     for block in blocks:
 
+        if block is None:
+            continue
+
         block = block.strip()
 
-        if len(block) > 20:
+        if len(block) > 50:
             cleaned.append(block)
 
+    # If nothing matched, keep the entire document
+    if not cleaned:
+        cleaned.append(text.strip())
+
     return cleaned
-        
+
 def extract_clauses(text):
+
     extracted_clauses = {}
+
     current_clause = None
+
     lines = text.split("\n")
+
     for line in lines:
+
         line = line.strip()
+
         if not line:
             continue
+
         heading = find_clause_heading(line)
+
         if heading:
+
             current_clause = heading
+
             extracted_clauses[current_clause] = []
+
         elif current_clause:
+
             extracted_clauses[current_clause].append(line)
 
     for clause in extracted_clauses:
