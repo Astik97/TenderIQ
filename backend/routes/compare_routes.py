@@ -90,9 +90,7 @@ def compare():
     # Compare
     # -----------------------------------------
 
-    comparison = compare_tenders(
-        text1,
-        text2,)
+    comparison = compare_tenders(text1,text2,)
 
     print("\n========== COMPARISON RESULT ==========\n")
 
@@ -110,13 +108,7 @@ def compare():
     # Report
     # -----------------------------------------
 
-    report = generate_report(
-
-        tender_name1,
-
-        tender_name2,
-
-        comparison)
+    report = generate_report(tender_name1,tender_name2,comparison)
 
     cursor.execute(
     """

@@ -2,7 +2,7 @@
 
 <p align="center">
 
-![Python](https://img.shields.io/badge/Python-3.11+-blue?style=for-the-badge&logo=python)
+![Python](https://img.shields.io/badge/Python-3.10.11-blue?style=for-the-badge&logo=python)
 ![Flask](https://img.shields.io/badge/Flask-3.1-black?style=for-the-badge&logo=flask)
 ![MySQL](https://img.shields.io/badge/MySQL-Database-blue?style=for-the-badge&logo=mysql)
 ![Status](https://img.shields.io/badge/Status-Active%20Development-success?style=for-the-badge)

@@ -328,48 +328,18 @@ End of Report
 # Main Generator
 # =========================================================
 
-def generate_report(
-
-    tender1_name,
-
-    tender2_name,
-
-    comparison
-
-):
+def generate_report(tender1_name,tender2_name,comparison):
 
     report = ""
 
-    report += generate_header(
+    report += generate_header(tender1_name,tender2_name)
 
-        tender1_name,
+    report += generate_summary(comparison)
 
-        tender2_name
+    report += generate_statistics(comparison)
 
-    )
+    report += generate_clause_analysis(comparison)
 
-    report += generate_summary(
-
-        comparison
-
-    )
-
-    report += generate_statistics(
-
-        comparison
-
-    )
-
-    report += generate_clause_analysis(
-
-        comparison
-
-    )
-
-    report += generate_footer(
-
-        comparison
-
-    )
+    report += generate_footer(comparison)
 
     return report
