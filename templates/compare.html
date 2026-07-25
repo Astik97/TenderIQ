@@ -8,11 +8,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>
-
-Tender Comparison Report
-
-</title>
+<title>Tender Comparison Report</title>
 
 <link rel="stylesheet"href="{{ url_for('static',filename='css/compare.css') }}">
 
@@ -28,17 +24,9 @@ Tender Comparison Report
 
     <div class="header">
 
-        <h1>
+        <h1>Tender Comparison Report</h1>
 
-            Tender Comparison Report
-
-        </h1>
-
-        <p>
-
-            AI Powered Tender Comparison & Analysis
-
-        </p>
+        <p>AI Powered Tender Comparison & Analysis</p>
 
     </div>
 
@@ -50,33 +38,17 @@ Tender Comparison Report
 
         <div class="info-box">
 
-            <h3>
+            <h3>Tender A</h3>
 
-                Tender A
-
-            </h3>
-
-            <p>
-
-                {{ tender1 }}
-
-            </p>
+            <p>{{ tender1 }}</p>
 
         </div>
 
         <div class="info-box">
 
-            <h3>
+            <h3>Tender B</h3>
 
-                Tender B
-
-            </h3>
-
-            <p>
-
-                {{ tender2 }}
-
-            </p>
+            <p>{{ tender2 }}</p>
 
         </div>
 
@@ -88,11 +60,7 @@ Tender Comparison Report
 
     <div class="similarity-card">
 
-        <h2>
-
-            Overall Similarity
-
-        </h2>
+        <h2>Overall Similarity</h2>
 
         <div class="score-circle {{ comparison.color }}">
 
@@ -102,8 +70,7 @@ Tender Comparison Report
 
         <div class="progress-container">
 
-            <div
-                id="progressBar"
+            <div id="progressBar"
                 class="progress-bar {{ comparison.color }}"
                 data-progress="{{ comparison.similarity }}">
 
@@ -114,9 +81,7 @@ Tender Comparison Report
         <br>
 
         <span class="badge {{ comparison.color }}">
-
             {{ comparison.level }}
-
         </span>
 
     </div>
@@ -131,7 +96,9 @@ Tender Comparison Report
             
             <h4>Overall Similarity</h4>
 
-            <p>{{ comparison.similarity }}%</p>
+            <p>
+                {{ comparison.similarity }}%
+            </p>
         
         </div>
         
@@ -139,7 +106,9 @@ Tender Comparison Report
 
             <h4>Total Clauses</h4>
 
-            <p>{{ comparison.total_clauses }}</p>
+            <p>
+                {{ comparison.total_clauses }}
+            </p>
         
         </div>
         
@@ -147,7 +116,9 @@ Tender Comparison Report
             
             <h4>Matched Clauses</h4>
 
-            <p>{{ comparison.matched_clauses }}</p>
+            <p>
+                {{ comparison.matched_clauses }}
+            </p>
         
         </div>
         
@@ -167,24 +138,14 @@ Tender Comparison Report
      
     <div class="executive-summary">
         
-        <h2>
-            
-            Executive Summary
-        
-        </h2>
+        <h2>Executive Summary</h2>
         
         <div class="stat-card">
 
-            <h4>
-
-                Match Level
-
-            </h4>
+            <h4>Match Level</h4>
 
             <strong>
-
                 {{ comparison.level }}
-
             </strong>
             
             <p>
@@ -192,17 +153,13 @@ Tender Comparison Report
                 The AI comparison engine analyzed
                 
                 <strong>
-                    
                     {{ comparison.total_clauses }}
-                
                 </strong>
                 
                 clauses and matched
                 
                 <strong>
-                    
                     {{ comparison.matched_clauses }}
-                
                 </strong>
                 
                 clauses using semantic similarity.
@@ -217,8 +174,7 @@ Tender Comparison Report
 
     <div class="search-box">
         
-        <input
-        type="text"
+        <input type="text"
         id="clauseSearch"
         placeholder="Search Clause...">
     
@@ -230,24 +186,16 @@ Tender Comparison Report
      
     <div class="clause-section">
         
-        <h2>
-            
-            Clause Analysis
-        
-        </h2>
+        <h2>Clause Analysis</h2>
 
         {% for clause in comparison.clause_results %}
         
         <div class="clause-card">
             
-            <h3>
-                Clause {{ loop.index }}
-            </h3>
+            <h3>Clause {{ loop.index }}</h3>
             
             <p>
-                <strong>
-                    Original
-                </strong>
+                <strong>Original</strong>
             </p>
             
             <p>
@@ -257,9 +205,7 @@ Tender Comparison Report
             <hr>
             
             <p>
-                <strong>
-                    Matched Clause
-                </strong>
+                <strong>Matched Clause</strong>
             </p>
             
             <p>
@@ -270,10 +216,7 @@ Tender Comparison Report
             
             <p>
                 Similarity :
-                
-                <strong>
-                    {{ clause.similarity }}%
-                </strong>
+                <strong>{{ clause.similarity }}%</strong>
             </p>
 
             <p>
@@ -283,9 +226,7 @@ Tender Comparison Report
                 </span>
             </p>
             
-            <p>
-                Difference Summary
-            </p>
+            <p>Difference Summary</p>
 
             <p>
                 {{ clause.difference.summary }}
@@ -309,35 +250,23 @@ Tender Comparison Report
                 <h4>Risk Analysis</h4>
 
                 <p>
-
                     <strong>Risk Score</strong>
-
                     {{ clause.risk.score }}
-
                 </p>
 
                 <p>
-
                     <strong>Risk Level</strong>
-
                     <span class="badge {{ clause.risk.color }}">
-
                         {{ clause.risk.level }}
-
                     </span>
-
                 </p>
 
                 <p>
-
                     <strong>Reason</strong>
-
                 </p>
 
                 <p>
-
                     {{ clause.risk.reason }}
-
                 </p>
 
                 <p>
@@ -347,9 +276,7 @@ Tender Comparison Report
                 </p>
 
                 <p>
-
                     {{ clause.risk.recommendation }}
-
                 </p>
             
             </div>
@@ -364,11 +291,7 @@ Tender Comparison Report
 
     <div class="recommendation-card">
 
-        <h2>
-
-            Recommendation
-
-        </h2>
+        <h2>Recommendation</h2>
 
         <p>
 
@@ -395,23 +318,61 @@ Tender Comparison Report
     </div>
 
     <!-- ========================= -->
-    <!-- AI Report -->
+    <!-- AI Analysis Report -->
     <!-- ========================= -->
-
+     
     <div class="report-card">
-
-        <h2>
-
-            AI Analysis Report
-
-        </h2>
-
-        <!-- <pre>
+        
+        <h2>AI Analysis Report</h2>
+        
+        <div class="analysis-box">
             
-            {{ report }}
+            <h3>Overall Assessment</h3>
+            
+            <p>
+                The AI engine analyzed <strong>{{ comparison.total_clauses }}</strong>
+                clauses from both tender documents using semantic similarity analysis.
+            </p>
+            
+            <br>
 
-        </pre> -->
+            <p>
+                Overall similarity was found to be <strong>{{ comparison.similarity }}%</strong>,
+                resulting in a <strong>{{ comparison.level }}</strong>.
+            </p>
 
+            <br>
+            
+            {% if comparison.similarity >= 90 %}
+            
+            <p>
+                ✔ The documents are highly similar with only minor wording differences.
+            </p>
+            
+            {% elif comparison.similarity >= 70 %}
+
+            <p>
+                ✔ Most clauses match successfully. Manual verification of commercial
+                and financial sections is recommended.
+            </p>
+
+            {% elif comparison.similarity >= 50 %}
+
+            <p>
+                ⚠ Several clauses differ significantly. Technical and eligibility
+                requirements should be reviewed carefully.
+            </p>
+
+            {% else %}
+
+            <p>
+                ❌ Major differences detected. Complete manual verification is strongly recommended.
+            </p>
+
+            {% endif %}
+
+        </div>
+    
     </div>
 
     <!-- ========================= -->
