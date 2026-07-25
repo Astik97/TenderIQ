@@ -287,35 +287,32 @@ body{
 }
 
 /* =====================================================
-   Risk
+   Risk Colors
 ===================================================== */
 
-.risk-box{
+.risk-low{
+    background:#ecfdf5;
+    border-left:6px solid #16a34a;
+}
 
-    margin-top:20px;
+.risk-medium{
+    background:#fefce8;
+    border-left:6px solid #eab308;
+}
 
-    padding:20px;
+.risk-high{
+    background:#fff7ed;
+    border-left:6px solid #f97316;
+}
 
-    border-left:6px solid #ef4444;
-
+.risk-critical{
     background:#fef2f2;
-
-    border-radius:10px;
-
+    border-left:6px solid #dc2626;
 }
 
-.risk-box h4{
-
-    color:#dc2626;
-
-    margin-bottom:15px;
-
-}
-
-.risk-box p{
-
-    margin:8px 0;
-
+.risk-verylow{
+    background:#eff6ff;
+    border-left:6px solid #2563eb;
 }
 
 /* =====================================================
@@ -434,7 +431,7 @@ body{
 
     background: #04e2f2;
 
-    color: #fff;
+    color: #0f172a;
 
 }
 
@@ -450,7 +447,7 @@ body{
 
     background: #facc15;
 
-    color: #fff;
+    color: #1f2937;
 
 }
 

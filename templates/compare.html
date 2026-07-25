@@ -165,7 +165,7 @@ Tender Comparison Report
     <!-- Executive Summary -->
     <!-- ========================= -->
      
-    <div class="summary-box">
+    <div class="executive-summary">
         
         <h2>
             
@@ -291,7 +291,20 @@ Tender Comparison Report
                 {{ clause.difference.summary }}
             </p>
             
-            <div class="risk-box" data-risk="{{ clause.risk.level }}">
+            <div class="risk-box
+            {% if clause.risk.level == 'Very Low Risk' %}
+            risk-verylow
+            {% elif clause.risk.level == 'Low Risk' %}
+            risk-low
+            {% elif clause.risk.level == 'Medium Risk' %}
+            risk-medium
+            {% elif clause.risk.level == 'High Risk' %}
+            risk-high
+            {% else %}
+            risk-critical
+            {% endif %}"
+
+            data-risk="{{ clause.risk.level }}">
                 
                 <h4>Risk Analysis</h4>
 
@@ -393,11 +406,11 @@ Tender Comparison Report
 
         </h2>
 
-        <pre>
+        <!-- <pre>
             
             {{ report }}
 
-        </pre>
+        </pre> -->
 
     </div>
 

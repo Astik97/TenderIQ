@@ -58,28 +58,27 @@ def compare_clauses(clauses1, clauses2):
         best_score = 0
         best_clause = ""
 
-    for clause2 in clauses2:
+        for clause2 in clauses2:
 
-        score = calculate_similarity(clause1,clause2)
+            score = calculate_similarity(clause1,clause2)
 
-        if score > best_score:
-            
-            best_score = score
-            best_clause = clause2
+            if score > best_score:
+                best_score = score
+                best_clause = clause2
 
-    difference = compare_clause_difference(clause1,best_clause)
+        difference = compare_clause_difference(clause1, best_clause)
 
-    risk = analyze_risk(similarity=best_score,difference=difference)
+        risk = analyze_risk(best_score, difference)
 
-    comparison_results.append({
-        "clause": clause1,
-        "best_match": best_clause,
-        "similarity": best_score,
-        "level": get_similarity_level(best_score),
-        "color": get_similarity_color(best_score),
-        "difference": difference,
-        "risk": risk
-    })
+        comparison_results.append({
+            "clause": clause1,
+            "best_match": best_clause,
+            "similarity": best_score,
+            "level": get_similarity_level(best_score),
+            "color": get_similarity_color(best_score),
+            "difference": difference,
+            "risk": risk
+        })
 
     return comparison_results
 

@@ -228,19 +228,29 @@ def generate_clause_analysis(comparison):
 
         risk = clause["risk"]
 
-        added = ", ".join(difference["added"][:5])
+        if difference["added"]:
 
-        if len(difference["added"]) > 5:
-            added += "..." 
+            added = ", ".join(difference["added"][:5])
+
+            if len(difference["added"]) > 5:
+
+                added += "..."
+
         else:
-            "None"
 
-        removed = ", ".join(difference["removed"][:5])
+            added = "None"
 
-        if len(difference["removed"]) > 5:
-            removed += "..."
+        if difference["removed"]:
+
+            removed = ", ".join(difference["removed"][:5])
+
+            if len(difference["removed"]) > 5:
+
+                removed += "..."
+
         else:
-            "None"
+
+            removed = "None"
 
         report += f"""
 
@@ -311,7 +321,7 @@ def generate_footer(comparison):
 
 Total Clauses Compared
 
-{comparison["matched_clauses"]}
+{comparison["total_clauses"]}
 
 Overall Similarity
 

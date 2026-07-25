@@ -100,9 +100,9 @@ document.addEventListener("DOMContentLoaded", function(){
 
         cards.forEach(card=>{
 
-        const text=card.innerText.toLowerCase();
+        const text=card.querySelector("p").innerText.toLowerCase();
 
-        card.style.display=text.includes(value)?"block":"none";
+        card.style.display=text.includes(value)?"":"none";
     
     });
     
