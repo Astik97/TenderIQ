@@ -139,6 +139,12 @@ def compare():
 
     conn.close()
 
+    # ----------------------------------------
+    # AI-Engine
+    # ----------------------------------------
+
+    ai_engine = "TF-IDF + Cosine Similarity"
+
     # -----------------------------------------
     # Render Compare Page
     # -----------------------------------------
@@ -153,4 +159,6 @@ def compare():
 
         comparison=comparison,
 
-        report=report)
+        report=report,
+
+        ai_engine=ai_engine)

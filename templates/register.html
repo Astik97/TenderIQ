@@ -20,11 +20,7 @@
 
     <div class="auth-card">
 
-        <h1>
-
-            Create Your Account
-
-        </h1>
+        <h1>Create Your Account</h1>
 
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
@@ -40,66 +36,39 @@
             {% endif %}
         {% endwith %}
 
-        <p>
-
-            Register to start using TenderIQ
-
-        </p>
+        <p>Register to start TenderIQ</p>
 
         <form method="POST" id="registerForm">
 
             <div class="input-group">
 
-                <label>
+                <label>Username</label>
 
-                    Username
-
-                </label>
-
-                <input
-                    type="text"
-                    name="username"
-                    placeholder="Enter username"
-                    required>
+                <input type="text" name="username" 
+                placeholder="Enter your username" required>
 
             </div>
 
             <div class="input-group">
 
-                <label>
+                <label>Email Address</label>
 
-                    Email Address
-
-                </label>
-
-                <input
-                    type="email"
-                    name="email"
-                    placeholder="Enter your email"
-                    required>
+                <input type="email" name="email"
+                placeholder="Enter your email" required>
 
             </div>
 
             <div class="input-group">
 
-                <label>
-
-                    Password
-
-                </label>
+                <label>Password</label>
 
                 <div class="password-box">
 
-                    <input
-                        type="password"
-                        id="password"
-                        name="password"
-                        placeholder="Create password"
-                        required>
+                    <input type="password" id="password" name="password" 
+                    placeholder="Create password" required>
 
-                    <span
-                        class="toggle-password"
-                        onclick="togglePassword('password', this)">
+                    <span class="toggle-password"
+                    onclick="togglePassword('password', this)">
 
                         <i class="fa-solid fa-eye"></i>
 
@@ -111,24 +80,15 @@
 
             <div class="input-group">
 
-                <label>
-
-                    Confirm Password
-
-                </label>
+                <label>Confirm Password</label>
 
                 <div class="password-box">
 
-                    <input
-                        type="password"
-                        id="confirm_password"
-                        name="confirm_password"
-                        placeholder="Confirm password"
-                        required>
+                    <input type="password" id="confirm_password" name="confirm_password"
+                    placeholder="Confirm password" required>
 
-                    <span
-                        class="toggle-password"
-                        onclick="togglePassword('confirm_password', this)">
+                    <span class="toggle-password"
+                    onclick="togglePassword('confirm_password', this)">
 
                         <i class="fa-solid fa-eye"></i>
 
@@ -138,8 +98,8 @@
 
             </div>
 
-            <div id="passwordStrength"
-                 class="password-strength">
+            <div id="passwordStrength" 
+            class="password-strength">
 
                 Password Strength
 
@@ -149,9 +109,7 @@
 
                 <label>
 
-                    <input
-                        type="checkbox"
-                        required>
+                    <input type="checkbox" required>
 
                     I agree to the Terms & Conditions
 
@@ -159,9 +117,7 @@
 
             </div>
 
-            <button
-                type="submit"
-                class="btn btn-primary">
+            <button type="submit" class="btn btn-primary">
 
                 Create Account
 
@@ -173,21 +129,13 @@
 
             Already have an account?
 
-            <a href="/login">
-
-                Login
-
-            </a>
+            <a href="/login">Login</a>
 
         </div>
 
         <div class="home-link">
 
-            <a href="/">
-
-                ← Back to Home
-
-            </a>
+            <a href="/">← Back to Home</a>
 
         </div>
 
