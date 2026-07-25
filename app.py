@@ -6,14 +6,6 @@ from dotenv import load_dotenv
 
 app = Flask(__name__)
 
-@app.before_request
-def debug_request():
-    
-    print("\n")
-    print("=" * 80)
-    print(request.method, request.path)
-    print("=" * 80)
-
 app.config.from_object(Config)
 
 from backend.routes.auth_routes import auth_bp
