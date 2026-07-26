@@ -143,7 +143,7 @@ def compare():
     # AI-Engine
     # ----------------------------------------
 
-    ai_engine = "TF-IDF + Cosine Similarity"
+    ai_engine = "Sentence Transformers(all-MiniLM-L6-v2) + Cosine Similarity"
 
     # -----------------------------------------
     # Render Compare Page

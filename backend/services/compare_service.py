@@ -21,8 +21,13 @@ from backend.services.difference_service import (
 
 from backend.services.risk_service import analyze_risk
 
+from backend.services.embedding_service import (
+    generate_embeddings,
+    calculate_similarity_matrix
+    # calculate_embedding_similarity
+)
+
 from backend.services.similarity_service import (
-    calculate_similarity,
     get_similarity_level,
     get_similarity_color
 )
@@ -31,7 +36,8 @@ from backend.services.similarity_service import (
 # Compare Individual Clauses
 # =========================================================
 
-def compare_clauses(clauses1, clauses2):
+def compare_clauses(clauses1, clauses2,similarity_matrix):
+    # embeddings1, embeddings2
     """
     Compare every clause from Tender A
     against every clause from Tender B.
@@ -53,32 +59,62 @@ def compare_clauses(clauses1, clauses2):
 
     for i, clause1 in enumerate(clauses1):
 
-        print(f"Comparing clause {i+1}/{len(clauses1)}")
+        if (i + 1) % 100 == 0:
+            print(f"Comparing clause {i+1}/{len(clauses1)}")
 
         best_score = 0
         best_clause = ""
 
-        for clause2 in clauses2:
+        # for j, embedding2 in enumerate(embeddings2):
 
-            score = calculate_similarity(clause1,clause2)
+        #     score = calculate_embedding_similarity(embeddings1[i], embedding2)
 
-            if score > best_score:
-                best_score = score
-                best_clause = clause2
+        #     if score > best_score:
+        #         best_score = score
+        #         best_clause = clauses2[j]
+
+        # ----------------------------------
+        # Best Match
+        # ----------------------------------
+
+        best_index = similarity_matrix[i].argmax()
+
+        best_score = round(similarity_matrix[i][best_index] * 100,2)
+
+        best_clause = clauses2[best_index]
+
+        # ----------------------------------
+        # Difference
+        # ----------------------------------
 
         difference = compare_clause_difference(clause1, best_clause)
+
+        # ----------------------------------
+        # Risk
+        # ----------------------------------
 
         risk = analyze_risk(best_score, difference)
 
         comparison_results.append({
+
             "clause": clause1,
+
             "best_match": best_clause,
+
             "similarity": best_score,
+
             "level": get_similarity_level(best_score),
+
             "color": get_similarity_color(best_score),
+
             "difference": difference,
+
             "risk": risk
+
         })
+
+        print(best_score)
+        print("Total comparison results:",len(comparison_results))
 
     return comparison_results
 
@@ -117,11 +153,27 @@ def compare_tenders(text1, text2):
 
     clauses2 = extract_clauses(text2)
 
+    embeddings1 = generate_embeddings(clauses1)
+
+    embeddings2 = generate_embeddings(clauses2)
+
+    print(len(embeddings1))
+    print(len(embeddings2))
+
+    similarity_matrix = calculate_similarity_matrix(embeddings1,embeddings2)
+
+    print(type(similarity_matrix))
+    print(similarity_matrix.shape)
+
     # --------------------------------------
     # Clause Comparison
     # --------------------------------------
 
-    clause_results = compare_clauses(clauses1,clauses2)
+    clause_results = compare_clauses(clauses1,clauses2,similarity_matrix)
+    # embeddings1,embeddings2
+    print("=" * 50)
+    print("Total Clause Results :", len(clause_results))
+    print("=" * 50)
 
     # --------------------------------------
     # Overall Similarity
