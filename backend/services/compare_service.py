@@ -24,7 +24,6 @@ from backend.services.risk_service import analyze_risk
 from backend.services.embedding_service import (
     generate_embeddings,
     calculate_similarity_matrix
-    # calculate_embedding_similarity
 )
 
 from backend.services.similarity_service import (
@@ -37,7 +36,6 @@ from backend.services.similarity_service import (
 # =========================================================
 
 def compare_clauses(clauses1, clauses2,similarity_matrix):
-    # embeddings1, embeddings2
     """
     Compare every clause from Tender A
     against every clause from Tender B.
@@ -65,17 +63,12 @@ def compare_clauses(clauses1, clauses2,similarity_matrix):
         best_score = 0
         best_clause = ""
 
-        # for j, embedding2 in enumerate(embeddings2):
-
-        #     score = calculate_embedding_similarity(embeddings1[i], embedding2)
-
-        #     if score > best_score:
-        #         best_score = score
-        #         best_clause = clauses2[j]
-
         # ----------------------------------
         # Best Match
         # ----------------------------------
+
+        if similarity_matrix.shape[1] == 0:
+            continue
 
         best_index = similarity_matrix[i].argmax()
 
@@ -112,9 +105,6 @@ def compare_clauses(clauses1, clauses2,similarity_matrix):
             "risk": risk
 
         })
-
-        print(best_score)
-        print("Total comparison results:",len(comparison_results))
 
     return comparison_results
 
@@ -157,23 +147,13 @@ def compare_tenders(text1, text2):
 
     embeddings2 = generate_embeddings(clauses2)
 
-    print(len(embeddings1))
-    print(len(embeddings2))
-
     similarity_matrix = calculate_similarity_matrix(embeddings1,embeddings2)
-
-    print(type(similarity_matrix))
-    print(similarity_matrix.shape)
 
     # --------------------------------------
     # Clause Comparison
     # --------------------------------------
 
     clause_results = compare_clauses(clauses1,clauses2,similarity_matrix)
-    # embeddings1,embeddings2
-    print("=" * 50)
-    print("Total Clause Results :", len(clause_results))
-    print("=" * 50)
 
     # --------------------------------------
     # Overall Similarity
