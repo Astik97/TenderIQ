@@ -1,3 +1,7 @@
+/* ==========================================
+   Index, Login & Register
+========================================== */
+
 *{
     margin:0;
     padding:0;
@@ -334,6 +338,10 @@ footer{
     gap:12px;
 }
 
+/* ==========================================
+   Flash Message
+========================================== */
+
 .flash-message{
     padding:12px;
     margin-bottom:20px;
@@ -352,4 +360,6 @@ footer{
     background:#f8d7da;
     color:#721c24;
     border:1px solid #dc3545;
-}}
+}
+
+}

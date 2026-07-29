@@ -4,7 +4,15 @@ from flask import(
     render_template,
     flash,
     redirect,
-    session)
+    session
+)
+
+from backend.services.ranking_service import (
+    get_highest_matching_clauses,
+    get_highest_risk_clauses,
+    get_lowest_matching_clauses,
+    get_ranking_summary
+)
 
 from backend.utils.db import get_connection
 from backend.services.compare_service import compare_tenders
@@ -29,6 +37,7 @@ def compare():
         return redirect("/dashboard")
 
     conn = None
+    
     cursor = None
 
     try:
@@ -91,8 +100,26 @@ def compare():
     # Compare
     # -----------------------------------------
 
-    comparison = compare_tenders(text1,text2,)
+    comparison = compare_tenders(text1,text2)
 
+    clause_results = comparison["clause_results"]
+
+    # -----------------------------------------
+    # Ranking Service
+    # -----------------------------------------
+
+    highest_matches = get_highest_matching_clauses(clause_results)
+
+    highest_risks = get_highest_risk_clauses(clause_results)
+
+    lowest_matches = get_lowest_matching_clauses(clause_results)
+
+    ranking_summary = get_ranking_summary(clause_results)
+
+    # -----------------------------------------
+    # AI Summary
+    # -----------------------------------------
+    
     ai_summary = generate_ai_summary(comparison)
 
     print("\n========== COMPARISON RESULT ==========\n")
@@ -106,8 +133,6 @@ def compare():
     print(f"Matched Clauses : {comparison['matched_clauses']}")
 
     print(f"Total Risks : {len(comparison['clause_results'])}")
-
-    print(ai_summary)
 
     # -----------------------------------------
     # Report
@@ -136,7 +161,9 @@ def compare():
         comparison["similarity"],
         comparison["level"],
         report
-    ))
+    )
+
+)
     
     conn.commit()
     
@@ -164,9 +191,18 @@ def compare():
 
         comparison=comparison,
 
+        highest_matches=highest_matches,
+
+        highest_risks=highest_risks,
+
+        lowest_matches=lowest_matches,
+
+        ranking_summary=ranking_summary,
+
         report=report,
 
         ai_engine=ai_engine,
 
         ai_summary=ai_summary
-    )
+
+)
