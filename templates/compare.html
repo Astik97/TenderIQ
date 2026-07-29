@@ -53,6 +53,73 @@
         </div>
 
     </div>
+    
+    <div class="ai-summary-card">
+        
+        <h2>AI Executive Summary</h2>
+        
+        <div class="summary-grid">
+            
+            <div>
+                <strong>Overall Similarity</strong><br>
+                {{ ai_summary.overall_similarity }}%
+            </div>
+
+            <div>
+                <strong>Risk Level</strong><br>
+                {{ ai_summary.risk_level }}
+            </div>
+
+            <div>
+                <strong>Clauses Compared</strong><br>
+                {{ ai_summary.total_clauses }}
+            </div>
+        
+        </div>
+        
+        <hr>
+        
+        <p>
+            <strong>Highest Matching Clause</strong><br>
+
+            {% if ai_summary.highest_matching_clause %}
+                {{ ai_summary.highest_matching_clause.clause }}
+            {% else %}
+                No matching clause found.
+            {% endif %}
+        </p>
+        
+        <hr>
+
+        <p>
+            <strong>Highest Risk Clause</strong><br>
+
+            {% if ai_summary.highest_risk_clause %}
+                {{ ai_summary.highest_risk_clause.clause }}
+            {% else %}
+                No high-risk clause found.
+            {% endif %}
+        </p>
+
+        <hr>
+
+        <strong>Major Differences</strong>
+
+        <ul>
+            {% for item in ai_summary.major_differences %}
+                <li>{{ item }}</li>
+            {% endfor %}
+        </ul>
+
+        <hr>
+
+        <strong>AI Recommendation</strong>
+
+        <p>
+            {{ ai_summary.recommendation }}
+        </p>
+    
+    </div>
 
     <!-- ========================= -->
     <!-- Similarity -->
@@ -149,21 +216,15 @@
             </strong>
             
             <p>
-                
                 The AI comparison engine analyzed
-                
                 <strong>
                     {{ comparison.total_clauses }}
                 </strong>
-                
                 clauses and matched
-                
                 <strong>
                     {{ comparison.matched_clauses }}
                 </strong>
-                
                 clauses using semantic similarity.
-            
             </p>
         
         </div>
@@ -270,9 +331,7 @@
                 </p>
 
                 <p>
-
                     <strong>Recommendation</strong>
-
                 </p>
 
                 <p>

@@ -14,12 +14,12 @@ Responsibilities
 """
 
 from backend.services.clause_service import extract_clauses
+from backend.services.risk_service import analyze_risk
+from backend.services.ai_summary_service import generate_ai_summary
 
 from backend.services.difference_service import (
     compare_clauses as compare_clause_difference
 )
-
-from backend.services.risk_service import analyze_risk
 
 from backend.services.embedding_service import (
     generate_embeddings,
@@ -165,7 +165,7 @@ def compare_tenders(text1, text2):
     # Final Result
     # --------------------------------------
 
-    return {
+    result = {
 
         "similarity": overall_similarity,
 
@@ -182,5 +182,11 @@ def compare_tenders(text1, text2):
         "matched_clauses": len(clause_results),
 
         "clause_results": clause_results
-
+        
     }
+
+    ai_summary = generate_ai_summary(result)
+
+    result["ai_summary"] = ai_summary
+
+    return result

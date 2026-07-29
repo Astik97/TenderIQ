@@ -9,6 +9,7 @@ from flask import(
 from backend.utils.db import get_connection
 from backend.services.compare_service import compare_tenders
 from backend.services.report_service import generate_report
+from backend.services.ai_summary_service import generate_ai_summary
 
 compare_bp = Blueprint("compare",__name__)
 
@@ -92,6 +93,8 @@ def compare():
 
     comparison = compare_tenders(text1,text2,)
 
+    ai_summary = generate_ai_summary(comparison)
+
     print("\n========== COMPARISON RESULT ==========\n")
 
     print(f"Similarity : {comparison['similarity']}%")
@@ -103,6 +106,8 @@ def compare():
     print(f"Matched Clauses : {comparison['matched_clauses']}")
 
     print(f"Total Risks : {len(comparison['clause_results'])}")
+
+    print(ai_summary)
 
     # -----------------------------------------
     # Report
@@ -161,4 +166,7 @@ def compare():
 
         report=report,
 
-        ai_engine=ai_engine)
+        ai_engine=ai_engine,
+
+        ai_summary=ai_summary
+    )
