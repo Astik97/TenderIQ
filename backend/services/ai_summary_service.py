@@ -640,10 +640,7 @@ def generate_ai_summary(result):
 
     review_priority = generate_review_priority(clause_results)
 
-    recommendation = generate_recommendation(
-        result["similarity"],
-        risk_level
-    )
+    recommendation = generate_recommendation(result["similarity"],risk_level)
 
     recommendations = generate_ai_recommendations(clause_results)
 
@@ -722,6 +719,8 @@ def generate_ai_summary(result):
         "weighted_similarity": weighted_similarity,
 
         "weight_summary": weight_summary,
+
+        # "difference_percentage": weight_summary["difference_percentage"],
 
         # ==========================================
         # Review & Recommendation

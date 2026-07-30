@@ -104,9 +104,7 @@ def calculate_weighted_similarity(clause_results):
 
     for clause in clause_results:
 
-        weight = get_clause_weight(
-            clause["clause"]
-        )
+        weight = get_clause_weight(clause["clause"])
 
         weighted_sum += clause["similarity"] * weight
 
@@ -146,26 +144,21 @@ def calculate_weighted_statistics(clause_results):
 
     for clause in clause_results:
 
-        weights.append(
-            get_clause_weight(
-                clause["clause"]
-            )
-        )
+        weights.append(get_clause_weight(clause["clause"]))
 
-    weighted_similarity = calculate_weighted_similarity(
-        clause_results
-    )
+    weighted_similarity = calculate_weighted_similarity(clause_results)
+
+    # difference_percentage = round(100 - weighted_similarity,2)
 
     return {
 
         "weighted_similarity": weighted_similarity,
 
+        # "difference_percentage": difference_percentage,
+
         "total_weight": sum(weights),
 
-        "average_weight": round(
-            sum(weights) / len(weights),
-            2
-        ),
+        "average_weight": round(sum(weights) / len(weights),2),
 
         "highest_weight": max(weights),
 
@@ -202,34 +195,42 @@ def get_weight_summary(clause_results):
 
         }
 
-    statistics = calculate_weighted_statistics(
-        clause_results
-    )
+    statistics = calculate_weighted_statistics(clause_results)
 
     critical = 0
 
     high = 0
 
+    medium = 0
+
+    low = 0
+
     for clause in clause_results:
 
-        weight = get_clause_weight(
-            clause["clause"]
-        )
+        weight = get_clause_weight(clause["clause"])
 
         if weight >= 10:
-
             critical += 1
 
         elif weight >= 8:
-
             high += 1
+
+        elif weight >= 5:
+            medium += 1
+
+        else:
+            low += 1
 
     return {
 
-        **statistics,
+    **statistics,
 
-        "critical_clauses": critical,
+    "critical_clauses": critical,
 
-        "high_priority_clauses": high
+    "high_priority_clauses": high,
 
-    }
+    "medium_priority_clauses": medium,
+
+    "low_priority_clauses": low
+
+} 

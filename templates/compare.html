@@ -53,50 +53,11 @@
         </div>
 
     </div>
-    
-    <div class="ai-summary-card">
         
-        <h2>AI Executive Summary</h2>
-        
-        <div class="summary-grid">
-            
-            <div>
-                <strong>Overall Similarity</strong><br>
-                {{ ai_summary.overall_similarity }}%
-            </div>
-
-            <div>
-                <strong>Weighted Similarity</strong><br>
-                {{ ai_summary.weighted_similarity }}%
-            </div>
-
-            <div>
-                <strong>Critical Clauses</strong><br>
-                {{ ai_summary.weight_summary.critical_clauses }}
-            </div>
-
-            <div>
-                <strong>High Priority Clauses</strong><br>
-                {{ ai_summary.weight_summary.high_priority_clauses }}
-            </div>
-
-            <div>
-                <strong>Risk Level</strong><br>
-                {{ ai_summary.risk_level }}
-            </div>
-
-            <div>
-                <strong>Clauses Compared</strong><br>
-                {{ ai_summary.total_clauses }}
-            </div>
-        
-        </div>
-        
-        <hr>
+        <div class="info-box">
         
         <p>
             <strong>Highest Matching Clause</strong><br>
-
             {% if ai_summary.highest_matching_clause %}
                 {{ ai_summary.highest_matching_clause.clause }}
             {% else %}
@@ -108,7 +69,6 @@
 
         <p>
             <strong>Highest Risk Clause</strong><br>
-
             {% if ai_summary.highest_risk_clause %}
                 {{ ai_summary.highest_risk_clause.clause }}
             {% else %}
@@ -245,6 +205,53 @@
         </div>
     
     </div>
+
+    <!-- ========================= -->
+    <!-- AI Executive Summary -->
+    <!-- ========================= -->    
+    
+    <div class="ai-summary-card">
+        
+        <h2>AI Executive Summary</h2>
+        
+        <div class="summary-grid">
+
+            <div>
+                <strong>Weighted Similarity</strong><br>
+                {{ ai_summary.weighted_similarity }}%
+            </div>
+
+            <!-- <div>
+                <strong>Difference</strong><br>
+                {{ ai_summary.difference_percentage }}%
+            </div> -->
+
+            <div>
+                <strong>Critical Clauses</strong><br>
+                {{ ai_summary.weight_summary.critical_clauses }}
+            </div>
+
+            <div>
+                <strong>High Priority Clauses</strong><br>
+                {{ ai_summary.weight_summary.high_priority_clauses }}
+            </div>
+
+            <div>
+                <strong>Medium Priority Clauses</strong><br>
+                {{ ai_summary.weight_summary.medium_priority_clauses }}
+            </div>
+
+            <div>
+                <strong>Low Priority Clauses</strong><br>
+                {{ ai_summary.weight_summary.low_priority_clauses }}
+            </div>
+
+            <div>
+                <strong>Risk Level</strong><br>
+                {{ ai_summary.risk_level }}
+            </div>
+        
+        </div>
 
     <!-- Clause Search -->
 
