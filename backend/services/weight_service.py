@@ -1,0 +1,235 @@
+"""
+=========================================================
+TenderIQ Weight Service
+---------------------------------------------------------
+Responsible for
+
+1. Clause Importance
+2. Weighted Similarity
+3. Weighted Statistics
+4. Weight Summary
+=========================================================
+"""
+
+# =========================================================
+# Clause Weights
+# =========================================================
+
+CLAUSE_WEIGHTS = {
+
+    "payment": 10,
+    "payment terms": 10,
+    "emd": 10,
+    "earnest money": 10,
+    "bid security": 10,
+
+    "eligibility": 10,
+    "qualification": 10,
+
+    "technical": 9,
+    "technical specification": 9,
+    "specification": 9,
+    "scope": 9,
+    "experience": 9,
+
+    "warranty": 8,
+    "guarantee": 8,
+    "penalty": 8,
+    "liquidated damages": 8,
+
+    "delivery": 7,
+    "timeline": 7,
+    "completion": 7,
+    "contract": 7,
+    "termination": 7,
+
+    "invoice": 6,
+    "price": 6,
+    "gst": 6,
+    "tax": 6,
+
+    "address": 2,
+    "contact": 2,
+
+    "email": 1,
+    "phone": 1,
+    "website": 1
+}
+
+# =========================================================
+# Get Clause Weight
+# =========================================================
+
+def get_clause_weight(clause):
+    """
+    Returns the importance weight of a clause.
+
+    Default weight = 5
+    """
+
+    if not clause:
+        return 5
+
+    clause = clause.lower()
+
+    for keyword, weight in CLAUSE_WEIGHTS.items():
+
+        if keyword in clause:
+
+            return weight
+
+    return 5
+
+# =========================================================
+# Weighted Similarity
+# =========================================================
+
+def calculate_weighted_similarity(clause_results):
+    """
+    Calculate weighted similarity score.
+
+    Formula
+
+    Sum(similarity × weight)
+    ------------------------
+         Sum(weight)
+    """
+
+    if not clause_results:
+        return 0
+
+    weighted_sum = 0
+
+    total_weight = 0
+
+    for clause in clause_results:
+
+        weight = get_clause_weight(
+            clause["clause"]
+        )
+
+        weighted_sum += clause["similarity"] * weight
+
+        total_weight += weight
+
+    if total_weight == 0:
+        return 0
+
+    return round(weighted_sum / total_weight, 2)
+
+# =========================================================
+# Weighted Statistics
+# =========================================================
+
+def calculate_weighted_statistics(clause_results):
+    """
+    Generate weighted statistics.
+    """
+
+    if not clause_results:
+
+        return {
+
+            "weighted_similarity": 0,
+
+            "total_weight": 0,
+
+            "average_weight": 0,
+
+            "highest_weight": 0,
+
+            "lowest_weight": 0
+
+        }
+
+    weights = []
+
+    for clause in clause_results:
+
+        weights.append(
+            get_clause_weight(
+                clause["clause"]
+            )
+        )
+
+    weighted_similarity = calculate_weighted_similarity(
+        clause_results
+    )
+
+    return {
+
+        "weighted_similarity": weighted_similarity,
+
+        "total_weight": sum(weights),
+
+        "average_weight": round(
+            sum(weights) / len(weights),
+            2
+        ),
+
+        "highest_weight": max(weights),
+
+        "lowest_weight": min(weights)
+
+    }
+
+# =========================================================
+# Weight Summary
+# =========================================================
+
+def get_weight_summary(clause_results):
+    """
+    Returns a complete weight summary.
+    """
+
+    if not clause_results:
+
+        return {
+
+            "weighted_similarity": 0,
+
+            "total_weight": 0,
+
+            "average_weight": 0,
+
+            "highest_weight": 0,
+
+            "lowest_weight": 0,
+
+            "critical_clauses": 0,
+
+            "high_priority_clauses": 0
+
+        }
+
+    statistics = calculate_weighted_statistics(
+        clause_results
+    )
+
+    critical = 0
+
+    high = 0
+
+    for clause in clause_results:
+
+        weight = get_clause_weight(
+            clause["clause"]
+        )
+
+        if weight >= 10:
+
+            critical += 1
+
+        elif weight >= 8:
+
+            high += 1
+
+    return {
+
+        **statistics,
+
+        "critical_clauses": critical,
+
+        "high_priority_clauses": high
+
+    }

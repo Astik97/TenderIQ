@@ -66,6 +66,21 @@
             </div>
 
             <div>
+                <strong>Weighted Similarity</strong><br>
+                {{ ai_summary.weighted_similarity }}%
+            </div>
+
+            <div>
+                <strong>Critical Clauses</strong><br>
+                {{ ai_summary.weight_summary.critical_clauses }}
+            </div>
+
+            <div>
+                <strong>High Priority Clauses</strong><br>
+                {{ ai_summary.weight_summary.high_priority_clauses }}
+            </div>
+
+            <div>
                 <strong>Risk Level</strong><br>
                 {{ ai_summary.risk_level }}
             </div>

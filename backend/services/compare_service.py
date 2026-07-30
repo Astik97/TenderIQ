@@ -31,6 +31,12 @@ from backend.services.similarity_service import (
     get_similarity_color
 )
 
+from backend.services.weight_service import (
+    calculate_weighted_similarity,
+    calculate_weighted_statistics,
+    get_weight_summary
+)
+
 # =========================================================
 # Compare Individual Clauses
 # =========================================================
@@ -156,6 +162,22 @@ def compare_tenders(text1, text2):
     clause_results = compare_clauses(clauses1,clauses2,similarity_matrix)
 
     # --------------------------------------
+    # Weighted Analysis
+    # --------------------------------------
+
+    weighted_similarity = calculate_weighted_similarity(
+        clause_results
+    )
+
+    weighted_statistics = calculate_weighted_statistics(
+        clause_results
+    )
+
+    weight_summary = get_weight_summary(
+        clause_results
+    )
+
+    # --------------------------------------
     # Overall Similarity
     # --------------------------------------
 
@@ -181,8 +203,14 @@ def compare_tenders(text1, text2):
 
         "matched_clauses": len(clause_results),
 
-        "clause_results": clause_results
-        
+        "clause_results": clause_results,
+
+        "weighted_similarity": weighted_similarity,
+
+        "weighted_statistics": weighted_statistics,
+
+        "weight_summary": weight_summary,
+                
     }
 
     ai_summary = generate_ai_summary(result)
