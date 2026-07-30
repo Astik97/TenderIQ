@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 <html lang="en">
-    
+
 <head>
 
 <meta charset="UTF-8">
@@ -55,40 +55,6 @@
         </div>
 
     </div>
-        
-        <div class="info-box">
-        
-        <p>
-            <strong>Highest Matching Clause</strong><br>
-            {% if ai_summary.highest_matching_clause %}
-                {{ ai_summary.highest_matching_clause.clause }}
-            {% else %}
-                No matching clause found.
-            {% endif %}
-        </p>
-        
-        <hr>
-
-        <p>
-            <strong>Highest Risk Clause</strong><br>
-            {% if ai_summary.highest_risk_clause %}
-                {{ ai_summary.highest_risk_clause.clause }}
-            {% else %}
-                No high-risk clause found.
-            {% endif %}
-        </p>
-
-        <hr>
-
-        <strong>AI Recommendation</strong>
-
-        <p>
-            {{ ai_summary.recommendation }}
-        </p>
-    
-    </div>
-
-    <br>
 
     <!-- ========================= -->
     <!-- Similarity -->
