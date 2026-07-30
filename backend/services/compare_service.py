@@ -14,7 +14,9 @@ Responsibilities
 """
 
 from backend.services.clause_service import extract_clauses
+
 from backend.services.risk_service import analyze_risk
+
 from backend.services.ai_summary_service import generate_ai_summary
 
 from backend.services.difference_service import (
@@ -33,7 +35,6 @@ from backend.services.similarity_service import (
 
 from backend.services.weight_service import (
     calculate_weighted_similarity,
-    calculate_weighted_statistics,
     get_weight_summary
 )
 
@@ -63,17 +64,17 @@ def compare_clauses(clauses1, clauses2,similarity_matrix):
 
     for i, clause1 in enumerate(clauses1):
 
-        if (i + 1) % 100 == 0:
+        if len(clauses1) >= 100 and (i + 1) % 100 == 0:
             print(f"Comparing clause {i+1}/{len(clauses1)}")
 
-        best_score = 0
-        best_clause = ""
+        # best_score = 0
+        # best_clause = ""
 
         # ----------------------------------
         # Best Match
         # ----------------------------------
 
-        if similarity_matrix.shape[1] == 0:
+        if similarity_matrix.size == 0:
             continue
 
         best_index = similarity_matrix[i].argmax()
@@ -165,17 +166,9 @@ def compare_tenders(text1, text2):
     # Weighted Analysis
     # --------------------------------------
 
-    weighted_similarity = calculate_weighted_similarity(
-        clause_results
-    )
+    weighted_similarity = calculate_weighted_similarity(clause_results)
 
-    weighted_statistics = calculate_weighted_statistics(
-        clause_results
-    )
-
-    weight_summary = get_weight_summary(
-        clause_results
-    )
+    weight_summary = get_weight_summary(clause_results)
 
     # --------------------------------------
     # Overall Similarity
@@ -206,8 +199,6 @@ def compare_tenders(text1, text2):
         "clause_results": clause_results,
 
         "weighted_similarity": weighted_similarity,
-
-        "weighted_statistics": weighted_statistics,
 
         "weight_summary": weight_summary,
                 

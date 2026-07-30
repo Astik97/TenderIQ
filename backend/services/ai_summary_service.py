@@ -720,7 +720,7 @@ def generate_ai_summary(result):
 
         "weight_summary": weight_summary,
 
-        # "difference_percentage": weight_summary["difference_percentage"],
+        "difference_percentage": weight_summary["difference_percentage"],
 
         # ==========================================
         # Review & Recommendation

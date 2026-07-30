@@ -148,13 +148,13 @@ def calculate_weighted_statistics(clause_results):
 
     weighted_similarity = calculate_weighted_similarity(clause_results)
 
-    # difference_percentage = round(100 - weighted_similarity,2)
+    difference_percentage = round(100 - weighted_similarity,2)
 
     return {
 
         "weighted_similarity": weighted_similarity,
 
-        # "difference_percentage": difference_percentage,
+        "difference_percentage": difference_percentage,
 
         "total_weight": sum(weights),
 

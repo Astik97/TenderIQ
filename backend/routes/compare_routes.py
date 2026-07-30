@@ -1,11 +1,16 @@
-from flask import(
-    Blueprint,
-    request,
-    render_template,
-    flash,
-    redirect,
-    session
-)
+"""
+=========================================================
+TenderIQ Compare Service
+=========================================================
+"""
+
+from flask import(Blueprint,request,render_template,flash,redirect,session)
+
+from backend.services.chart_service import (generate_chart_data)
+
+from backend.services.recommendation_service import (generate_recommendation_summary)
+
+from backend.services.analytics_service import (generate_analytics)
 
 from backend.services.ranking_service import (
     get_highest_matching_clauses,
@@ -15,9 +20,10 @@ from backend.services.ranking_service import (
 )
 
 from backend.utils.db import get_connection
+
 from backend.services.compare_service import compare_tenders
+
 from backend.services.report_service import generate_report
-from backend.services.ai_summary_service import generate_ai_summary
 
 compare_bp = Blueprint("compare",__name__)
 
@@ -120,7 +126,29 @@ def compare():
     # AI Summary
     # -----------------------------------------
     
-    ai_summary = generate_ai_summary(comparison)
+    ai_summary = comparison["ai_summary"]
+
+    # -----------------------------------------
+    # Recommendation Summary
+    # -----------------------------------------
+
+    recommendation_summary = generate_recommendation_summary(comparison, ai_summary)
+
+    # -----------------------------------------
+    # Analytics
+    # -----------------------------------------
+
+    analytics = generate_analytics(comparison)
+
+    # -----------------------------------------
+    # Chart Data
+    # -----------------------------------------
+
+    chart_data = generate_chart_data(comparison,analytics)
+
+    # -----------------------------------------
+    # Comparison Result
+    # -----------------------------------------
 
     print("\n========== COMPARISON RESULT ==========\n")
 
@@ -201,8 +229,14 @@ def compare():
 
         report=report,
 
+        analytics=analytics,
+
+        chart_data=chart_data,
+
         ai_engine=ai_engine,
 
-        ai_summary=ai_summary
+        ai_summary=ai_summary,
+
+        recommendation_summary=recommendation_summary
 
 )

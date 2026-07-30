@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 <html lang="en">
-
+    
 <head>
 
 <meta charset="UTF-8">
@@ -11,6 +11,8 @@
 <title>Tender Comparison Report</title>
 
 <link rel="stylesheet"href="{{ url_for('static',filename='css/compare.css') }}">
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 </head>
 
@@ -78,16 +80,6 @@
 
         <hr>
 
-        <strong>Major Differences</strong>
-
-        <ul>
-            {% for item in ai_summary.major_differences %}
-                <li>{{ item }}</li>
-            {% endfor %}
-        </ul>
-
-        <hr>
-
         <strong>AI Recommendation</strong>
 
         <p>
@@ -95,6 +87,8 @@
         </p>
     
     </div>
+
+    <br>
 
     <!-- ========================= -->
     <!-- Similarity -->
@@ -479,6 +473,14 @@
 </div>
 
 <script src="{{ url_for('static',filename='js/compare.js') }}"></script>
+
+<script id="chart-data" type="application/json">
+
+{{ chart_data | tojson }}
+
+</script>
+
+<script src="{{ url_for('static', filename='js/charts.js') }}"></script>
 
 </body>
 
