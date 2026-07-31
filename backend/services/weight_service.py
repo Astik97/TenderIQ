@@ -221,11 +221,19 @@ def get_weight_summary(clause_results):
         else:
             low += 1
 
+        total_clauses = len(clause_results)
+
+        critical_percentage = round(
+            (critical / total_clauses) * 100,
+            2)
+
     return {
 
     **statistics,
 
     "critical_clauses": critical,
+
+    "critical_percentage": critical_percentage,
 
     "high_priority_clauses": high,
 

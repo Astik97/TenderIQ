@@ -126,9 +126,9 @@
         
         <div class="stat-card">
 
-            <h4>AI Engine</h4>
+            <h4>Confidence Score</h4>
 
-            <p>{{ ai_engine }}</p>
+            <p>{{ ai_summary.confidence_score }}%</p>
         
         </div>
     
@@ -175,7 +175,15 @@
 
             <div>
                 <strong>Critical Clauses</strong><br>
-                {{ ai_summary.weight_summary.critical_clauses }}
+                <p>
+                    {{ ai_summary.weight_summary.critical_clauses }}
+                    /
+                    {{ ai_summary.total_clauses }}
+                </p>
+
+                <small>
+                    {{ ai_summary.weight_summary.critical_percentage }}%
+                </small>
             </div>
 
             <div>
