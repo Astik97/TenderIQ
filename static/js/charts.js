@@ -21,6 +21,10 @@ new Chart(
                     data: chartData.similarity_chart.values
                 }
             ]
+        },
+        options:{
+            responsive:true,
+            maintainAspectRatio:false
         }
     }
 );
@@ -40,6 +44,10 @@ new Chart(
                     data: chartData.risk_chart.values
                 }
             ]
+        },
+        options:{
+            responsive:true,
+            maintainAspectRatio:false
         }
     }
 );
@@ -60,6 +68,10 @@ new Chart(
                     data: chartData.priority_chart.values
                 }
             ]
+        },
+        options:{
+            responsive:true,
+            maintainAspectRatio:false
         }
     }
 );
@@ -81,6 +93,10 @@ new Chart(
                     data: chartData.dashboard_chart.values
                 }
             ]
+        },
+        options:{
+            responsive:true,
+            maintainAspectRatio:false
         }
     }
 );

@@ -159,28 +159,12 @@ def generate_chart_data(result, analytics):
 
     return {
 
-        "similarity_chart":
+        "similarity_chart": generate_similarity_chart(analytics),
 
-            generate_similarity_chart(
-                analytics
-            ),
+        "risk_chart": generate_risk_chart(analytics),
 
-        "risk_chart":
+        "priority_chart": generate_priority_chart(result["weight_summary"]),
 
-            generate_risk_chart(
-                analytics
-            ),
-
-        "priority_chart":
-
-            generate_priority_chart(
-                result["weight_summary"]
-            ),
-
-        "dashboard_chart":
-
-            generate_dashboard_chart(
-                result
-            )
+        "dashboard_chart": generate_dashboard_chart(result)
 
     }

@@ -483,3 +483,10 @@ body{
 .ai-summary-card hr{
     margin:20px 0;
 }
+
+.chart-container{
+    width:500px;
+    height:500px;
+    margin:auto;
+    position:relative;
+}

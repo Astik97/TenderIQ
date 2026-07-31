@@ -96,10 +96,10 @@
         
         <div class="stat-card">
             
-            <h4>Overall Similarity</h4>
+            <h4>Weighted Similarity</h4>
 
             <p>
-                {{ comparison.similarity }}%
+                {{ ai_summary.weighted_similarity }}%
             </p>
         
         </div>
@@ -146,19 +146,11 @@
 
             <h4>Match Level</h4>
 
-            <strong>
-                {{ comparison.level }}
-            </strong>
+            <strong>{{ comparison.level }}</strong>
             
             <p>
-                The AI comparison engine analyzed
-                <strong>
-                    {{ comparison.total_clauses }}
-                </strong>
-                clauses and matched
-                <strong>
-                    {{ comparison.matched_clauses }}
-                </strong>
+                The AI comparison engine analyzed <strong>{{ comparison.total_clauses }}</strong>
+                clauses and matched <strong>{{ comparison.matched_clauses }}</strong>
                 clauses using semantic similarity.
             </p>
         
@@ -177,14 +169,9 @@
         <div class="summary-grid">
 
             <div>
-                <strong>Weighted Similarity</strong><br>
-                {{ ai_summary.weighted_similarity }}%
-            </div>
-
-            <!-- <div>
-                <strong>Difference</strong><br>
+                <strong>Document Difference</strong><br>
                 {{ ai_summary.difference_percentage }}%
-            </div> -->
+            </div>
 
             <div>
                 <strong>Critical Clauses</strong><br>
@@ -211,6 +198,38 @@
                 {{ ai_summary.risk_level }}
             </div>
         
+        </div>
+        
+        <div class="chart-card">
+            <h2>Similarity Distribution</h2>
+
+            <div class="chart-container">
+                <canvas id="similarityChart"></canvas>
+            </div>
+        </div>
+
+        <div class="chart-card">
+            <h2>Risk Distribution</h2>
+
+            <div class="chart-container">
+                <canvas id="riskChart"></canvas>
+            </div>
+        </div>
+        
+        <div class="chart-card">
+            <h2>Priority Distribution</h2>
+
+            <div class="chart-container">
+                <canvas id="priorityChart"></canvas>
+            </div>
+        </div>
+        
+        <div class="chart-card">
+            <h2>Dashboard Summary</h2>
+
+            <div class="chart-container">
+                <canvas id="dashboardChart"></canvas>
+            </div>
         </div>
 
     <!-- Clause Search -->
