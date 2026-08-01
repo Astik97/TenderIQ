@@ -4,13 +4,15 @@ TenderIQ Compare Service
 =========================================================
 """
 
-from flask import(Blueprint,request,render_template,flash,redirect,session)
+from flask import(Blueprint, request, render_template, flash, redirect, session)
 
 from backend.services.chart_service import (generate_chart_data)
 
 from backend.services.recommendation_service import (generate_recommendation_summary)
 
 from backend.services.analytics_service import (generate_analytics)
+
+from backend.utils.ui_setup import (get_risk_badge, get_risk_icon)
 
 from backend.services.ranking_service import (
     get_highest_matching_clauses,
@@ -110,6 +112,14 @@ def compare():
 
     clause_results = comparison["clause_results"]
 
+    for clause in clause_results:
+
+        risk_level = clause["risk"]["level"]
+
+        clause["risk_badge"] = get_risk_badge(risk_level)
+
+        clause["risk_icon"] = get_risk_icon(risk_level)
+
     # -----------------------------------------
     # Ranking Service
     # -----------------------------------------
@@ -127,6 +137,12 @@ def compare():
     # -----------------------------------------
     
     ai_summary = comparison["ai_summary"]
+
+    risk_level = ai_summary["risk_level"]
+
+    ai_summary["risk_badge"] = get_risk_badge(risk_level)
+
+    ai_summary["risk_icon"] = get_risk_icon(risk_level)
 
     # -----------------------------------------
     # Recommendation Summary

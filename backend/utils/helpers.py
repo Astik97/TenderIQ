@@ -1,15 +1,7 @@
 import os
 from werkzeug.utils import secure_filename
 
-ALLOWED_EXTENSIONS = {
-
-    "pdf",
-
-    "docx",
-
-    "txt"
-
-}
+ALLOWED_EXTENSIONS = {"pdf","docx","txt"}
 
 def allowed_file(filename):
 

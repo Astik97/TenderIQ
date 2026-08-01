@@ -203,7 +203,10 @@
 
             <div>
                 <strong>Risk Level</strong><br>
-                {{ ai_summary.risk_level }}
+                <span class="badge bg-{{ ai_summary.risk_badge }}">
+                    {{ ai_summary.risk_level }}
+                    {{ ai_summary.risk_icon }}
+                </span>
             </div>
         
         </div>
@@ -326,7 +329,8 @@
 
                 <p>
                     <strong>Risk Level</strong>
-                    <span class="badge {{ clause.risk.color }}">
+                    <span class="badge bg-{{ clause.risk_badge }}">
+                        {{ clause.risk_icon }}
                         {{ clause.risk.level }}
                     </span>
                 </p>
