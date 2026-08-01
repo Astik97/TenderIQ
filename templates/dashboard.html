@@ -8,13 +8,9 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>
-        TenderIQ Dashboard
-    </title>
+    <title>TenderIQ Dashboard</title>
 
-    <link
-        rel="stylesheet"
-        href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
 
 </head>
 
@@ -24,13 +20,8 @@
 
     <header>
 
-        <h1>
+        <h1>TenderIQ</h1>
 
-            TenderIQ
-
-        </h1>
-
-        
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 {% for category, message in messages %}
@@ -45,19 +36,87 @@
             {% endif %}
         {% endwith %}
 
-        <p>
-            Tender Comparison & Analysis System
-        </p>
+        <p>Tender Comparison & Analysis System</p>
 
-        <a
-            href="/logout"
-            class="logout-btn">
-
-            Logout
-
-        </a>
+        <a href="/logout" class="logout-btn">Logout</a>
 
     </header>
+
+    <hr>
+
+    <!-- ========================================== -->
+    <!-- Dashboard Statistics                       -->
+    <!-- ========================================== -->
+
+    <section class="dashboard-summary">
+        
+        <h2>Dashboard Statistics</h2>
+
+        <div class="stats-grid">
+
+            <div class="stat-card">
+
+                <h3>Total Tenders</h3>
+
+                <p>{{ dashboard_summary.total_tenders }}</p>
+
+            </div>
+
+            <div class="stat-card">
+
+                <h3>Total Comparisons</h3>
+
+                <p>{{ dashboard_summary.total_comparisons }}</p>
+
+            </div>
+        
+        </div>
+
+    </section>
+
+    <hr>
+
+    <!-- ========================================== -->
+    <!-- Recent Activity                            -->
+    <!-- ========================================== -->
+     
+    <section class="recent-activity">
+        
+        <h2>Recent Comparisons</h2>
+
+        <table>
+            
+            <tr>
+                
+                <th>Tender 1</th>
+
+                <th>Tender 2</th>
+
+                <th>Similarity</th>
+
+                <th>Date</th>
+
+            </tr>
+            
+            {% for report in dashboard_summary.recent_comparisons %}
+            
+            <tr>
+                
+                <td>{{ report[0] }}</td>
+
+                <td>{{ report[1] }}</td>
+
+                <td>{{ report[2] }}%</td>
+
+                <td>{{ report[3] }}</td>
+
+            </tr>
+            
+            {% endfor %}
+        
+        </table>
+    
+    </section>
 
     <hr>
 
@@ -65,36 +124,19 @@
     <!-- Upload Section                             -->
     <!-- ========================================== -->
 
-    <section>
+    <section class="upload-section">
 
-        <h2>
-
-            Upload Tender Documents
-
-        </h2>
+        <h2>Upload Tender Documents</h2>
 
         <p id="selectedFiles"></p>
 
-        <form
-            id="uploadForm"
-            action="/upload"
-            method="POST"
-            enctype="multipart/form-data">
+        <form id="uploadForm" action="/upload" 
+        method="POST" enctype="multipart/form-data">
 
-            <input
-                id="tenderFiles"
-                type="file"
-                name="tender_files"
-                multiple
-                required>
+            <input id="tenderFiles" type="file" 
+            name="tender_files" multiple required>
 
-            <button
-                id="uploadButton"
-                type="submit">
-
-                Upload Files
-
-            </button>
+            <button id="uploadButton" type="submit">Upload Files</button>
 
         </form>
 
@@ -106,19 +148,13 @@
     <!-- Uploaded Tender Table                      -->
     <!-- ========================================== -->
 
-    <section>
+    <section class="uploaded-tenders">
 
-        <h2>
-
-            Uploaded Tender Documents
-
-        </h2>
+        <h2>Uploaded Tender Documents</h2>
 
         {% if tenders %}
 
-        <form
-            action="/compare"
-            method="POST">
+        <form action="/compare" method="POST">
 
         <table>
 
@@ -151,61 +187,25 @@
             <tr>
 
                 <td>
+                    <input type="checkbox"
+                    name="selected_tenders" value="{{ tender[0] }}">
+                </td>
 
-                    <input
-                        type="checkbox"
-                        name="selected_tenders"
-                        value="{{ tender[0] }}">
+                <td>{{ tender[0] }}</td>
 
+                <td>{{ tender[1] }}</td>
+
+                <td>{{ tender[2].split('.')[-1].upper() }}</td>
+
+                <td>{{ tender[3] }}</td>
+
+                <td>
+                    <a href="/view/{{ tender[0] }}" class="view-btn">View</a>
                 </td>
 
                 <td>
-
-                    {{ tender[0] }}
-
-                </td>
-
-                <td>
-
-                    {{ tender[1] }}
-
-                </td>
-
-                <td>
-
-                    {{ tender[2].split('.')[-1].upper() }}
-
-                </td>
-
-                <td>
-
-                    {{ tender[3] }}
-
-                </td>
-
-                <td>
-
-                    <a
-                        href="/view/{{ tender[0] }}"
-                        class="view-btn">
-
-                        View
-
-                    </a>
-
-                </td>
-
-                <td>
-
-                    <a
-                        href="/delete/{{ tender[0] }}"
-                        class="delete-btn"
-                        class="delete-btn delete-link">
-
-                        Delete
-
-                    </a>
-
+                    <a href="/delete/{{ tender[0] }}"
+                    class="delete-btn delete-link">Delete</a>
                 </td>
 
             </tr>
@@ -218,24 +218,14 @@
 
         <br>
 
-        <button
-            id="compareButton"
-            type="submit"
-            class="compare-btn">
-
-            Compare Selected Tenders
-
-        </button>
+        <button id="compareButton" type="submit"
+        class="compare-btn">Compare Selected Tenders</button>
 
         </form>
 
         {% else %}
 
-        <p>
-
-            No tender documents uploaded yet.
-
-        </p>
+        <p>No tender documents uploaded yet.</p>
 
         {% endif %}
 
@@ -243,8 +233,7 @@
 
 </div>
 
-<script src="{{ url_for('static', filename='js/dashboard.js') }}">
-</script>
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
 
 </body>
 
