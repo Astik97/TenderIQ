@@ -503,7 +503,7 @@ def generate_confidence_score(result,
     float
     """
 
-    confidence = (weighted_similarity * 0.75) + ((100 - difference_percentage) * 0.25)
+    confidence = (weighted_similarity * 0.80) + (difference_percentage * 0.20)
 
     confidence = max(60, min(confidence, 99.9))
 
