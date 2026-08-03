@@ -202,6 +202,7 @@ def compare():
         flash(f"Failed to generate report: {e}", "error")
 
     try:
+        
         cursor.execute(
         """
         INSERT INTO comparison_reports
