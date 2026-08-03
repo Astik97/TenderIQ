@@ -12,7 +12,35 @@ Responsible for
 =========================================================
 """
 
+distribution = {
+
+        "Excellent": 0,
+
+        "Good": 0,
+
+        "Moderate": 0,
+
+        "Poor": 0
+
+}
+
+risk_level = {
+
+        "Very Low Risk":0,
+
+        "Low Risk":0,
+
+        "Medium Risk":0,
+
+        "High Risk":0,
+
+        "Critical Risk":0
+
+}
+
 from statistics import mean
+
+from backend.services.weight_service import get_clause_weight
 
 # =========================================================
 # Similarity Distribution
@@ -23,21 +51,13 @@ def calculate_similarity_distribution(clause_results):
     Count clauses by similarity level.
     """
 
-    distribution = {
+    if not clause_results:
 
-        "Excellent": 0,
-
-        "Good": 0,
-
-        "Moderate": 0,
-
-        "Poor": 0
-
-    }
+        return distribution
 
     for clause in clause_results:
 
-        similarity = clause["similarity"]
+        similarity = clause.get("similarity", 0)
 
         if similarity >= 90:
 
@@ -66,29 +86,85 @@ def calculate_risk_distribution(clause_results):
     Count clauses by risk level.
     """
 
-    distribution = {
+    if not clause_results:
 
-        "Very Low Risk":0,
-
-        "Low Risk":0,
-
-        "Medium Risk":0,
-
-        "High Risk":0,
-
-        "Critical Risk":0
-
-    }
+        return risk_level
 
     for clause in clause_results:
 
-        level = clause["risk"]["level"]
+        level = clause.get("risk", {}).get("level", "Very Low Risk")
 
         if level in distribution:
 
             distribution[level] += 1
 
     return distribution
+
+# ========================================================
+# Match Distribution
+# ========================================================
+
+def calculate_match_distribution(clause_results):
+    """
+    Count clauses by match level.
+    """
+
+    if not clause_results:
+
+        return {
+
+            "Matched":0,
+
+            "Unmatched":0
+
+        }
+
+    for clause in clause_results:
+
+        match = clause.get("match", False)
+
+        if match:
+
+            distribution["Matched"] += 1
+
+        else:
+
+            distribution["Unmatched"] += 1
+
+    return distribution
+
+# =======================================================
+# Priority Distribution
+# =======================================================
+
+def calculate_priority_distribution(clause_results):
+    """
+    Count clauses by priority level.
+    """
+
+    if not clause_results:
+
+        return distribution
+
+    for clause in clause_results:
+
+        weight = get_clause_weight(clause.get("clause", ""))
+
+        if weight >= 10:
+
+            distribution["Critical"] += 1
+
+        elif weight >= 8:
+
+            distribution["High"] += 1
+
+        elif weight >= 5:
+
+            distribution["Medium"] += 1
+
+        else:
+
+            distribution["Low"] += 1
 
 # =========================================================
 # Clause Statistics
@@ -113,7 +189,7 @@ def calculate_clause_statistics(clause_results):
 
     similarities = [
 
-        clause["similarity"]
+        clause.get("similarity", 0)
 
         for clause in clause_results
 
@@ -138,25 +214,25 @@ def calculate_dashboard_statistics(result):
     Overall dashboard statistics.
     """
 
-    clause_results = result["clause_results"]
+    clause_results = result.get("clause_results", [])
 
     statistics = calculate_clause_statistics(clause_results)
 
     return {
 
-        "total_clauses": result["total_clauses"],
+        "total_clauses": result.get("total_clauses", 0),
 
-        "matched_clauses": result["matched_clauses"],
+        "matched_clauses": result.get("matched_clauses", 0),
 
-        "overall_similarity": result["similarity"],
+        "overall_similarity": result.get("similarity", 0),
 
-        "weighted_similarity": result["weighted_similarity"],
+        "weighted_similarity": result.get("weighted_similarity", 0),
 
-        "highest_similarity": statistics["highest_similarity"],
+        "highest_similarity": statistics.get("highest_similarity", 0),
 
-        "lowest_similarity": statistics["lowest_similarity"],
+        "lowest_similarity": statistics.get("lowest_similarity", 0),
 
-        "average_similarity": statistics["average_similarity"]
+        "average_similarity": statistics.get("average_similarity", 0)
 
     }
 
@@ -164,12 +240,12 @@ def calculate_dashboard_statistics(result):
 # Generate Analytics
 # =========================================================
 
-def generate_analytics(result):
+def generate_analytics_summary(result):
     """
     Generate complete analytics package.
     """
 
-    clause_results = result["clause_results"]
+    clause_results = result.get("clause_results", [])
 
     return {
 
@@ -178,6 +254,10 @@ def generate_analytics(result):
         "risk_distribution": calculate_risk_distribution(clause_results),
 
         "clause_statistics": calculate_clause_statistics(clause_results),
+
+        "match_distribution": calculate_match_distribution(clause_results),
+
+        "priority_distribution": calculate_priority_distribution(clause_results),
 
         "dashboard_statistics": calculate_dashboard_statistics(result)
 

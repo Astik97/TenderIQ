@@ -22,7 +22,6 @@ CLAUSE_WEIGHTS = {
     "emd": 10,
     "earnest money": 10,
     "bid security": 10,
-
     "eligibility": 10,
     "qualification": 10,
 
@@ -36,12 +35,12 @@ CLAUSE_WEIGHTS = {
     "guarantee": 8,
     "penalty": 8,
     "liquidated damages": 8,
+    "contract": 8,
+    "termination": 8,
 
     "delivery": 7,
     "timeline": 7,
     "completion": 7,
-    "contract": 7,
-    "termination": 7,
 
     "invoice": 6,
     "price": 6,
@@ -57,6 +56,18 @@ CLAUSE_WEIGHTS = {
 }
 
 # =========================================================
+# Weight Configuration
+# =========================================================
+
+DEFAULT_WEIGHT = 5
+
+CRITICAL_WEIGHT = 10
+
+HIGH_WEIGHT = 8
+
+MEDIUM_WEIGHT = 5
+
+# =========================================================
 # Get Clause Weight
 # =========================================================
 
@@ -68,7 +79,7 @@ def get_clause_weight(clause):
     """
 
     if not clause:
-        return 5
+        return DEFAULT_WEIGHT
 
     clause = clause.lower()
 
@@ -78,7 +89,7 @@ def get_clause_weight(clause):
 
             return weight
 
-    return 5
+    return DEFAULT_WEIGHT
 
 # =========================================================
 # Weighted Similarity
@@ -104,16 +115,19 @@ def calculate_weighted_similarity(clause_results):
 
     for clause in clause_results:
 
-        weight = get_clause_weight(clause["clause"])
+        weight = get_clause_weight(clause.get("clause", ""))
 
-        weighted_sum += clause["similarity"] * weight
+        similarity = clause.get("similarity", 0)
+
+        weighted_sum += similarity * weight
 
         total_weight += weight
 
     if total_weight == 0:
         return 0
 
-    return round(weighted_sum / total_weight, 2)
+    return round(weighted_sum / total_weight, 
+                2)
 
 # =========================================================
 # Weighted Statistics
@@ -140,15 +154,19 @@ def calculate_weighted_statistics(clause_results):
 
         }
 
-    weights = []
+    weights = [
 
-    for clause in clause_results:
+    get_clause_weight(clause.get("clause", ""))
 
-        weights.append(get_clause_weight(clause["clause"]))
+    for clause in clause_results
+
+    ]
 
     weighted_similarity = calculate_weighted_similarity(clause_results)
 
-    difference_percentage = round(100 - weighted_similarity,2)
+    difference_percentage = round(
+        100 - weighted_similarity,
+        2)
 
     return {
 
@@ -158,7 +176,9 @@ def calculate_weighted_statistics(clause_results):
 
         "total_weight": sum(weights),
 
-        "average_weight": round(sum(weights) / len(weights),2),
+        "average_weight": round(
+            sum(weights) / len(weights),
+            2),
 
         "highest_weight": max(weights),
 
@@ -191,7 +211,13 @@ def get_weight_summary(clause_results):
 
             "critical_clauses": 0,
 
-            "high_priority_clauses": 0
+            "high_priority_clauses": 0,
+
+            "medium_priority_clauses": 0,
+
+            "low_priority_clauses": 0,
+
+            "critical_percentage": 0
 
         }
 
@@ -207,7 +233,7 @@ def get_weight_summary(clause_results):
 
     for clause in clause_results:
 
-        weight = get_clause_weight(clause["clause"])
+        weight = get_clause_weight(clause.get("clause", ""))
 
         if weight >= 10:
             critical += 1
@@ -221,11 +247,11 @@ def get_weight_summary(clause_results):
         else:
             low += 1
 
-        total_clauses = len(clause_results)
+    total_clauses = len(clause_results)
 
-        critical_percentage = round(
-            (critical / total_clauses) * 100,
-            2)
+    critical_percentage = round(
+        (critical / total_clauses) * 100,
+        2)
 
     return {
 
@@ -233,12 +259,12 @@ def get_weight_summary(clause_results):
 
     "critical_clauses": critical,
 
-    "critical_percentage": critical_percentage,
-
     "high_priority_clauses": high,
 
     "medium_priority_clauses": medium,
 
-    "low_priority_clauses": low
+    "low_priority_clauses": low,
+
+    "critical_percentage": critical_percentage
 
 } 

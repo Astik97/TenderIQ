@@ -1,18 +1,20 @@
 """
 =========================================================
-TenderIQ Compare Service
+TenderIQ Compare Routes
 =========================================================
 """
 
-from flask import(Blueprint, request, render_template, flash, redirect, session)
+from flask import (
+    Blueprint,
+    request,
+    render_template,
+    flash,
+    redirect,
+    logging,
+    session
+)
 
-from backend.services.chart_service import (generate_chart_data)
-
-from backend.services.recommendation_service import (generate_recommendation_summary)
-
-from backend.services.analytics_service import (generate_analytics)
-
-from backend.utils.ui_setup import (get_risk_badge, get_risk_icon)
+from backend.utils.ui_setup import get_risk_badge, get_risk_icon
 
 from backend.services.ranking_service import (
     get_highest_matching_clauses,
@@ -21,11 +23,19 @@ from backend.services.ranking_service import (
     get_ranking_summary
 )
 
+from backend.services.chart_service import generate_chart_data
+
+from backend.services.recommendation_service import generate_recommendation_summary
+
+from backend.services.analytics_service import generate_analytics
+
 from backend.utils.db import get_connection
 
 from backend.services.compare_service import compare_tenders
 
 from backend.services.report_service import generate_report
+
+from backend.services.ai_summary_service import generate_ai_summary
 
 compare_bp = Blueprint("compare",__name__)
 
@@ -44,14 +54,15 @@ def compare():
 
         return redirect("/dashboard")
 
+    tender1_id = selected[0]
+    tender2_id = selected[1]
+
     conn = None
-    
     cursor = None
 
     try:
 
         conn = get_connection()
-
         cursor = conn.cursor()
 
         query = """
@@ -66,7 +77,7 @@ def compare():
         # Tender 1
         # -----------------------------
 
-        cursor.execute(query,(selected[0],))
+        cursor.execute(query,(tender1_id,))
 
         row1 = cursor.fetchone()
 
@@ -76,15 +87,13 @@ def compare():
 
             return redirect("/dashboard")
 
-        tender_name1 = row1[0]
-
-        text1 = row1[1]
+        tender_name1, text1 = row1
 
         # -----------------------------
         # Tender 2
         # -----------------------------
 
-        cursor.execute(query,(selected[1],))
+        cursor.execute(query,(tender2_id,))
 
         row2 = cursor.fetchone()
 
@@ -94,9 +103,7 @@ def compare():
 
             return redirect("/dashboard")
 
-        tender_name2 = row2[0]
-
-        text2 = row2[1]
+        tender_name2 , text2 = row2
 
     except Exception as e:
 
@@ -110,11 +117,11 @@ def compare():
 
     comparison = compare_tenders(text1,text2)
 
-    clause_results = comparison["clause_results"]
+    clause_results = comparison.get("clause_results", [])
 
     for clause in clause_results:
 
-        risk_level = clause["risk"]["level"]
+        risk_level = clause.get("risk", {}).get("level", "Very Low Risk")
 
         clause["risk_badge"] = get_risk_badge(risk_level)
 
@@ -136,9 +143,9 @@ def compare():
     # AI Summary
     # -----------------------------------------
     
-    ai_summary = comparison["ai_summary"]
+    ai_summary = generate_ai_summary(comparison)
 
-    risk_level = ai_summary["risk_level"]
+    risk_level = ai_summary.get("risk_level", "Very Low Risk")
 
     ai_summary["risk_badge"] = get_risk_badge(risk_level)
 
@@ -166,54 +173,91 @@ def compare():
     # Comparison Result
     # -----------------------------------------
 
-    print("\n========== COMPARISON RESULT ==========\n")
+    logging.info("========== COMPARISON RESULT ==========")
 
-    print(f"Similarity : {comparison['similarity']}%")
-    
-    print(f"Match Level : {comparison['level']}")
+    logging.info(
+        "Similarity: %s%%",
+        comparison.get("similarity", 0)
+    )
 
-    print(f"Total Clauses : {comparison['total_clauses']}")
+    logging.info(
+        "Match Level: %s",
+        comparison.get("level", "Unknown")
+    )
 
-    print(f"Matched Clauses : {comparison['matched_clauses']}")
+    logging.info(
+        "Total Clauses: %s",
+        comparison.get("total_clauses", 0)
+    )
 
-    print(f"Total Risks : {len(comparison['clause_results'])}")
+    logging.info(
+        "Matched Clauses: %s",
+        comparison.get("matched_clauses", 0)
+    )
 
+    logging.info(
+        "Total Risks: %s",
+        len(comparison.get("clause_results", []))
+)
     # -----------------------------------------
     # Report
     # -----------------------------------------
+    try:
 
-    report = generate_report(tender_name1,tender_name2,comparison)
+        report = generate_report(
+            tender_name1,
+            tender_name2,
+            comparison
+        )
 
-    cursor.execute(
-    """
-    INSERT INTO comparison_reports
-    (
-        user_id,
-        tender1_id,
-        tender2_id,
-        similarity_score,
-        match_level,
-        analysis_report
+    except Exception as e:
+
+        report = "Report generation failed. Please try again later."
+
+        flash(f"Failed to generate report: {e}", "error")
+
+    try:
+        cursor.execute(
+        """
+        INSERT INTO comparison_reports
+        (
+            user_id,
+            tender1_id,
+            tender2_id,
+            similarity_score,
+            match_level,
+            analysis_report
+        )
+        VALUES
+        (%s,%s,%s,%s,%s,%s)
+        """,
+        (
+            session.get("user_id"),
+            tender1_id,
+            tender2_id,
+            comparison.get("similarity", 0),
+            comparison.get("level", "Unknown"),
+            report
+        )
     )
-    VALUES
-    (%s,%s,%s,%s,%s,%s)
-    """,
-    (
-        session["user_id"],
-        selected[0],
-        selected[1],
-        comparison["similarity"],
-        comparison["level"],
-        report
-    )
+        
+        conn.commit()
 
-)
-    
-    conn.commit()
-    
-    cursor.close()
+    except Exception as e:
 
-    conn.close()
+        if conn:
+            
+            conn.rollback()
+
+        flash(f"Failed to save comparison report: {e}", "error")
+
+    finally:
+
+        if cursor:
+            cursor.close()
+
+        if conn:
+            conn.close()
 
     # ----------------------------------------
     # AI-Engine
@@ -233,7 +277,7 @@ def compare():
 
         tender2=tender_name2,
 
-        comparison=comparison,
+        comparison=comparison or {},
 
         highest_matches=highest_matches,
 

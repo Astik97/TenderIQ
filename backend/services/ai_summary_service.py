@@ -3,7 +3,7 @@
 AI Executive Summary Service
 =========================================================
 
-This service converts clause comparison results into
+This service converts clause comparison results into 
 a professional executive summary.
 
 Input:
@@ -15,6 +15,8 @@ Output:
 Used by:
     compare_service.py
 """
+
+MAX_DISPLAY_ITEMS = 5
 
 # =========================================================
 #  Risk Distribution
@@ -115,7 +117,7 @@ def find_best_clause(clause_results):
         return None
 
     return max(clause_results,
-        key=lambda x: x["similarity"])
+        key=lambda x: x.get("similarity", 0))
 
 # =========================================================
 #  Highest Risk Clause
@@ -134,7 +136,7 @@ def find_highest_risk_clause(clause_results):
         return None
 
     return max(clause_results,
-        key=lambda x: priority.get(x["risk"]["level"],0)
+        key=lambda x: priority.get(x.get("risk", {}).get("level", "Low"), 0)
     )
 
 # =========================================================
@@ -157,7 +159,7 @@ def extract_major_differences(clause_results):
 
                 differences.append(summary)
 
-        if len(differences) == 5:
+        if len(differences) >= MAX_DISPLAY_ITEMS:
 
             break
 
@@ -172,35 +174,35 @@ def generate_recommendation(overall_similarity,risk_level):
     if overall_similarity >= 90:
 
         return (
-            "The tenders are highly similar."
+            "The tenders are highly similar. "
             "Minor verification before submission is sufficient."
         )
 
     elif overall_similarity >= 75:
 
         return (
-            "Most clauses are similar."
+            "Most clauses are similar. "
             "Review payment terms, eligibility and timelines."
         )
 
     elif overall_similarity >= 50:
 
         return (
-            "Moderate similarity detected."
+            "Moderate similarity detected. "
             "Manual review is strongly recommended."
         )
 
     elif risk_level == "Critical":
 
         return (
-            "Critical differences detected."
+            "Critical differences detected. "
             "Do not proceed without detailed review."
         )
 
     else:
 
         return (
-            "Large differences detected between the tenders."
+            "Large differences detected between the tenders. "
             "Carefully verify all important clauses."
         )
 
@@ -217,13 +219,13 @@ def generate_overall_assessment(result):
     str
     """
 
-    similarity = result["similarity"]
+    similarity = result.get("similarity", 0)
 
-    total = result["total_clauses"]
+    total = result.get("total_clauses", 0)
 
-    matched = result["matched_clauses"]
+    matched = result.get("matched_clauses", 0)
 
-    level = result["level"]
+    level = result.get("level","Unknown")
 
     if similarity >= 90:
 
@@ -277,19 +279,18 @@ def generate_key_findings(result):
     list
     """
 
-    findings = []
+    findings = [
+    f"Analyzed {result.get('total_clauses', 0)} clauses.",
+    f"Overall similarity is {result.get('similarity', 0):.2f}%.",
+    f"{result.get('matched_clauses', 0)} clauses were successfully matched."
+]
+    overall_similarity = result.get("similarity", 0)
 
-    findings.append(f"Analyzed {result['total_clauses']} clauses.")
-
-    findings.append(f"Overall similarity is {result['similarity']:.2f}%.")
-
-    findings.append(f"{result['matched_clauses']} clauses were successfully matched.")
-
-    if result["similarity"] >= 85:
+    if overall_similarity >= 85:
 
         findings.append("Most contractual clauses remain unchanged.")
 
-    elif result["similarity"] >= 60:
+    elif overall_similarity >= 60:
 
         findings.append("Moderate clause differences detected.")
 
@@ -300,41 +301,79 @@ def generate_key_findings(result):
     return findings
 
 # =========================================================
-#  Positive Highlights
+# Positive Highlights
 # =========================================================
 
-def generate_positive_highlights(clause_results):
+def generate_positive_highlights(result):
     """
-    Highlight the strongest similarities.
+    Generate positive business highlights.
 
     Returns
     -------
     list
     """
 
+    clause_results = result.get("clause_results", [])
+
+    overall_similarity = result.get("similarity", 0)
+
+    weighted_similarity = result.get("weighted_similarity", 0)
+
     highlights = []
 
-    excellent = [clause
-                for clause in clause_results
-                if clause["similarity"] >= 90]
+    excellent = 0
+    good = 0
 
-    if excellent:
+    for clause in clause_results:
 
-        highlights.append(f"{len(excellent)} clauses have Excellent similarity.")
+        similarity = clause.get("similarity", 0)
 
-    good = [clause
-            for clause in clause_results
-            if 75 <= clause["similarity"] < 90]
+        if similarity >= 90:
+            excellent += 1
 
-    if good:
+        elif similarity >= 75:
+            good += 1
 
-        highlights.append(f"{len(good)} clauses have Good similarity.")
+    # Overall Similarity
+    if overall_similarity >= 90:
+
+        highlights.append(
+            "Excellent overall similarity between both tenders."
+        )
+
+    elif overall_similarity >= 75:
+
+        highlights.append(
+            "Strong semantic similarity across most clauses."
+        )
+
+    # Weighted Similarity
+    if weighted_similarity >= 85:
+
+        highlights.append(
+            "High-priority business clauses are well aligned."
+        )
+
+    # Clause Match Statistics
+    if excellent > 0:
+
+        highlights.append(
+            f"{excellent} clauses achieved Excellent similarity."
+        )
+
+    if good > 0:
+
+        highlights.append(
+            f"{good} clauses achieved Good similarity."
+        )
 
     if not highlights:
 
-        highlights.append("No highly similar clauses were identified.")
+        highlights.append(
+            "No significant positive highlights were identified."
+        )
 
-    return highlights
+    return highlights[:MAX_DISPLAY_ITEMS]
 
 # =========================================================
 #  Critical Findings
@@ -353,7 +392,7 @@ def generate_critical_findings(clause_results):
 
     for clause in clause_results:
 
-        risk = clause["risk"]["level"]
+        risk = clause.get("risk", {}).get("level", "Low")
 
         if risk in ["Critical Risk", "High Risk"]:
 
@@ -365,7 +404,7 @@ def generate_critical_findings(clause_results):
 
         findings.append("No critical clause changes detected.")
 
-    return findings[:5]
+    return findings[:MAX_DISPLAY_ITEMS]
 
 # =========================================================
 #  Review Priority
@@ -388,7 +427,7 @@ def generate_review_priority(clause_results):
 
     for clause in clause_results:
 
-        level = clause["risk"]["level"]
+        level = clause.get("risk", {}).get("level", "Low")
 
         if level == "Critical Risk":
 
@@ -455,7 +494,7 @@ def generate_ai_recommendations(clause_results):
 
     for clause in clause_results:
 
-        risk = clause["risk"]["level"]
+        risk = clause.get("risk", {}).get("level", "Low")
 
         if risk == "Critical Risk":
 
@@ -474,11 +513,11 @@ def generate_ai_recommendations(clause_results):
         recommendations.append("Verify payment terms,"
         "eligibility criteria and compliance requirements.")
 
-    recommendations.append("Review all manually modified clauses.")
-
-    recommendations.append("Validate technical specifications with the original tender.")
-
-    recommendations.append("Cross-check important contractual obligations before bidding.")
+    recommendations.extend([
+    "Review all manually modified clauses.",
+    "Validate technical specifications with the original tender.",
+    "Cross-check important contractual obligations before bidding."
+])
 
     return recommendations
 
@@ -487,8 +526,7 @@ def generate_ai_recommendations(clause_results):
 # =========================================================
 
 def generate_confidence_score(result,
-        weighted_similarity, 
-        difference_percentage):
+        weighted_similarity):
     """
     Estimate AI confidence using:
 
@@ -503,7 +541,19 @@ def generate_confidence_score(result,
     float
     """
 
-    confidence = (weighted_similarity * 0.80) + (difference_percentage * 0.20)
+    total_clauses = result.get("total_clauses", 0)
+
+    matched_clauses = result.get("matched_clauses", 0)
+
+    if total_clauses:
+
+        clause_coverage = (matched_clauses / total_clauses) * 100
+
+    else:
+
+        clause_coverage = 0
+
+    confidence = (weighted_similarity * 0.70 + clause_coverage * 0.30)
 
     confidence = max(60, min(confidence, 99.9))
 
@@ -552,7 +602,7 @@ def generate_ai_summary(result):
     dict
     """
 
-    clause_results = result["clause_results"]
+    clause_results = result.get("clause_results", [])
 
     # -----------------------------------------------------
     # Core Analysis
@@ -582,13 +632,13 @@ def generate_ai_summary(result):
 
     key_findings = generate_key_findings(result)
 
-    positive_highlights = generate_positive_highlights(clause_results)
+    positive_highlights = generate_positive_highlights(result)
 
     critical_findings = generate_critical_findings(clause_results)
 
     review_priority = generate_review_priority(clause_results)
 
-    recommendation = generate_recommendation(result["similarity"],risk_level)
+    recommendation = generate_recommendation(result.get("similarity", 0),risk_level)
 
     recommendations = generate_ai_recommendations(clause_results)
 
@@ -596,17 +646,16 @@ def generate_ai_summary(result):
     # Weighted Service
     # -----------------------------------------------------
 
-    weighted_similarity = result["weighted_similarity"]
+    weighted_similarity = result.get("weighted_similarity", 0)
 
-    weight_summary = result["weight_summary"]
+    weight_summary = result.get("weight_summary", {})
 
     # -----------------------------------------------------
     # AI Metadata
     # -----------------------------------------------------
 
     confidence_score = generate_confidence_score(result,
-        weighted_similarity,
-        weight_summary["difference_percentage"])
+        weighted_similarity)
 
     processing_summary = generate_processing_summary(result)
 
@@ -620,7 +669,7 @@ def generate_ai_summary(result):
         # Executive Overview
         # ==========================================
 
-        "overall_similarity": result["similarity"],
+        "overall_similarity": result.get("similarity", 0),
 
         "overall_assessment": overall_assessment,
 
@@ -634,9 +683,9 @@ def generate_ai_summary(result):
         # Statistics
         # ==========================================
 
-        "total_clauses": result["total_clauses"],
+        "total_clauses": result.get("total_clauses", 0),
 
-        "matched_clauses": result["matched_clauses"],
+        "matched_clauses": result.get("matched_clauses", 0),
 
         "risk_distribution": risk_distribution,
 
@@ -666,11 +715,11 @@ def generate_ai_summary(result):
         # Weighted Service
         # ==========================================
 
-        "weighted_similarity": weight_summary["weighted_similarity"],
+        "weighted_similarity": weighted_similarity,
 
         "weight_summary": weight_summary,
 
-        "difference_percentage": weight_summary["difference_percentage"],
+        "difference_percentage": weight_summary.get("difference_percentage", 0),
 
         # ==========================================
         # Review & Recommendation

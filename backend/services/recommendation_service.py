@@ -12,96 +12,7 @@ Responsible for
 =========================================================
 """
 
-from backend.services.weight_service import get_clause_weight
-
-# =========================================================
-# Generate Clause Recommendations
-# =========================================================
-
-def generate_clause_recommendations(clause_results):
-    """
-    Generate recommendation for every clause.
-
-    Returns
-    -------
-    list
-    """
-
-    recommendations = []
-
-    for clause in clause_results:
-
-        similarity = clause["similarity"]
-
-        weight = get_clause_weight(clause["clause"])
-
-        risk = clause["risk"]["level"]
-
-        # ------------------------------------
-        # Recommendation
-        # ------------------------------------
-
-        if weight >= 10:
-
-            if similarity < 80:
-
-                action = ("Critical clause. Immediate manual verification required.")
-
-            else:
-
-                action = ("Critical clause appears acceptable. Verify before submission.")
-
-        elif weight >= 8:
-
-            if similarity < 75:
-
-                action = ("Review this important clause carefully.")
-
-            else:
-
-                action = ("Minor verification recommended.")
-
-        elif weight >= 5:
-
-            action = ("General review recommended.")
-
-        else:
-
-            action = ("Low priority clause. Review if necessary.")
-
-        recommendations.append({
-
-            "clause": clause["clause"],
-
-            "similarity": similarity,
-
-            "weight": weight,
-
-            "risk": risk,
-
-            "recommendation": action
-
-        })
-
-    return recommendations
-
-
-# =========================================================
-# Priority Actions
-# =========================================================
-
-def generate_priority_actions(clause_results):
-    """
-    Generate highest priority actions.
-
-    Returns
-    -------
-    list
-    """
-
-    actions = []
-
-    keywords = {
+PRIORITY_ACTIONS = {
 
         "payment":
         "Review Payment Terms.",
@@ -138,45 +49,10 @@ def generate_priority_actions(clause_results):
 
         "experience":
         "Check Experience Requirements."
-    }
 
-    for clause in clause_results:
+}
 
-        if clause["similarity"] >= 80:
-
-            continue
-
-        text = clause["clause"].lower()
-
-        for keyword, action in keywords.items():
-
-            if keyword in text:
-
-                if action not in actions:
-
-                    actions.append(action)
-
-    return actions
-
-
-# =========================================================
-# Submission Checklist
-# =========================================================
-
-def generate_submission_checklist(clause_results):
-    """
-    Generate submission checklist.
-
-    Returns
-    -------
-    list
-    """
-
-    checklist = []
-
-    completed = set()
-
-    keywords = {
+CHECKLIST_ITEMS = {
 
         "payment":
         "Review Payment Terms",
@@ -201,13 +77,136 @@ def generate_submission_checklist(clause_results):
 
         "contract":
         "Review Contract Conditions"
-    }
+}
+
+from backend.services.weight_service import get_clause_weight
+
+# =========================================================
+# Generate Clause Recommendations
+# =========================================================
+
+def generate_clause_recommendations(clause_results):
+    """
+    Generate recommendation for every clause.
+
+    Returns
+    -------
+    list
+    """
+
+    recommendations = []
 
     for clause in clause_results:
 
-        text = clause["clause"].lower()
+        similarity = clause.get("similarity", 0)
 
-        for keyword, item in keywords.items():
+        weight = get_clause_weight(clause.get("clause", ""))
+
+        risk = clause.get("risk", {}).get("level", "Very Low Risk")
+
+        # ------------------------------------
+        # Recommendation
+        # ------------------------------------
+
+        if weight >= 10:
+
+            if similarity < 80:
+
+                action = ("Critical clause. Immediate manual verification required.")
+
+            else:
+
+                action = ("Critical clause appears acceptable. Verify before submission.")
+
+        elif weight >= 8:
+
+            if similarity < 75:
+
+                action = ("Review this important clause carefully.")
+
+            else:
+
+                action = ("Minor verification recommended.")
+
+        elif weight >= 5:
+
+            action = ("General review recommended.")
+
+        else:
+
+            action = ("Low priority clause. Review if necessary.")
+
+        recommendations.append({
+
+            "clause": clause.get("clause", ""),
+
+            "similarity": similarity,
+
+            "weight": weight,
+
+            "risk": risk,
+
+            "recommendation": action
+
+        })
+
+    return recommendations
+
+# =========================================================
+# Priority Actions
+# =========================================================
+
+def generate_priority_actions(clause_results):
+    """
+    Generate highest priority actions.
+
+    Returns
+    -------
+    list
+    """
+
+    actions = []
+
+    for clause in clause_results:
+
+        if clause.get("similarity", 0) >= 80:
+
+            continue
+
+        text = clause.get("clause", "").lower()
+
+        for keyword, action in PRIORITY_ACTIONS.items():
+
+            if keyword in text:
+
+                if action not in actions:
+
+                    actions.append(action)
+                    
+    return actions
+
+# =========================================================
+# Submission Checklist
+# =========================================================
+
+def generate_submission_checklist(clause_results):
+    """
+    Generate submission checklist.
+
+    Returns
+    -------
+    list
+    """
+
+    checklist = []
+
+    completed = set()
+
+    for clause in clause_results:
+
+        text = clause.get("clause", "").lower()
+
+        for keyword, item in CHECKLIST_ITEMS.items():
 
             if keyword in text and item not in completed:
 
@@ -223,7 +222,6 @@ def generate_submission_checklist(clause_results):
 
     return checklist
 
-
 # =========================================================
 # Final Recommendation
 # =========================================================
@@ -237,11 +235,19 @@ def generate_final_recommendation(result, ai_summary):
     str
     """
 
-    similarity = result["weighted_similarity"]
+    similarity = result.get("weighted_similarity", 0)
 
-    risk = ai_summary["risk_level"]
+    risk = ai_summary.get("risk_level", "Low Risk")
 
-    if similarity >= 90:
+    if risk == "Critical":
+
+        return (
+            "Significant differences were identified in critical "
+            "contractual clauses. Submission is not recommended "
+            "until these clauses are carefully verified."
+        )
+
+    elif similarity >= 90:
 
         return (
             "The compared tenders are highly similar. "
@@ -265,14 +271,6 @@ def generate_final_recommendation(result, ai_summary):
             "is strongly recommended."
         )
 
-    elif risk == "Critical":
-
-        return (
-            "Significant differences were identified in critical "
-            "contractual clauses. Submission is not recommended "
-            "until these clauses are carefully verified."
-        )
-
     else:
 
         return (
@@ -280,7 +278,6 @@ def generate_final_recommendation(result, ai_summary):
             "Perform a complete clause-by-clause review "
             "before making any procurement decision."
         )
-
 
 # =========================================================
 # Recommendation Summary
@@ -295,7 +292,7 @@ def generate_recommendation_summary(result, ai_summary):
     dict
     """
 
-    clause_results = result["clause_results"]
+    clause_results = result.get("clause_results", [])
 
     clause_recommendations = generate_clause_recommendations(clause_results)
 

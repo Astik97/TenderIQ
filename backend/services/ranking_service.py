@@ -1,21 +1,23 @@
 """
 =========================================================
-Ranking Service
+TenderIQ Ranking Service
 
-Responsible for ranking compared clauses based on
-similarity and risk.
+Responsible for ranking compared clauses based on similarity and risk.
 
 This service DOES NOT perform comparison.
+
 It only sorts existing comparison results.
 
 =========================================================
 """
-
+DEFAULT_TOP_N = 5
 # =========================================================
-# Highest Matching Clauses
+# Highest Matching Clause Ranking
 # =========================================================
 
-def get_highest_matching_clauses(clause_results, top_n=5):
+def get_highest_matching_clauses(
+        clause_results, 
+        top_n=DEFAULT_TOP_N):
     """
     Returns the top N highest matching clauses.
 
@@ -38,7 +40,7 @@ def get_highest_matching_clauses(clause_results, top_n=5):
 
         clause_results,
 
-        key=lambda x: x["similarity"],
+        key=lambda x: x.get("similarity", 0),
 
         reverse=True
 
@@ -47,10 +49,12 @@ def get_highest_matching_clauses(clause_results, top_n=5):
     return ranked[:top_n]
 
 # =========================================================
-# Lowest Matching Clauses
+# Lowest Matching Clause Ranking
 # =========================================================
 
-def get_lowest_matching_clauses(clause_results, top_n=5):
+def get_lowest_matching_clauses(
+        clause_results, 
+        top_n=DEFAULT_TOP_N):
     """
     Returns the lowest similarity clauses.
 
@@ -73,17 +77,19 @@ def get_lowest_matching_clauses(clause_results, top_n=5):
 
         clause_results,
 
-        key=lambda x: x["similarity"]
+        key=lambda x: x.get("similarity", 0)
 
     )
 
     return ranked[:top_n]
 
 # =========================================================
-# Highest Risk Clauses
+# Highest Risk Clause Ranking
 # =========================================================
 
-def get_highest_risk_clauses(clause_results, top_n=5):
+def get_highest_risk_clauses(
+        clause_results, 
+        top_n=DEFAULT_TOP_N):
     """
     Returns clauses having the highest risk.
 
@@ -119,14 +125,13 @@ def get_highest_risk_clauses(clause_results, top_n=5):
 
         key=lambda x: (
 
-            risk_priority.get(x["risk"]["level"], 0),
+            risk_priority.get(
+                x.get("risk", {}).get("level", "Very Low Risk"), 
+                1),
 
-            -x["similarity"]
+                -x.get("similarity", 0)),
 
-        ),
-
-        reverse=True
-
+                reverse=True
     )
 
     return ranked[:top_n]
