@@ -65,7 +65,7 @@ def generate_risk_chart(analytics):
 
             "Medium Risk",
 
-            "High Risk",
+            "High Risk ",
 
             "Critical Risk"
 

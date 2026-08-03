@@ -10,7 +10,6 @@ from flask import (
     render_template,
     flash,
     redirect,
-    logging,
     session
 )
 
@@ -27,7 +26,7 @@ from backend.services.chart_service import generate_chart_data
 
 from backend.services.recommendation_service import generate_recommendation_summary
 
-from backend.services.analytics_service import generate_analytics
+from backend.services.analytics_service import generate_analytics_summary
 
 from backend.utils.db import get_connection
 
@@ -161,7 +160,7 @@ def compare():
     # Analytics
     # -----------------------------------------
 
-    analytics = generate_analytics(comparison)
+    analytics = generate_analytics_summary(comparison)
 
     # -----------------------------------------
     # Chart Data
@@ -173,32 +172,18 @@ def compare():
     # Comparison Result
     # -----------------------------------------
 
-    logging.info("========== COMPARISON RESULT ==========")
+    print("========== COMPARISON RESULT ==========")
 
-    logging.info(
-        "Similarity: %s%%",
-        comparison.get("similarity", 0)
-    )
+    print(f"Similarity Score: {comparison.get('similarity', 0)}")
 
-    logging.info(
-        "Match Level: %s",
-        comparison.get("level", "Unknown")
-    )
+    print(f"Match Level: {comparison.get('level', 'Unknown')}")
 
-    logging.info(
-        "Total Clauses: %s",
-        comparison.get("total_clauses", 0)
-    )
+    print(f"Total Clauses: {comparison.get('total_clauses', 0)}")
 
-    logging.info(
-        "Matched Clauses: %s",
-        comparison.get("matched_clauses", 0)
-    )
+    print(f"Matched Clauses: {comparison.get('matched_clauses', 0)}")
 
-    logging.info(
-        "Total Risks: %s",
-        len(comparison.get("clause_results", []))
-)
+    print(f"Total Risks: {len(comparison.get('clause_results', []))}")
+        
     # -----------------------------------------
     # Report
     # -----------------------------------------

@@ -11,6 +11,7 @@ It only sorts existing comparison results.
 =========================================================
 """
 DEFAULT_TOP_N = 5
+
 # =========================================================
 # Highest Matching Clause Ranking
 # =========================================================
@@ -95,10 +96,7 @@ def get_highest_risk_clauses(
 
     Risk Priority
 
-    Critical
-    High
-    Medium
-    Low
+    Critical,High,Medium,Low
     """
 
     if not clause_results:
@@ -142,8 +140,7 @@ def get_highest_risk_clauses(
 
 def get_ranking_summary(clause_results):
     """
-    Returns a summary dictionary used by
-    AI Executive Summary.
+    Returns a summary dictionary used by AI Executive Summary.
 
     Returns
     -------

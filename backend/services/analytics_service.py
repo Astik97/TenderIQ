@@ -12,32 +12,6 @@ Responsible for
 =========================================================
 """
 
-distribution = {
-
-        "Excellent": 0,
-
-        "Good": 0,
-
-        "Moderate": 0,
-
-        "Poor": 0
-
-}
-
-risk_level = {
-
-        "Very Low Risk":0,
-
-        "Low Risk":0,
-
-        "Medium Risk":0,
-
-        "High Risk":0,
-
-        "Critical Risk":0
-
-}
-
 from statistics import mean
 
 from backend.services.weight_service import get_clause_weight
@@ -50,6 +24,18 @@ def calculate_similarity_distribution(clause_results):
     """
     Count clauses by similarity level.
     """
+
+    distribution = {
+
+        "Excellent": 0,
+
+        "Good": 0,
+
+        "Moderate": 0,
+
+        "Poor": 0
+
+    }
 
     if not clause_results:
 
@@ -86,6 +72,20 @@ def calculate_risk_distribution(clause_results):
     Count clauses by risk level.
     """
 
+    risk_level = {
+
+        "Very Low Risk":0,
+
+        "Low Risk":0,
+
+        "Medium Risk":0,
+
+        "High Risk":0,
+
+        "Critical Risk":0
+
+}
+    
     if not clause_results:
 
         return risk_level
@@ -94,11 +94,11 @@ def calculate_risk_distribution(clause_results):
 
         level = clause.get("risk", {}).get("level", "Very Low Risk")
 
-        if level in distribution:
+        if level in risk_level:
 
-            distribution[level] += 1
+            risk_level[level] += 1
 
-    return distribution
+    return risk_level
 
 # ========================================================
 # Match Distribution
@@ -109,27 +109,29 @@ def calculate_match_distribution(clause_results):
     Count clauses by match level.
     """
 
+    distribution = {
+
+        "Excellent": 0,
+
+        "Good": 0,
+
+        "Moderate": 0,
+
+        "Poor": 0
+
+}
+
     if not clause_results:
 
-        return {
-
-            "Matched":0,
-
-            "Unmatched":0
-
-        }
+        return distribution
 
     for clause in clause_results:
+        
+        level = clause.get("match_level", "Poor")
 
-        match = clause.get("match", False)
+        if level in distribution:
 
-        if match:
-
-            distribution["Matched"] += 1
-
-        else:
-
-            distribution["Unmatched"] += 1
+            distribution[level] += 1
 
     return distribution
 
@@ -141,6 +143,20 @@ def calculate_priority_distribution(clause_results):
     """
     Count clauses by priority level.
     """
+
+    distribution = {
+
+        "Critical": 0,
+
+        "High": 0,
+
+        "Medium": 0,
+
+        "Low": 0,
+
+        "Very Low": 0
+
+    }
 
     if not clause_results:
 
@@ -164,7 +180,9 @@ def calculate_priority_distribution(clause_results):
 
         else:
 
-            distribution["Low"] += 1
+            distribution["Very Low"] += 1
+
+    return distribution
 
 # =========================================================
 # Clause Statistics
