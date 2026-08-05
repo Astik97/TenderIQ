@@ -18,11 +18,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 # Load Model (Loads Only Once)
 # =========================================================
 
-print("Loading Sentence Transformer Model...")
-
 model = SentenceTransformer("all-MiniLM-L6-v2")
-
-print("Model Loaded Successfully.")
 
 # =========================================================
 # Generate Embedding
@@ -77,18 +73,6 @@ def generate_embeddings(texts: list[str]):
         normalize_embeddings=True)
 
     return embeddings
-
-# def calculate_embedding_similarity(embedding1, embedding2):
-#     """
-#     Cosine similarity between two embeddings.
-#     """
-
-#     score = cosine_similarity(
-#         [embedding1],
-#         [embedding2]
-#     )[0][0]
-
-#     return round(score * 100, 2)
 
 # =========================================================
 # Similarity Matrix

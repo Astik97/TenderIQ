@@ -160,3 +160,36 @@ document.addEventListener("DOMContentLoaded", function(){
     });
 
 });
+
+/*==========================================================
+Scroll To Top
+==========================================================*/
+
+const topButton=document.getElementById("scrollTop");
+
+window.addEventListener("scroll",()=>{
+    
+    if(window.scrollY>300){
+        
+        topButton.style.display="block";
+    }
+    
+    else{
+        
+        topButton.style.display="none";
+
+    }
+
+});
+
+topButton.onclick=()=>{
+
+    window.scrollTo({
+        
+        top:0,
+        
+        behavior:"smooth"
+    
+    });
+
+};
