@@ -77,50 +77,6 @@
     <hr>
 
     <!-- ========================================== -->
-    <!-- Recent Activity                            -->
-    <!-- ========================================== -->
-     
-    <section class="recent-activity">
-        
-        <h2>Recent Comparisons</h2>
-
-        <table>
-            
-            <tr>
-                
-                <th>Tender 1</th>
-
-                <th>Tender 2</th>
-
-                <th>Similarity</th>
-
-                <th>Date</th>
-
-            </tr>
-            
-            {% for report in dashboard_summary.recent_comparisons %}
-            
-            <tr>
-                
-                <td>{{ report[0] }}</td>
-
-                <td>{{ report[1] }}</td>
-
-                <td>{{ report[2] }}%</td>
-
-                <td>{{ report[3] }}</td>
-
-            </tr>
-            
-            {% endfor %}
-        
-        </table>
-    
-    </section>
-
-    <hr>
-
-    <!-- ========================================== -->
     <!-- Upload Section                             -->
     <!-- ========================================== -->
 

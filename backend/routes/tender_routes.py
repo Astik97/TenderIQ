@@ -17,7 +17,6 @@ from backend.utils.db import get_connection
 
 from backend.services.dashboard_service import generate_dashboard_summary
 
-
 from backend.services.document_service import (
     extract_pdf,
     extract_docx,
@@ -66,7 +65,6 @@ def allowed_file(filename):
     extension = filename.rsplit(".", 1)[1].lower()
 
     return extension in ALLOWED_EXTENSIONS
-
 
 # =========================================================
 # Dashboard
@@ -180,7 +178,7 @@ def view_tender(tender_id):
             return redirect("/dashboard")
 
         return render_template(
-            "view_tender.html",
+            "view_tender.html", 
             tender=tender
         )
 
@@ -510,7 +508,7 @@ def upload():
                 (%s,%s,%s,%s)
             """
 
-                        # --------------------------------------------
+            # --------------------------------------------
             # Insert Into Database
             # --------------------------------------------
 
