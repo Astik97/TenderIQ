@@ -193,3 +193,43 @@ topButton.onclick=()=>{
     });
 
 };
+
+function toggleClause(button){
+    
+    const details = button.nextElementSibling;
+    
+    if(details.style.display==="block"){
+        
+        details.style.display="none";
+        
+        button.innerText="View Details";
+
+    }
+    
+    else{
+
+        details.style.display="block";
+
+        button.innerText="Hide Details";
+
+    }
+
+}
+
+const search=document.getElementById("clauseSearch");
+
+search.addEventListener("keyup",()=>{
+
+    const value=search.value.toLowerCase();
+
+    document.querySelectorAll(".clause-card").forEach(card=>{
+
+        const text=card.innerText.toLowerCase();
+
+        card.style.display=text.includes(value)
+            ? "block"
+            : "none";
+
+    });
+
+});

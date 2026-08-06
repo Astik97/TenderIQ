@@ -53,8 +53,7 @@ def compare():
 
         return redirect("/dashboard")
 
-    tender1_id = selected[0]
-    tender2_id = selected[1]
+    tender1_id, tender2_id = selected
 
     conn = None
     cursor = None
@@ -102,7 +101,13 @@ def compare():
 
             return redirect("/dashboard")
 
-        tender_name2 , text2 = row2
+        tender_name2, text2 = row2
+
+        cursor.close()
+        conn.close()
+
+        cursor = None
+        conn = None
 
     except Exception as e:
 
@@ -116,11 +121,21 @@ def compare():
 
     comparison = compare_tenders(text1,text2)
 
+    similarity = comparison.get("similarity", 0)
+
+    match_level = comparison.get("level", "Unknown")
+
+    total_clauses = comparison.get("total_clauses", 0)
+
+    matched_clauses = comparison.get("matched_clauses", 0)
+
     clause_results = comparison.get("clause_results", [])
 
     for clause in clause_results:
 
-        risk_level = clause.get("risk", {}).get("level", "Very Low Risk")
+        risk = clause.get("risk", {})
+
+        risk_level = risk.get("level", "Very Low Risk")
 
         clause["risk_badge"] = get_risk_badge(risk_level)
 
@@ -174,15 +189,15 @@ def compare():
 
     print("========== COMPARISON RESULT ==========")
 
-    print(f"Similarity Score: {comparison.get('similarity', 0)}")
+    print(f"Similarity Score: {similarity}")
 
-    print(f"Match Level: {comparison.get('level', 'Unknown')}")
+    print(f"Match Level: {match_level}")
 
-    print(f"Total Clauses: {comparison.get('total_clauses', 0)}")
+    print(f"Total Clauses: {total_clauses}")
 
-    print(f"Matched Clauses: {comparison.get('matched_clauses', 0)}")
+    print(f"Matched Clauses: {matched_clauses}")
 
-    print(f"Total Risks: {len(comparison.get('clause_results', []))}")
+    print(f"Total Risks: {len(clause_results)}")
         
     # -----------------------------------------
     # Report
@@ -202,7 +217,10 @@ def compare():
         flash(f"Failed to generate report: {e}", "error")
 
     try:
-        
+
+        conn = get_connection()
+        cursor = conn.cursor()
+
         cursor.execute(
         """
         INSERT INTO comparison_reports
@@ -221,8 +239,8 @@ def compare():
             session.get("user_id"),
             tender1_id,
             tender2_id,
-            comparison.get("similarity", 0),
-            comparison.get("level", "Unknown"),
+            similarity,
+            match_level,
             report
         )
     )
@@ -263,7 +281,7 @@ def compare():
 
         tender2=tender_name2,
 
-        comparison=comparison or {},
+        comparison=comparison,
 
         highest_matches=highest_matches,
 

@@ -1,634 +1,982 @@
 <!DOCTYPE html>
-
 <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Tender Comparison Report</title>
+        <link rel="stylesheet"href="{{ url_for('static',filename='css/compare.css') }}">
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    </head>
+    
+    <body>
 
-<head>
+        <div class="container">
 
-<meta charset="UTF-8">
+            <!-- ========================= -->
+            <!-- Header -->
+            <!-- ========================= -->
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <div class="header">
 
-<title>Tender Comparison Report</title>
+                <h1>Tender Comparison Report</h1>
 
-<link rel="stylesheet"href="{{ url_for('static',filename='css/compare.css') }}">
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-</head>
-
-<body>
-
-    <div class="container">
-
-        <!-- ========================= -->
-        <!-- Header -->
-        <!-- ========================= -->
-
-        <div class="header">
-
-            <h1>Tender Comparison Report</h1>
-
-            <p>AI Powered Tender Comparison & Analysis</p>
-
-        </div>
-
-        <!-- ========================= -->
-        <!-- Tender Summary -->
-        <!-- ========================= -->
-
-        <div class="summary-card">
-
-            <div class="info-box">
-
-                <h3>Tender A</h3>
-
-                <p>{{ tender1 }}</p>
+                <p>AI Powered Tender Comparison & Analysis</p>
 
             </div>
 
-            <div class="info-box">
+            <!-- ========================= -->
+            <!-- Comparison Overview -->
+            <!-- ========================= -->
 
-                <h3>Tender B</h3>
+            <div class="overview-section">
 
-                <p>{{ tender2 }}</p>
+                <h2>Comparison Overview</h2>
 
-            </div>
+                <div class="overview-grid">
 
-        </div>
-
-        <!-- ========================= -->
-        <!-- Similarity -->
-        <!-- ========================= -->
-
-        <div class="similarity-card">
-
-            <h2>Overall Similarity</h2>
-
-            <div class="score-circle {{ comparison.color }}">
-
-                {{ comparison.similarity }}%
-
-            </div>
-
-            <div class="progress-container">
-
-                <div id="progressBar"
-                    class="progress-bar {{ comparison.color }}"
-                    data-progress="{{ comparison.similarity }}">
-
-                </div>
-
-            </div>
-
-            <br>
-
-            <span class="badge {{ comparison.color }}">
-                {{ comparison.level }}
-            </span>
-
-        </div>
-
-        <!-- ========================= -->
-        <!-- Statistics Dashboard -->
-        <!-- ========================= -->
-        
-        <div class="stats-grid">
-            
-            <div class="stat-card">
-                
-                <h4>Weighted Similarity</h4>
-
-                <p>
-                    {{ ai_summary.weighted_similarity }}%
-                </p>
-            
-            </div>
-            
-            <div class="stat-card">
-
-                <h4>Total Clauses</h4>
-
-                <p>
-                    {{ comparison.total_clauses }}
-                </p>
-            
-            </div>
-            
-            <div class="stat-card">
-                
-                <h4>Matched Clauses</h4>
-
-                <p>
-                    {{ comparison.matched_clauses }}
-                </p>
-            
-            </div>
-            
-            <div class="stat-card">
-
-                <h4>Confidence Score</h4>
-
-                <p>{{ ai_summary.confidence_score }}%</p>
-            
-            </div>
-        
-        </div>
-        
-        <!-- ========================= -->
-        <!-- Executive Summary -->
-        <!-- ========================= -->
-        
-        <div class="executive-summary">
-            
-            <h2>Executive Summary</h2>
-            
-            <div class="stat-card">
-
-                <h4>Match Level</h4>
-
-                <strong>{{ comparison.level }}</strong>
-                
-                <p>
-                    The AI comparison engine analyzed <strong>{{ comparison.total_clauses }}</strong>
-                    clauses and matched <strong>{{ comparison.matched_clauses }}</strong>
-                    clauses using semantic similarity.
-                </p>
-            
-            </div>
-        
-        </div>
-
-        <!-- ========================= -->
-        <!-- AI Executive Summary -->
-        <!-- ========================= -->    
-        
-        <div class="ai-summary-card">
-            
-            <h2>AI Executive Summary</h2>
-            
-            <div class="summary-grid">
-
-                <div>
-                    <strong>Document Difference</strong><br>
-
-                    {{ ai_summary.difference_percentage }}%
-                </div>
-
-                <div>
-                    <strong>Critical Clauses</strong><br>
-                    <p>
-                        {{ ai_summary.weight_summary.critical_clauses }}
-                        /
-                        {{ ai_summary.total_clauses }}
-                    </p>
-
-                    <small>
-                        {{ ai_summary.weight_summary.critical_percentage }}%
-                    </small>
-                </div>
-
-                <div>
-                    <strong>High Priority Clauses</strong><br>
-
-                    {{ ai_summary.weight_summary.high_priority_clauses }}
-                </div>
-
-                <div>
-                    <strong>Medium Priority Clauses</strong><br>
-
-                    {{ ai_summary.weight_summary.medium_priority_clauses }}
-                </div>
-
-                <div>
-                    <strong>Low Priority Clauses</strong><br>
-
-                    {{ ai_summary.weight_summary.low_priority_clauses }}
-                </div>
-
-                <div>
-                    <strong>Risk Level</strong><br>
-                    <span class="badge bg-{{ ai_summary.risk_badge }}">
-
-                        {{ ai_summary.risk_level }}
-
-                        {{ ai_summary.risk_icon }}
-                    </span>
-                </div>
-            
-            </div>
-
-        </div>
-
-        <!-- ========================= -->
-        <!-- Analytics Charts -->
-        <!-- ========================= -->
-
-        <div class="charts-section">
-
-            <h2>Analytics Dashboard</h2>
-
-            <div class="charts-grid">
-
-                <!-- Similarity Distribution -->
-
-                <div class="chart-card">
-
-                    <h3>Similarity Distribution</h3>
-
-                    <div class="chart-container">
-
-                        <canvas id="similarityChart"></canvas>
-
+                    <div class="overview-card">
+                        <span class="overview-title">Tender A</span>
+                        <p>{{ tender1 }}</p>
                     </div>
 
-                </div>
-
-                <!-- Risk Distribution -->
-
-                <div class="chart-card">
-
-                    <h3>Risk Distribution</h3>
-
-                    <div class="chart-container">
-
-                        <canvas id="riskChart"></canvas>
-
+                    <div class="overview-card">
+                        <span class="overview-title">Tender B</span>
+                        <p>{{ tender2 }}</p>
                     </div>
 
-                </div>
-
-                <!-- Priority Distribution -->
-
-                <div class="chart-card">
-
-                    <h3>Priority Distribution</h3>
-
-                    <div class="chart-container">
-
-                        <canvas id="priorityChart"></canvas>
-
+                    <div class="overview-card">
+                        <span class="overview-title">Total Clauses</span>
+                        <h3>{{ comparison.total_clauses }}</h3>
                     </div>
 
-                </div>
-
-                <!-- Dashboard Statistics -->
-
-                <div class="chart-card">
-
-                    <h3>Dashboard Statistics</h3>
-
-                    <div class="chart-container">
-
-                        <canvas id="dashboardChart"></canvas>
-
+                    <div class="overview-card">
+                        <span class="overview-title">Matched Clauses</span>
+                        <h3>{{ comparison.matched_clauses }}</h3>
                     </div>
 
-                </div>
+                    <div class="overview-card">
+                        <span class="overview-title">Overall Similarity</span>
+                        <h3>{{ comparison.similarity }}%</h3>
+                    </div>
 
-            </div>
+                    <div class="overview-card">
+                        <span class="overview-title">Weighted Similarity</span>
+                        <h3>{{ ai_summary.weighted_similarity }}%</h3>
+                    </div>
 
-        </div>
+                    <div class="overview-card">
+                        <span class="overview-title">Match Level</span>
 
-        <!-- Clause Search -->
-
-        <div class="search-box">
-            
-            <input type="text"
-            id="clauseSearch"
-            placeholder="Search Clause...">
-        
-        </div>
-
-        <!-- ========================= -->
-        <!-- Clause Analysis -->
-        <!-- ========================= -->
-        
-        <div class="clause-section">
-            
-            <h2>Clause Analysis</h2>
-
-            {% for clause in comparison.clause_results %}
-            
-            <div class="clause-card">
-                
-                <h3>Clause {{ loop.index }}</h3>
-                
-                <p>
-                    <strong>Original</strong>
-                </p>
-                
-                <p>
-                    {{ clause.clause }}
-                </p>
-                
-                <hr>
-                
-                <p>
-                    <strong>Matched Clause</strong>
-                </p>
-                
-                <p>
-                    {{ clause.best_match }}
-                </p>
-
-                <hr>
-                
-                <p>
-                    Similarity :
-                    <strong>{{ clause.similarity }}%</strong>
-                </p>
-
-                <p>
-                    Match Level :
-                    <span class="badge {{ clause.color }}">
-
-                        {{ clause.level }}
-
-                    </span>
-                </p>
-                
-                <p>Difference Summary</p>
-
-                <p>
-                    {{ clause.difference.summary }}
-                </p>
-                
-                <div class="risk-box
-                {% if clause.risk.level == 'Very Low Risk' %}
-                risk-verylow
-                {% elif clause.risk.level == 'Low Risk' %}
-                risk-low
-                {% elif clause.risk.level == 'Medium Risk' %}
-                risk-medium
-                {% elif clause.risk.level == 'High Risk' %}
-                risk-high
-                {% else %}
-                risk-critical
-                {% endif %}"
-
-                data-risk="{{ clause.risk.level }}">
-                    
-                    <h4>Risk Analysis</h4>
-
-                    <p>
-                        <strong>Risk Score</strong>
-
-                        {{ clause.risk.score }}
-                    </p>
-
-                    <p>
-                        <strong>Risk Level</strong>
-
-                        <span class="badge bg-{{ clause.risk_badge }}">
-
-                            {{ clause.risk_icon }}
-
-                            {{ clause.risk.level }}
-                            
+                        <span class="badge {{ comparison.color }}">
+                            {{ comparison.level }}
                         </span>
-                    </p>
+                        
+                        <p>
+                            The AI comparison engine analyzed <strong>{{ comparison.total_clauses }}</strong>
+                            clauses and matched <strong>{{ comparison.matched_clauses }}</strong>
+                            clauses using semantic similarity.
+                        </p>
 
-                    <p>
-                        <strong>Reason</strong>
-                    </p>
+                    </div>
 
-                    <p>
-                        {{ clause.risk.reason }}
-                    </p>
+                    <div class="overview-card">
 
-                    <p>
-                        <strong>Recommendation</strong>
-                    </p>
+                        <span class="overview-title">AI Engine</span>
 
-                    <p>
-                        {{ clause.risk.recommendation }}
-                    </p>
+                        <small>{{ ai_engine }}</small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- ========================= -->
+            <!-- Similarity -->
+            <!-- ========================= -->
+
+            <div class="similarity-card">
+
+                <h2>Overall Similarity</h2>
+
+                <div class="score-circle {{ comparison.color }}">
+
+                    {{ comparison.similarity }}%
+
+                </div>
+
+                <div class="progress-container">
+
+                    <div id="progressBar"
+                        class="progress-bar {{ comparison.color }}"
+                        data-progress="{{ comparison.similarity }}">
+
+                    </div>
+
+                </div>
+
+                <br>
+
+                <span class="badge {{ comparison.color }}">
+                    {{ comparison.level }}
+                </span>
+
+            </div>
+
+            <!-- ========================= -->
+            <!-- AI Statistics Dashboard -->
+            <!-- ========================= -->
+
+            <div class="dashboard-section">
+
+                <h2>AI Statistics Dashboard</h2>
+
+                <div class="stats-grid">
+
+                    <div class="stat-card">
+
+                        <div class="stat-icon">📄</div>
+
+                        <h4>Total Clauses</h4>
+
+                        <h2>{{ comparison.total_clauses }}</h2>
+
+                    </div>
+
+                    <div class="stat-card">
+
+                        <div class="stat-icon">✅</div>
+
+                        <h4>Matched Clauses</h4>
+
+                        <h2>{{ comparison.matched_clauses }}</h2>
+
+                    </div>
+
+                    <div class="stat-card">
+
+                        <div class="stat-icon">📊</div>
+
+                        <h4>Overall Similarity</h4>
+
+                        <h2>{{ comparison.similarity }}%</h2>
+
+                    </div>
+
+                    <div class="stat-card">
+
+                        <div class="stat-icon">⭐</div>
+
+                        <h4>Weighted Similarity</h4>
+
+                        <h2>{{ ai_summary.weighted_similarity }}%</h2>
+
+                    </div>
+
+                    <div class="stat-card">
+
+                        <div class="stat-icon">🎯</div>
+
+                        <h4>Confidence Score</h4>
+
+                        <h2>{{ ai_summary.confidence_score }}%</h2>
+
+                    </div>
+
+                    <div class="stat-card">
+
+                        <div class="stat-icon">⚠️</div>
+
+                        <h4>Risk Level</h4>
+
+                        <span class="badge bg-{{ ai_summary.risk_badge }}">
+                            {{ ai_summary.risk_icon }}
+                            {{ ai_summary.risk_level }}
+                        </span>
+
+                    </div>
+
+                    <div class="stat-card">
+
+                        <div class="stat-icon">📉</div>
+
+                        <h4>Difference</h4>
+
+                        <h2>{{ ai_summary.difference_percentage }}%</h2>
+
+                    </div>
+
+                    <div class="stat-card">
+
+                        <div class="stat-icon">🧠</div>
+
+                        <h4>AI Engine</h4>
+
+                        <small>{{ ai_engine }}</small>
+
+                    </div>
+
+                </div>
+
+            </div>
+            
+            <!-- ========================= -->
+            <!-- AI Insights -->
+            <!-- ========================= -->
+
+            <div class="insights-section">
+
+                <h2>AI Insights</h2>
+
+                <div class="insights-grid">
+
+                    <div class="insight-card success">
+
+                        <h3>✔ Similarity Analysis</h3>
+
+                        <p>
+
+                            The AI identified
+
+                            <strong>{{ comparison.matched_clauses }}</strong>
+
+                            matching clauses out of
+
+                            <strong>{{ comparison.total_clauses }}</strong>.
+
+                        </p>
+
+                    </div>
+
+                    <div class="insight-card info">
+
+                        <h3>📊 Match Quality</h3>
+
+                        <p>
+
+                            Overall document similarity is
+
+                            <strong>{{ comparison.similarity }}%</strong>
+
+                            with a weighted similarity of
+
+                            <strong>{{ ai_summary.weighted_similarity }}%</strong>.
+
+                        </p>
+
+                    </div>
+
+                    <div class="insight-card warning">
+
+                        <h3>⚠ Risk Assessment</h3>
+
+                        <p>
+
+                            The documents are classified as
+
+                            <strong>{{ ai_summary.risk_level }}</strong>.
+
+                            Manual review is recommended for
+
+                            critical commercial clauses.
+
+                        </p>
+
+                    </div>
+
+                    <div class="insight-card primary">
+
+                        <h3>🧠 AI Recommendation</h3>
+
+                        <p>
+
+                            {{ recommendation_summary.final_recommendation }}
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>        
+
+            <!-- ========================= -->
+            <!-- AI Executive Summary -->
+            <!-- ========================= -->    
+            
+            <section class="ai-summary-section">
+                
+                <h2>AI Executive Summary</h2>
+                
+                <div class="summary-top">
+                    
+                    <div class="summary-card">
+
+                        <h3>Document Difference</h3>
+
+                        <p>
+                            <strong>
+                                {{ ai_summary.difference_percentage }}%
+                            </strong>
+                        </p>
+
+                    </div>
+
+                    <div class="summary-card">
+
+                        <h3>Critical Clauses</h3>
+
+                        <p>
+                            <strong>
+                                {{ ai_summary.weight_summary.critical_clauses }}
+                                /
+                                {{ ai_summary.total_clauses }}
+                            </strong>
+                        </p>
+
+                        <small>
+                            {{ ai_summary.weight_summary.critical_percentage }}%
+                        </small>
+
+                    </div>
+
+                    <div class="summary-card">
+
+                        <h3>High Priority Clauses</h3>
+
+                        <p>
+                            <strong>
+                                {{ ai_summary.weight_summary.high_priority_clauses }}
+                            </strong>
+                        </p>
+
+                    </div>
+
+                    <div class="summary-card">
+
+                        <h3>Medium Priority Clauses</h3>
+
+                        <p>
+                            <strong>
+                                {{ ai_summary.weight_summary.medium_priority_clauses }}
+                            </strong>
+                        </p>
+
+                    </div>
+
+                    <div class="summary-card">
+
+                        <h3>Low Priority Clauses</h3>
+
+                        <p>
+                            <strong>
+                                {{ ai_summary.weight_summary.low_priority_clauses }}
+                            </strong>
+                        </p>
+
+                    </div>
+
+                    <div class="summary-card">
+
+                        <h3>Risk Level</h3>
+                        
+                        <p>
+                            <span class="badge bg-{{ ai_summary.risk_badge }}">
+
+                                {{ ai_summary.risk_level }}
+                                {{ ai_summary.risk_icon }}
+
+                            </span>
+                        </p>
+
+                    </div>
                 
                 </div>
-            
-            </div>
-            
-            {% endfor %}
-
-        </div>
-
-        <!-- ========================= -->
-        <!-- Recommendation Section -->
-        <!-- ========================= -->
-
-        <div class="recommendation-section">
-
-            <h2>AI Recommendations</h2>
-
-            <!-- Priority Actions -->
-
-            <div class="recommendation-card">
-
-                <h3>Priority Actions</h3>
-
-                <ul>
-
-                    {% for action in recommendation_summary.priority_actions %}
-
-                    <li>{{ action }}</li>
-
-                    {% endfor %}
-
-                </ul>
 
             </div>
 
-            <!-- Submission Checklist -->
+            <!-- ===================================== -->
+            <!-- AI Clause Rankings -->
+            <!-- ===================================== -->
 
-            <div class="recommendation-card">
+            <section class="ranking-section">
 
-                <h3>Submission Checklist</h3>
+                <h2>AI Clause Rankings</h2>
 
-                <table>
+                <div class="ranking-grid">
 
-                    <tr>
+                    <!-- Highest Matching -->
 
-                        <th>Task</th>
+                    <div class="ranking-card">
 
-                        <th>Status</th>
+                        <h3>Highest Matching Clauses</h3>
 
-                    </tr>
+                        {% for clause in highest_matches %}
 
-                    {% for item in recommendation_summary.submission_checklist %}
+                        <div class="ranking-item">
 
-                    <tr>
+                            <strong>{{ clause.clause }}</strong>
 
-                        <td>{{ item.task }}</td>
+                            <br>
 
-                        <td>{{ item.status }}</td>
+                            Similarity
 
-                    </tr>
+                            <span class="score good">
 
-                    {% endfor %}
+                                {{ clause.similarity }}%
 
-                </table>
+                            </span>
 
-            </div>
+                        </div>
 
-            <!-- Clause Recommendations -->
+                        {% endfor %}
 
-            <div class="recommendation-card">
+                    </div>
 
-                <h3>Clause Recommendations</h3>
+                    <!-- Highest Risk -->
 
-                {% for item in recommendation_summary.clause_recommendations %}
+                    <div class="ranking-card">
 
-                <div class="mini-card">
+                        <h3>Highest Risk Clauses</h3>
 
-                    <strong>{{ item.clause }}</strong>
+                        {% for clause in highest_risks %}
 
-                    <br>
+                        <div class="ranking-item">
 
-                    Similarity:
-                    {{ item.similarity }}%
+                            <strong>{{ clause.clause }}</strong>
 
-                    <br>
+                            <br>
 
-                    Weight:
-                    {{ item.weight }}
+                            <span class="badge bg-{{ clause.risk_badge }}">
 
-                    <br>
+                                {{ clause.risk_icon }}
+                                {{ clause.risk.level }}
 
-                    Risk:
-                    {{ item.risk }}
+                            </span>
 
-                    <p>{{ item.recommendation }}</p>
+                        </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                    <!-- Lowest Matching -->
+
+                    <div class="ranking-card">
+
+                        <h3>Lowest Matching Clauses</h3>
+
+                        {% for clause in lowest_matches %}
+
+                        <div class="ranking-item">
+
+                            <strong>{{ clause.clause }}</strong>
+
+                            <br>
+
+                            Similarity
+
+                            <span class="score danger">
+
+                                {{ clause.similarity }}%
+
+                            </span>
+
+                        </div>
+
+                        {% endfor %}
+
+                    </div>
 
                 </div>
 
-                {% endfor %}
+            </section>
+            
+            <div class="ranking-summary">
+
+                <h3>Ranking Summary</h3>
+
+                <div class="summary-grid">
+
+                    <div>
+
+                        <strong>Highest Match</strong>
+
+                        <p>{{ ranking_summary.highest_similarity }}%</p>
+
+                    </div>
+
+                    <div>
+
+                        <strong>Lowest Match</strong>
+
+                        <p>{{ ranking_summary.lowest_similarity }}%</p>
+
+                    </div>
+
+                    <div>
+
+                        <strong>Average Similarity</strong>
+
+                        <p>{{ ranking_summary.average_similarity }}%</p>
+
+                    </div>
+
+                    <div>
+
+                        <strong>Highest Risk</strong>
+
+                        <p>{{ ranking_summary.highest_risk }}</p>
+
+                    </div>
+
+                </div>
 
             </div>
 
-            <!-- Final Recommendation -->
+            <!-- ========================= -->
+            <!-- Analytics Charts -->
+            <!-- ========================= -->
 
-            <div class="recommendation-card">
+            <div class="charts-section">
 
-                <h3>Final AI Recommendation</h3>
+                <h2>Analytics Dashboard</h2>
 
-                <p>
+                <div class="charts-grid">
+
+                    <!-- Similarity Distribution -->
+
+                    <div class="chart-card">
+
+                        <h3>Similarity Distribution</h3>
+
+                        <div class="chart-container">
+
+                            <canvas id="similarityChart"></canvas>
+
+                        </div>
+
+                    </div>
+
+                    <!-- Risk Distribution -->
+
+                    <div class="chart-card">
+
+                        <h3>Risk Distribution</h3>
+
+                        <div class="chart-container">
+
+                            <canvas id="riskChart"></canvas>
+
+                        </div>
+
+                    </div>
+
+                    <!-- Priority Distribution -->
+
+                    <div class="chart-card">
+
+                        <h3>Priority Distribution</h3>
+
+                        <div class="chart-container">
+
+                            <canvas id="priorityChart"></canvas>
+
+                        </div>
+
+                    </div>
+
+                    <!-- Dashboard Statistics -->
+
+                    <div class="chart-card">
+
+                        <h3>Dashboard Statistics</h3>
+
+                        <div class="chart-container">
+
+                            <canvas id="dashboardChart"></canvas>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Clause Search -->
+
+            <div class="search-box">
+                
+                <input type="text"
+                id="clauseSearch"
+                placeholder="Search Clause...">
+            
+            </div>
+
+            <!-- ========================= -->
+            <!-- Clause Analysis -->
+            <!-- ========================= -->
+            
+            <div class="clause-section">
+                
+                <h2>Clause Analysis</h2>
+
+                {% for clause in comparison.clause_results %}
+                
+                <div class="clause-card">
+                    
+                    <div class="clause-header">
+                        
+                        <div>
+                            
+                            <h3>Clause {{ loop.index }}</h3>
+
+                            <strong>{{ clause.clause }}</strong>
+
+                        </div>
+                        
+                        <div class="clause-summary">
+                            
+                            <span class="badge {{ clause.color }}">
+                                {{ clause.similarity }}%
+                            </span>
+
+                            <span class="badge bg-{{ clause.risk_badge }}">
+                                {{ clause.risk.level }}
+                            </span>
+
+                            <p>Match Level :
+                                <span class="badge {{ clause.color }}">
+                                    {{ clause.level }}
+                                </span>
+                            </p>
+
+                        </div>
+
+                    </div>
+                    
+                    <button class="toggle-btn" onclick="toggleClause(this)">
+                        View Details
+                    </button>
+                    
+                    <div class="clause-details">
+                        <hr>
+                        
+                        <h4>Original Clause</h4>
+                    
+                        <p>{{ clause.clause }}</p>
+                        
+                        <h4>Matched Clause</h4>
+
+                        <p>{{ clause.best_match }}</p>
+
+                        <h4>Difference Summary</h4>
+
+                        <p>{{ clause.difference.summary }}</p>
+                        
+                        <div class="risk-box
+                            {% if clause.risk.level == 'Very Low Risk' %}
+                                risk-verylow
+                            {% elif clause.risk.level == 'Low Risk' %}
+                                risk-low
+                            {% elif clause.risk.level == 'Medium Risk' %}
+                                risk-medium
+                            {% elif clause.risk.level == 'High Risk' %}
+                                risk-high
+                            {% else %}
+                                risk-critical
+                            {% endif %}"
+                            
+                            data-risk="{{ clause.risk.level }}">
+                        
+                            <h4>Risk Analysis</h4>
+                        
+                            <p>
+                                <strong>Risk Score:</strong>
+
+                                {{ clause.risk.score }}
+                            </p>
+
+                            <p>
+                                <strong>Risk Level</strong>
+                            
+                                <span class="badge bg-{{ clause.risk_badge }}">
+                                    {{ clause.risk_icon }}
+
+                                    {{ clause.risk.level }}
+                                    
+                                </span>
+                            </p>
+
+                            <p>
+                                <strong>Reason:</strong>
+
+                                {{ clause.risk.reason }}
+                            </p>
+
+                            <p>
+                                <strong>Recommendation:</strong>
+
+                                {{ clause.risk.recommendation }}
+                            </p>
+                        
+                        </div>
+                    
+                    </div>
+
+                </div>
+                
+                {% endfor %}
+            
+            </div>
+            
+            <!-- ===================================== -->
+            <!-- AI Decision Center -->
+            <!-- ===================================== -->
+
+            <section class="decision-center">
+
+                <h2>AI Decision Center</h2>
+
+                <div class="decision-grid">
+
+                    <!-- Priority Actions -->
+
+                    <div class="decision-card">
+
+                        <h3>Priority Actions</h3>
+
+                        <ul>
+
+                            {% for action in recommendation_summary.priority_actions %}
+
+                            <li>⚠ {{ action }}</li>
+
+                            {% endfor %}
+
+                        </ul>
+
+                    </div>
+
+                    <!-- Submission Checklist -->
+
+                    <div class="decision-card">
+
+                        <h3>Submission Checklist</h3>
+
+                        <table>
+
+                            <tr>
+
+                                <th>Task</th>
+
+                                <th>Status</th>
+
+                            </tr>
+
+                            {% for item in recommendation_summary.submission_checklist %}
+
+                            <tr>
+
+                                <td>{{ item.task }}</td>
+
+                                <td>
+
+                                    <span class="pending">
+
+                                        {{ item.status }}
+
+                                    </span>
+
+                                </td>
+
+                            </tr>
+
+                            {% endfor %}
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+                <!-- Clause Recommendations -->
+
+                <div class="decision-card full-width">
+
+                    <h3>Clause Recommendations</h3>
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>Clause</th>
+
+                                <th>Similarity</th>
+
+                                <th>Weight</th>
+
+                                <th>Risk</th>
+
+                                <th>Recommendation</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                        {% for item in recommendation_summary.clause_recommendations %}
+
+                            <tr>
+
+                                <td>{{ item.clause }}</td>
+
+                                <td>{{ item.similarity }}%</td>
+
+                                <td>{{ item.weight }}</td>
+
+                                <td>{{ item.risk }}</td>
+
+                                <td>{{ item.recommendation }}</td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+                <!-- Final Recommendation -->
+
+                <div class="final-decision">
+
+                    <h2>Final AI Recommendation</h2>
+
+                    <p>
+                        {% if comparison.similarity >= 90 %}
+                        
+                        These tenders are almost identical.
+
+                        {% elif comparison.similarity >= 70 %}
+
+                        High similarity detected. Review minor differences.
+
+                        {% elif comparison.similarity >= 50 %}
+
+                        Moderate similarity detected. Manual verification is recommended.
+
+                        {% else %} Low similarity detected. These tenders differ significantly.
+
+                        {% endif %}
+                    </p>
+
+                </div>
+
+            </section>
+
+            <!-- ========================= -->
+            <!-- AI Analysis Report -->
+            <!-- ========================= -->
+            
+            <div class="report-card">
+                
+                <h2>AI Analysis Report</h2>
+                
+                <div class="analysis-box">
+                    
+                    <h3>Overall Assessment</h3>
+                    
+                    <p>
+                        The AI engine analyzed <strong>{{ comparison.total_clauses }}</strong>
+                        clauses from both tender documents using semantic similarity analysis.
+                    </p>
+                    
+                    <br>
+
+                    <p>
+                        Overall similarity was found to be <strong>{{ comparison.similarity }}%</strong>,
+                        resulting in a <strong>{{ comparison.level }}</strong>.
+                    </p>
+
+                    <br>
+                    
                     {% if comparison.similarity >= 90 %}
-
-                    These tenders are almost identical.
-
+                    
+                    <p>
+                        ✔ The documents are highly similar with only minor wording differences.
+                    </p>
+                    
                     {% elif comparison.similarity >= 70 %}
 
-                    High similarity detected. Review minor differences.
+                    <p>
+                        ✔ Most clauses match successfully. Manual verification of commercial
+                        and financial sections is recommended.
+                    </p>
 
                     {% elif comparison.similarity >= 50 %}
 
-                    Moderate similarity detected. Manual verification is recommended.
+                    <p>
+                        ⚠ Several clauses differ significantly. Technical and eligibility
+                        requirements should be reviewed carefully.
+                    </p>
 
-                    {% else %} Low similarity detected. These tenders differ significantly.
+                    {% else %}
+
+                    <p>
+                        ❌ Major differences detected. Complete manual verification is strongly recommended.
+                    </p>
 
                     {% endif %}
-                </p>
+
+                </div>
+            
+            </div>
+
+            <!-- ========================= -->
+            <!-- Buttons -->
+            <!-- ========================= -->
+
+            <div class="buttons">
+
+                <button onclick = "window.location.href='/dashboard'" class="btn">
+
+                    ← Back To Dashboard
+
+                </button>
+
+                <button onclick="window.print()" class="btn print-btn">
+
+                    🖨 Print Report
+
+                </button>
+                
+                <button id="scrollTop" class="btn">
+                    
+                    ⬇ Scroll to Top
+
+                </button>
 
             </div>
 
         </div>
-
-        <!-- ========================= -->
-        <!-- AI Analysis Report -->
-        <!-- ========================= -->
         
-        <div class="report-card">
-            
-            <h2>AI Analysis Report</h2>
-            
-            <div class="analysis-box">
-                
-                <h3>Overall Assessment</h3>
-                
-                <p>
-                    The AI engine analyzed <strong>{{ comparison.total_clauses }}</strong>
-                    clauses from both tender documents using semantic similarity analysis.
-                </p>
-                
-                <br>
-
-                <p>
-                    Overall similarity was found to be <strong>{{ comparison.similarity }}%</strong>,
-                    resulting in a <strong>{{ comparison.level }}</strong>.
-                </p>
-
-                <br>
-                
-                {% if comparison.similarity >= 90 %}
-                
-                <p>
-                    ✔ The documents are highly similar with only minor wording differences.
-                </p>
-                
-                {% elif comparison.similarity >= 70 %}
-
-                <p>
-                    ✔ Most clauses match successfully. Manual verification of commercial
-                    and financial sections is recommended.
-                </p>
-
-                {% elif comparison.similarity >= 50 %}
-
-                <p>
-                    ⚠ Several clauses differ significantly. Technical and eligibility
-                    requirements should be reviewed carefully.
-                </p>
-
-                {% else %}
-
-                <p>
-                    ❌ Major differences detected. Complete manual verification is strongly recommended.
-                </p>
-
-                {% endif %}
-
-            </div>
+        <script src="{{ url_for('static',filename='js/compare.js') }}"></script>
         
-        </div>
+        <script id="chart-data" type="application/json">
 
-        <!-- ========================= -->
-        <!-- Buttons -->
-        <!-- ========================= -->
+            {{ chart_data | tojson }}
 
-        <div class="buttons">
+        </script>
 
-            <button onclick = "window.location.href='/dashboard'" class="btn">
-
-                ← Back To Dashboard
-
-            </button>
-
-            <button onclick="window.print()" class="btn print-btn">
-
-                🖨 Print Report
-
-            </button>
-            
-            <button id="scrollTop" class="btn">
-                
-                ⬇ Scroll to Top
-
-            </button>
-
-        </div>
-
-    </div>
+        <script src="{{ url_for('static', filename='js/charts.js') }}"></script>
     
-    <script src="{{ url_for('static',filename='js/compare.js') }}"></script>
+    </body>
     
-    <script id="chart-data" type="application/json">
-
-        {{ chart_data | tojson }}
-
-    </script>
-
-    <script src="{{ url_for('static', filename='js/charts.js') }}"></script>
-
-</body>
-
-</html>
+    </html>
