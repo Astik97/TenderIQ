@@ -13,7 +13,11 @@ from flask import (
     session
 )
 
-from backend.utils.ui_setup import get_risk_badge, get_risk_icon
+from backend.utils.ui_setup import(
+    get_risk_badge, 
+    get_risk_icon, 
+    get_risk_class
+)
 
 from backend.services.ranking_service import (
     get_highest_matching_clauses,
@@ -23,18 +27,13 @@ from backend.services.ranking_service import (
 )
 
 from backend.services.chart_service import generate_chart_data
-
 from backend.services.recommendation_service import generate_recommendation_summary
-
 from backend.services.analytics_service import generate_analytics_summary
-
 from backend.utils.db import get_connection
-
 from backend.services.compare_service import compare_tenders
-
 from backend.services.report_service import generate_report
-
 from backend.services.ai_summary_service import generate_ai_summary
+from backend.services.insight_service import generate_complete_insight
 
 compare_bp = Blueprint("compare",__name__)
 
@@ -141,6 +140,8 @@ def compare():
 
         clause["risk_icon"] = get_risk_icon(risk_level)
 
+        clause["risk_class"] = get_risk_class(risk_level)
+
     # -----------------------------------------
     # Ranking Service
     # -----------------------------------------
@@ -176,6 +177,12 @@ def compare():
     # -----------------------------------------
 
     analytics = generate_analytics_summary(comparison)
+
+    # -----------------------------------------
+    # AI Insight Engine
+    # -----------------------------------------
+
+    insight = generate_complete_insight(comparison)
 
     # -----------------------------------------
     # Chart Data
@@ -294,6 +301,8 @@ def compare():
         report=report,
 
         analytics=analytics,
+
+        insight=insight,
 
         chart_data=chart_data,
 

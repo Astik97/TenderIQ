@@ -56,3 +56,31 @@ def get_risk_icon(level):
     }
 
     return icons.get(level, "⚪")
+
+# =========================================================
+# Risk CSS Class
+# =========================================================
+
+def get_risk_class(risk_level):
+    """
+    Returns CSS class for risk container.
+    """
+
+    risk_classes = {
+
+        "Very Low Risk": "risk-verylow",
+
+        "Low Risk": "risk-low",
+
+        "Medium Risk": "risk-medium",
+
+        "High Risk": "risk-high",
+
+        "Critical Risk": "risk-critical"
+
+    }
+
+    return risk_classes.get(
+        risk_level, 
+        "risk-medium"
+    )

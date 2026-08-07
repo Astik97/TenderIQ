@@ -595,7 +595,7 @@ def generate_ai_summary(result):
     Parameters
     ----------
     result : dict
-        Output returned by compare_tenders()
+    Output returned by compare_tenders()
 
     Returns
     -------
@@ -654,11 +654,77 @@ def generate_ai_summary(result):
     # AI Metadata
     # -----------------------------------------------------
 
-    confidence_score = generate_confidence_score(result,
-        weighted_similarity)
+    confidence_score = generate_confidence_score(result,weighted_similarity)
 
     processing_summary = generate_processing_summary(result)
 
+    # -----------------------------------------
+    # Summary Cards
+    # -----------------------------------------
+
+    summary_cards = [
+
+    {
+        "title": "Document Difference",
+        "value": f"{weight_summary.get('difference_percentage', 0)}%"
+    },
+
+    {
+        "title": "Critical Clauses",
+        "value": f"{weight_summary.get('critical_clauses', 0)}/{result.get('total_clauses', 0)}",
+        "small": f"{weight_summary.get('critical_percentage', 0)}%"
+    },
+
+    {
+        "title": "High Priority Clauses",
+        "value": weight_summary.get("high_priority_clauses", 0)
+    },
+
+    {
+        "title": "Medium Priority Clauses",
+        "value": weight_summary.get("medium_priority_clauses", 0)
+    },
+
+    {
+        "title": "Low Priority Clauses",
+        "value": weight_summary.get("low_priority_clauses", 0)
+    },
+
+    {
+        "title": "Risk Level",
+        "value": risk_level
+    }
+
+]
+
+    # -----------------------------------------------------
+    # Dashboard Statistics Cards
+    # -----------------------------------------------------
+
+    dashboard_cards = [
+
+        {
+            "title": "Weighted Similarity",
+            "value": f"{weighted_similarity}%"
+        },
+
+        {
+            "title": "Total Clauses",
+            "value": result.get("total_clauses", 0)
+        },
+
+        {
+            "title": "Matched Clauses",
+            "value": result.get("matched_clauses", 0)
+        },
+
+        {
+            "title": "Confidence Score",
+            "value": f"{confidence_score}%"
+        }
+
+    ]
+    
     # -----------------------------------------------------
     # Final Summary
     # -----------------------------------------------------
@@ -729,6 +795,14 @@ def generate_ai_summary(result):
 
         "recommendation": recommendation,
 
-        "recommendations": recommendations
+        "recommendations": recommendations,
+
+        # ==========================================
+        # Dynamic Cards
+        # ==========================================
+
+        "summary_cards": summary_cards,
+
+        "dashboard_cards":dashboard_cards
 
     }
