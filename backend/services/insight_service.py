@@ -132,7 +132,6 @@ def generate_procurement_risk_summary(clause_results):
     critical = 0
 
     for clause in clause_results:
-
         level = clause["risk"]["level"]
 
         if level == "High Risk":
@@ -142,15 +141,12 @@ def generate_procurement_risk_summary(clause_results):
             critical += 1
 
     if critical >= 3:
-
         overall = "High"
 
     elif high >= 5:
-
         overall = "Medium"
 
     else:
-
         overall = "Low"
 
     return {
@@ -173,39 +169,22 @@ def generate_ai_insights(comparison):
     insights = []
 
     if similarity >= 90:
-
-        insights.append(
-            "Both tenders are highly similar."
-        )
+        insights.append("Both tenders are highly similar.")
 
     elif similarity >= 70:
-
-        insights.append(
-            "Most technical clauses remain unchanged."
-        )
+        insights.append("Most technical clauses remain unchanged.")
 
     elif similarity >= 50:
-
-        insights.append(
-            "Several important clauses require review."
-        )
+        insights.append("Several important clauses require review.")
 
     else:
+        insights.append("The tenders differ substantially.")
 
-        insights.append(
-            "The tenders differ substantially."
-        )
-
-    insights.append(
-        f"{comparison['matched_clauses']} clauses matched successfully."
-    )
+    insights.append(f"{comparison['matched_clauses']} clauses matched successfully.")
 
     return insights
 
-def generate_final_recommendation(
-    comparison,
-    procurement_risk
-):
+def generate_final_recommendation(comparison,procurement_risk):
     """
     Final recommendation.
     """
@@ -215,31 +194,17 @@ def generate_final_recommendation(
     risk = procurement_risk["overall"]
 
     if similarity >= 90 and risk == "Low":
-
-        return (
-            "Safe to reuse this tender with minimal review."
-        )
+        return ("Safe to reuse this tender with minimal review.")
 
     if similarity >= 70:
-
-        return (
-            "Suitable for submission after reviewing changed clauses."
-        )
+        return ("Suitable for submission after reviewing changed clauses.")
 
     if similarity >= 50:
+        return ("Manual verification is strongly recommended.")
 
-        return (
-            "Manual verification is strongly recommended."
-        )
+    return ("Do not reuse without complete legal and technical review.")
 
-    return (
-        "Do not reuse without complete legal and technical review."
-    )
-
-def generate_tender_decision(
-    comparison,
-    procurement_risk
-):
+def generate_tender_decision(comparison,procurement_risk):
     """
     Final AI decision.
     """
@@ -249,15 +214,12 @@ def generate_tender_decision(
     risk = procurement_risk["overall"]
 
     if similarity >= 90 and risk == "Low":
-
         return "Safe to Bid"
 
     if similarity >= 70:
-
         return "Bid with Modifications"
 
     if similarity >= 50:
-
         return "High Risk"
 
     return "Not Recommended"
@@ -269,37 +231,22 @@ def generate_complete_insight(comparison):
 
     clause_results = comparison["clause_results"]
 
-    procurement_risk = generate_procurement_risk_summary(
-        clause_results
-    )
+    procurement_risk = generate_procurement_risk_summary(clause_results)
 
     return {
 
-        "strengths":
-        generate_strengths(clause_results),
+        "strengths": generate_strengths(clause_results),
 
-        "weaknesses":
-        generate_weaknesses(clause_results),
+        "weaknesses": generate_weaknesses(clause_results),
 
-        "top_changes":
-        generate_top_changes(clause_results),
+        "top_changes": generate_top_changes(clause_results),
 
-        "procurement_risk":
-        procurement_risk,
+        "procurement_risk": procurement_risk,
 
-        "ai_insights":
-        generate_ai_insights(comparison),
+        "ai_insights": generate_ai_insights(comparison),
 
-        "final_recommendation":
-        generate_final_recommendation(
-            comparison,
-            procurement_risk
-        ),
+        "final_recommendation": generate_final_recommendation(comparison,procurement_risk),
 
-        "tender_decision":
-        generate_tender_decision(
-            comparison,
-            procurement_risk
-        )
+        "tender_decision": generate_tender_decision(comparison,procurement_risk)
 
     }

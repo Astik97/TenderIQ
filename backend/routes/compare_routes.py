@@ -182,7 +182,7 @@ def compare():
     # AI Insight Engine
     # -----------------------------------------
 
-    insight = generate_complete_insight(comparison)
+    insights = generate_complete_insight(comparison)
 
     # -----------------------------------------
     # Chart Data
@@ -257,7 +257,6 @@ def compare():
     except Exception as e:
 
         if conn:
-            
             conn.rollback()
 
         flash(f"Failed to save comparison report: {e}", "error")
@@ -302,7 +301,7 @@ def compare():
 
         analytics=analytics,
 
-        insight=insight,
+        insights=insights,
 
         chart_data=chart_data,
 

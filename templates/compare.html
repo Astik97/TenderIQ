@@ -254,12 +254,12 @@
 
                 <div class="insight-card">
                     <h3>Tender Decision</h3>
-                    <p>{{ insight.tender_decision }}</p>
+                    <p>{{ insights.tender_decision }}</p>
                 </div>
 
                 <div class="insight-card">
                     <h3>Final Recommendation</h3>
-                    <p>{{ insight.final_recommendation }}</p>
+                    <p>{{ insights.final_recommendation }}</p>
                 </div>
 
             </div>
@@ -269,7 +269,7 @@
                 <h3>Strengths</h3>
                 
                 <ul>
-                    {% for item in insight.strengths %}
+                    {% for item in insights.strengths %}
 
                     <li>{{ item }}</li>
 
@@ -283,7 +283,7 @@
                 <h3>Weaknesses</h3>
 
                 <ul>
-                    {% for item in insight.weaknesses %}
+                    {% for item in insights.weaknesses %}
 
                     <li>{{ item }}</li>
 
@@ -296,7 +296,7 @@
 
                 <h3>Top Changed Clauses</h3>
                 
-                {% for item in insight.top_changes %}
+                {% for item in insights.top_changes %}
                 
                 <div class="mini-card">
                     
@@ -319,15 +319,15 @@
                 <h3>Procurement Risk</h3>
                 
                 <p>
-                    Overall Risk : {{ insight.procurement_risk.overall }}
+                    Overall Risk : {{ insights.procurement_risk.overall }}
                 </p>
 
                 <p>
-                    High Risk Clauses : {{ insight.procurement_risk.high }}
+                    High Risk Clauses : {{ insights.procurement_risk.high }}
                 </p>
 
                 <p>
-                    Critical Clauses : {{ insight.procurement_risk.critical }}
+                    Critical Clauses : {{ insights.procurement_risk.critical }}
                 </p>
 
             </div>
@@ -337,7 +337,7 @@
                 <h3>AI Observations</h3>
 
                 <ul>
-                    {% for observation in insight.ai_insights %}
+                    {% for observation in insights.ai_insights %}
                     <li>{{ observation }}</li>
                     {% endfor %}
 
@@ -605,17 +605,25 @@
 
                 <div class="decision-grid">
 
-                    <!-- Priority Actions -->
+                    <!-- Strength & Weakness -->
 
                     <div class="decision-card">
 
-                        <h3>Priority Actions</h3>
+                        <h3>Key Strengths</h3>
+                        
+                        <ul>
+                            {% for strength in insights.strengths %}
+                            <li>✅ {{ strength }}</li>
+                            {% endfor %}
+                        </ul>
+                        
+                        <hr>
+                        
+                        <h3>Major Weaknesses</h3>
 
                         <ul>
-                            {% for action in recommendation_summary.priority_actions %}
-
-                            <li>⚠ {{ action }}</li>
-
+                            {% for weakness in insights.weaknesses %}
+                            <li>⚠ {{ weakness }}</li>
                             {% endfor %}
                         </ul>
 
@@ -625,32 +633,30 @@
 
                     <div class="decision-card">
 
-                        <h3>Submission Checklist</h3>
+                        <h3>Tender Decision</h3>
+                        
+                        <div class="decision-box">
 
-                        <table>
+                            <h4>{{ insights.tender_decision }}</h4>
 
-                            <tr>
-                                <th>Task</th>
-                                <th>Status</th>
-                            </tr>
+                            <p>
+                                {{ insights.final_recommendation }}
+                            </p>
 
-                            {% for item in recommendation_summary.submission_checklist %}
+                        </div>
+                        
+                        <br>
 
-                            <tr>
-                                <td>{{ item.task }}</td>
+                        <h3>Major Clause Changes</h3>
+                        
+                        {% for change in insights.top_changes %}
 
-                                <td>
-                                    <span class="pending">
-                                        {{ item.status }}
-                                    </span>
-                                </td>
+                        <div class="mini-card">
+                            {{ change }}
+                        </div>
 
-                            </tr>
-
-                            {% endfor %}
-
-                        </table>
-
+                        {% endfor %}
+                    
                     </div>
 
                 </div>
