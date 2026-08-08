@@ -67,9 +67,6 @@ def compare_clauses(clauses1, clauses2,similarity_matrix):
         if len(clauses1) >= 100 and (i + 1) % 100 == 0:
             print(f"Comparing clause {i+1}/{len(clauses1)}")
 
-        # best_score = 0
-        # best_clause = ""
-
         # ----------------------------------
         # Best Match
         # ----------------------------------

@@ -84,9 +84,7 @@ def get_clause_weight(clause):
     clause = clause.lower()
 
     for keyword, weight in CLAUSE_WEIGHTS.items():
-
         if keyword in clause:
-
             return weight
 
     return DEFAULT_WEIGHT
@@ -103,14 +101,13 @@ def calculate_weighted_similarity(clause_results):
 
     Sum(similarity × weight)
     ------------------------
-         Sum(weight)
+        Sum(weight)
     """
 
     if not clause_results:
         return 0
 
     weighted_sum = 0
-
     total_weight = 0
 
     for clause in clause_results:
@@ -126,8 +123,7 @@ def calculate_weighted_similarity(clause_results):
     if total_weight == 0:
         return 0
 
-    return round(weighted_sum / total_weight, 
-                2)
+    return round(weighted_sum / total_weight, 2)
 
 # =========================================================
 # Weighted Statistics
@@ -164,9 +160,7 @@ def calculate_weighted_statistics(clause_results):
 
     weighted_similarity = calculate_weighted_similarity(clause_results)
 
-    difference_percentage = round(
-        100 - weighted_similarity,
-        2)
+    difference_percentage = round(100 - weighted_similarity,2)
 
     return {
 
@@ -224,15 +218,11 @@ def get_weight_summary(clause_results):
     statistics = calculate_weighted_statistics(clause_results)
 
     critical = 0
-
     high = 0
-
     medium = 0
-
     low = 0
 
     for clause in clause_results:
-
         weight = get_clause_weight(clause.get("clause", ""))
 
         if weight >= 10:

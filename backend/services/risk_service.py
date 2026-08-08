@@ -18,23 +18,18 @@ Responsible for
 def get_risk_level(similarity):
 
     if similarity >= 90:
-
         return "Very Low Risk"
 
     elif similarity >= 70:
-
         return "Low Risk"
 
     elif similarity >= 50:
-
         return "Medium Risk"
 
     elif similarity >= 30:
-
         return "High Risk"
 
     else:
-
         return "Critical Risk"
 
 # =========================================================
@@ -80,17 +75,14 @@ def get_risk_reason(difference):
     removed = difference.get("removed", [])
 
     if not added and not removed:
-
         return "No significant textual changes detected."
 
     reason = []
 
     if added:
-
         reason.append(f"Added keywords: {', '.join(added)}")
 
     if removed:
-
         reason.append(f"Removed keywords: {', '.join(removed)}")
 
     return " | ".join(reason)
@@ -103,25 +95,15 @@ def get_recommendation(level):
 
     recommendations = {
 
-        "Very Low Risk":
+        "Very Low Risk": "Clause is almost identical. Manual review is optional.",
 
-            "Clause is almost identical. Manual review is optional.",
+        "Low Risk": "Minor wording changes detected. Quick verification recommended.",
 
-        "Low Risk":
+        "Medium Risk": "Review this clause carefully before submitting the bid.",
 
-            "Minor wording changes detected. Quick verification recommended.",
+        "High Risk": "Major changes detected. Detailed manual verification is recommended.",
 
-        "Medium Risk":
-
-            "Review this clause carefully before submitting the bid.",
-
-        "High Risk":
-
-            "Major changes detected. Detailed manual verification is recommended.",
-
-        "Critical Risk":
-
-            "Clause differs significantly. Immediate review is required."
+        "Critical Risk": "Clause differs significantly. Immediate review is required."
 
     }
 

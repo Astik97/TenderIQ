@@ -20,20 +20,20 @@ Responsible for
 def generate_header(tender1_name, tender2_name):
 
     return f"""
-=========================================================
-TenderIQ AI Comparison Report
-=========================================================
+    =========================================================
+    TenderIQ AI Comparison Report
+    =========================================================
 
-Tender 1
+    Tender 1
 
-{tender1_name}
+    {tender1_name}
 
-Tender 2
+    Tender 2
 
-{tender2_name}
+    {tender2_name}
 
-=========================================================
-"""
+    =========================================================
+    """
 
 # =========================================================
 # Executive Summary
@@ -91,28 +91,28 @@ def generate_summary(comparison):
         )
 
     return f"""
-Overall Similarity
+    Overall Similarity
 
-{similarity} %
+    {similarity} %
 
-Overall Match
+    Overall Match
 
-{level}
+    {level}
 
-=========================================================
+    =========================================================
 
-Conclusion
+    Conclusion
 
-{conclusion}
+    {conclusion}
 
-=========================================================
+    =========================================================
 
-Recommendation
+    Recommendation
 
-{recommendation}
+    {recommendation}
 
-=========================================================
-"""
+    =========================================================
+    """
 
 # =========================================================
 # Statistics
@@ -166,50 +166,50 @@ def generate_statistics(comparison):
             poor += 1
 
     return f"""
-Statistics
+    Statistics
+    
+    Total Clauses
+    
+    {comparison["total_clauses"]}
 
-Total Clauses
+    Matched Clauses
 
-{comparison["total_clauses"]}
+    {comparison["matched_clauses"]}
 
-Matched Clauses
+    Excellent Matches
 
-{comparison["matched_clauses"]}
+    {excellent}
 
-Excellent Matches
+    Good Matches
 
-{excellent}
+    {good}
 
-Good Matches
+    Moderate Matches
 
-{good}
+    {moderate}
 
-Moderate Matches
+    Low Matches
 
-{moderate}
+    {low}
 
-Low Matches
+    Poor Matches
 
-{low}
+    {poor}
 
-Poor Matches
+    High Risk Clauses
 
-{poor}
+    {high_risk}
 
-High Risk Clauses
+    Medium Risk Clauses
 
-{high_risk}
+    {medium_risk}
 
-Medium Risk Clauses
+    Low Risk Clauses
 
-{medium_risk}
+    {low_risk}
 
-Low Risk Clauses
-
-{low_risk}
-
-=========================================================
-"""
+    =========================================================
+    """
 
 # =========================================================
 # Clause Analysis
@@ -229,83 +229,76 @@ def generate_clause_analysis(comparison):
         risk = clause["risk"]
 
         if difference["added"]:
-
             added = ", ".join(difference["added"][:5])
 
             if len(difference["added"]) > 5:
-
                 added += "..."
 
         else:
-
             added = "None"
 
         if difference["removed"]:
-
             removed = ", ".join(difference["removed"][:5])
 
             if len(difference["removed"]) > 5:
-
                 removed += "..."
 
         else:
-
             removed = "None"
 
         report += f"""
+        ----------------------------------------------------
+        Clause {index}
+        ----------------------------------------------------
+        
+        Original Clause
 
-----------------------------------------------------
-Clause {index}
-----------------------------------------------------
+        {clause["clause"]}
 
-Original Clause
+        Matched Clause
 
-{clause["clause"]}
+        {clause["best_match"]}
 
-Matched Clause
+        Similarity
 
-{clause["best_match"]}
+        {clause["similarity"]} %
 
-Similarity
+        Match Level
 
-{clause["similarity"]} %
+        {clause["level"]}
 
-Match Level
+        Difference Summary
 
-{clause["level"]}
+        {difference["summary"]}
 
-Difference Summary
+        Added Keywords
 
-{difference["summary"]}
+        {added}
 
-Added Keywords
+        Removed Keywords
 
-{added}
+        {removed}
 
-Removed Keywords
+        ==================== RISK ====================
 
-{removed}
+        Risk Score
 
-==================== RISK ====================
+        {risk["score"]}
 
-Risk Score
+        Risk Level
 
-{risk["score"]}
+        {risk["level"]}
 
-Risk Level
+        Risk Reason
 
-{risk["level"]}
+        {risk["reason"]}
 
-Risk Reason
+        Recommendation
 
-{risk["reason"]}
+        {risk["recommendation"]}
 
-Recommendation
-
-{risk["recommendation"]}
-
-====================================================
-"""
+        ====================================================
+        """
 
     return report
 
@@ -316,23 +309,23 @@ Recommendation
 def generate_footer(comparison):
 
     return f"""
+    
+    =========================================================
 
-=========================================================
+    Total Clauses Compared
 
-Total Clauses Compared
+    {comparison["total_clauses"]}
 
-{comparison["total_clauses"]}
+    Overall Similarity
 
-Overall Similarity
+    {comparison["similarity"]} %
 
-{comparison["similarity"]} %
+    =========================================================
 
-=========================================================
+    End of Report
 
-End of Report
-
-=========================================================
-"""
+    =========================================================
+    """
 
 # =========================================================
 # Main Generator

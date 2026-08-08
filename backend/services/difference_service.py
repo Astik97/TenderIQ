@@ -40,13 +40,9 @@ def get_added_words(original, matched):
     Words present only in matched clause.
     """
 
-    original_words = set(
-        tokenize(original)
-    )
+    original_words = set(tokenize(original))
 
-    matched_words = set(
-        tokenize(matched)
-    )
+    matched_words = set(tokenize(matched))
     
     added = list(matched_words - original_words)
 
@@ -64,13 +60,9 @@ def get_removed_words(original, matched):
     Words removed from original clause.
     """
 
-    original_words = set(
-        tokenize(original)
-    )
+    original_words = set(tokenize(original))
 
-    matched_words = set(
-        tokenize(matched)
-    )
+    matched_words = set(tokenize(matched))
     
     removed = list(original_words - matched_words)
 
@@ -89,24 +81,19 @@ def build_summary(added, removed):
     """
 
     if not added and not removed:
-
         return "No significant text difference detected."
 
     summary = []
 
     if added:
-
         preview = ", ".join(added[:3])
 
         if len(added) > 3:
             preview += "..."
 
-        summary.append(
-            f"Added ({len(added)}): {preview}"
-        )
+        summary.append(f"Added ({len(added)}): {preview}")
 
     if removed:
-
         preview = ", ".join(removed[:3])
 
         if len(removed) > 3:
@@ -123,30 +110,19 @@ def compare_clauses(original, matched):
     Compare two clauses.
     """
 
-    added = get_added_words(
-        original,
-        matched
-    )
+    added = get_added_words(original,matched)
 
-    removed = get_removed_words(
-        original,
-        matched
-    )
+    removed = get_removed_words(original,matched)
 
     return {
 
-    "changed": bool(
-        added or removed
-    ),
+    "changed": bool(added or removed),
 
     "added": added,
 
     "removed": removed,
 
-    "summary": build_summary(
-        added,
-        removed
-    ),
+    "summary": build_summary(added,removed),
 
     "added_count": len(added),
 

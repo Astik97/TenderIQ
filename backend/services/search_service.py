@@ -12,9 +12,7 @@ Responsible for
 """
 
 from backend.utils.db import get_connection
-
 from backend.services.embedding_service import generate_embedding
-
 from sklearn.metrics.pairwise import cosine_similarity
 
 # =========================================================
@@ -69,24 +67,14 @@ def search_by_keyword(user_id, keyword):
 
         pattern = f"%{keyword}%"
 
-        cursor.execute(
-
-            query,
-
-            (
-                user_id,
-                pattern,
-                pattern
-            )
-
-        )
+        cursor.execute(query,(user_id,pattern,pattern))
 
         results = cursor.fetchall()
 
         return results
 
     except Exception as e:
-
+        
         print(f"[Search Service] {e}")
 
         return []
@@ -329,11 +317,8 @@ def rank_search_results(results):
         return []
 
     ranked = sorted(results,
-
         key=lambda x: (x["similarity"],x["upload_date"]),
-
         reverse=True
-
     )
 
     return ranked
@@ -392,15 +377,12 @@ def generate_search_summary(results):
         search_type = result.get("search_type", "")
 
         if search_type == "Keyword":
-
             keyword_matches += 1
 
         elif search_type == "Semantic":
-
             semantic_matches += 1
 
         elif search_type == "Keyword + Semantic":
-
             hybrid_matches += 1
 
     # --------------------------------------

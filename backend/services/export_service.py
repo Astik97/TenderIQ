@@ -15,13 +15,9 @@ TenderIQ Export Service
 """
 
 import json
-
 from io import BytesIO
-
 from docx import Document
-
 from reportlab.platypus import (SimpleDocTemplate,Paragraph)
-
 from reportlab.lib.styles import getSampleStyleSheet
 
 # =========================================================
@@ -29,7 +25,6 @@ from reportlab.lib.styles import getSampleStyleSheet
 # =========================================================
 
 def export_json(result):
-
     return json.dumps(result,indent=4,default=str)
 
 # =========================================================

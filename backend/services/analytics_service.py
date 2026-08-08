@@ -13,7 +13,6 @@ Responsible for
 """
 
 from statistics import mean
-
 from backend.services.weight_service import get_clause_weight
 
 # =========================================================
@@ -26,39 +25,28 @@ def calculate_similarity_distribution(clause_results):
     """
 
     distribution = {
-
         "Excellent": 0,
-
         "Good": 0,
-
         "Moderate": 0,
-
         "Poor": 0
-
     }
 
     if not clause_results:
-
         return distribution
 
     for clause in clause_results:
-
         similarity = clause.get("similarity", 0)
 
         if similarity >= 90:
-
             distribution["Excellent"] += 1
 
         elif similarity >= 70:
-
             distribution["Good"] += 1
 
         elif similarity >= 50:
-
             distribution["Moderate"] += 1
 
         else:
-
             distribution["Poor"] += 1
 
     return distribution
@@ -73,29 +61,20 @@ def calculate_risk_distribution(clause_results):
     """
 
     risk_level = {
-
         "Very Low Risk":0,
-
         "Low Risk":0,
-
         "Medium Risk":0,
-
         "High Risk":0,
-
         "Critical Risk":0
-
 }
     
     if not clause_results:
-
         return risk_level
 
     for clause in clause_results:
-
         level = clause.get("risk", {}).get("level", "Very Low Risk")
 
         if level in risk_level:
-
             risk_level[level] += 1
 
     return risk_level
@@ -110,27 +89,19 @@ def calculate_match_distribution(clause_results):
     """
 
     distribution = {
-
         "Excellent": 0,
-
         "Good": 0,
-
         "Moderate": 0,
-
         "Poor": 0
-
 }
 
     if not clause_results:
-
         return distribution
 
     for clause in clause_results:
-        
         level = clause.get("match_level", "Poor")
 
         if level in distribution:
-
             distribution[level] += 1
 
     return distribution
@@ -145,41 +116,29 @@ def calculate_priority_distribution(clause_results):
     """
 
     distribution = {
-
         "Critical": 0,
-
         "High": 0,
-
         "Medium": 0,
-
         "Low": 0,
-
         "Very Low": 0
-
     }
 
     if not clause_results:
-
         return distribution
 
     for clause in clause_results:
-
         weight = get_clause_weight(clause.get("clause", ""))
 
         if weight >= 10:
-
             distribution["Critical"] += 1
 
         elif weight >= 8:
-
             distribution["High"] += 1
 
         elif weight >= 5:
-
             distribution["Medium"] += 1
 
         else:
-
             distribution["Very Low"] += 1
 
     return distribution

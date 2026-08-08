@@ -152,15 +152,12 @@ def extract_major_differences(clause_results):
         diff = clause.get("difference", {})
 
         if diff.get("changed", False):
-
             summary = diff.get("summary", "")
 
             if summary and summary not in differences:
-
                 differences.append(summary)
 
         if len(differences) >= MAX_DISPLAY_ITEMS:
-
             break
 
     return differences
@@ -172,35 +169,30 @@ def extract_major_differences(clause_results):
 def generate_recommendation(overall_similarity,risk_level):
 
     if overall_similarity >= 90:
-
         return (
             "The tenders are highly similar. "
             "Minor verification before submission is sufficient."
         )
 
     elif overall_similarity >= 75:
-
         return (
             "Most clauses are similar. "
             "Review payment terms, eligibility and timelines."
         )
 
     elif overall_similarity >= 50:
-
         return (
             "Moderate similarity detected. "
             "Manual review is strongly recommended."
         )
 
     elif risk_level == "Critical":
-
         return (
             "Critical differences detected. "
             "Do not proceed without detailed review."
         )
 
     else:
-
         return (
             "Large differences detected between the tenders. "
             "Carefully verify all important clauses."
@@ -220,15 +212,11 @@ def generate_overall_assessment(result):
     """
 
     similarity = result.get("similarity", 0)
-
     total = result.get("total_clauses", 0)
-
     matched = result.get("matched_clauses", 0)
-
     level = result.get("level","Unknown")
 
     if similarity >= 90:
-
         assessment = (
             "The two tender documents are highly consistent with only "
             "minor wording differences. Most contractual, technical and "
@@ -236,7 +224,6 @@ def generate_overall_assessment(result):
         )
 
     elif similarity >= 75:
-
         assessment = (
             "The tenders show good overall similarity. Most important "
             "clauses remain aligned, although a few sections require "
@@ -244,7 +231,6 @@ def generate_overall_assessment(result):
         )
 
     elif similarity >= 50:
-
         assessment = (
             "The tenders have moderate similarity. Several clauses differ "
             "in wording or content. A detailed manual review is recommended "
@@ -252,7 +238,6 @@ def generate_overall_assessment(result):
         )
 
     else:
-
         assessment = (
             "Significant differences exist between the two tenders. "
             "Multiple contractual or technical clauses have changed, "
@@ -287,15 +272,12 @@ def generate_key_findings(result):
     overall_similarity = result.get("similarity", 0)
 
     if overall_similarity >= 85:
-
         findings.append("Most contractual clauses remain unchanged.")
 
     elif overall_similarity >= 60:
-
         findings.append("Moderate clause differences detected.")
 
     else:
-
         findings.append("Large structural differences detected.")
 
     return findings
@@ -314,9 +296,7 @@ def generate_positive_highlights(result):
     """
 
     clause_results = result.get("clause_results", [])
-
     overall_similarity = result.get("similarity", 0)
-
     weighted_similarity = result.get("weighted_similarity", 0)
 
     highlights = []
@@ -336,42 +316,24 @@ def generate_positive_highlights(result):
 
     # Overall Similarity
     if overall_similarity >= 90:
-
-        highlights.append(
-            "Excellent overall similarity between both tenders."
-        )
+        highlights.append("Excellent overall similarity between both tenders.")
 
     elif overall_similarity >= 75:
-
-        highlights.append(
-            "Strong semantic similarity across most clauses."
-        )
+        highlights.append("Strong semantic similarity across most clauses.")
 
     # Weighted Similarity
     if weighted_similarity >= 85:
-
-        highlights.append(
-            "High-priority business clauses are well aligned."
-        )
+        highlights.append("High-priority business clauses are well aligned.")
 
     # Clause Match Statistics
     if excellent > 0:
-
-        highlights.append(
-            f"{excellent} clauses achieved Excellent similarity."
-        )
+        highlights.append(f"{excellent} clauses achieved Excellent similarity.")
 
     if good > 0:
-
-        highlights.append(
-            f"{good} clauses achieved Good similarity."
-        )
+        highlights.append(f"{good} clauses achieved Good similarity.")
 
     if not highlights:
-
-        highlights.append(
-            "No significant positive highlights were identified."
-        )
+        highlights.append("No significant positive highlights were identified.")
 
     return highlights[:MAX_DISPLAY_ITEMS]
 
@@ -391,7 +353,6 @@ def generate_critical_findings(clause_results):
     findings = []
 
     for clause in clause_results:
-
         risk = clause.get("risk", {}).get("level", "Low")
 
         if risk in ["Critical Risk", "High Risk"]:
@@ -401,7 +362,6 @@ def generate_critical_findings(clause_results):
                 f"{clause['clause'][:120]}...")
 
     if not findings:
-
         findings.append("No critical clause changes detected.")
 
     return findings[:MAX_DISPLAY_ITEMS]
@@ -426,51 +386,36 @@ def generate_review_priority(clause_results):
     medium = 0
 
     for clause in clause_results:
-
         level = clause.get("risk", {}).get("level", "Low")
 
         if level == "Critical Risk":
-
             critical += 1
 
         elif level == "High Risk":
-
             high += 1
 
         elif level == "Medium Risk":
-
             medium += 1
 
     if critical >= 1:
-
         priority = "URGENT"
-
         reason = ("Critical clause differences require immediate manual review.")
 
     elif high >= 3:
-
         priority = "HIGH"
-
         reason = ("Several high-risk clauses should be reviewed carefully.")
 
     elif medium >= 5:
-
         priority = "MEDIUM"
-
         reason = ("Moderate clause differences detected.")
 
     else:
-
         priority = "LOW"
-
         reason = ("Only minor differences were detected.")
 
     return {
-
         "priority": priority,
-
         "reason": reason
-
     }
 
 # =========================================================
@@ -493,23 +438,18 @@ def generate_ai_recommendations(clause_results):
     high_count = 0
 
     for clause in clause_results:
-
         risk = clause.get("risk", {}).get("level", "Low")
 
         if risk == "Critical Risk":
-
             critical_count += 1
 
         elif risk == "High Risk":
-
             high_count += 1
 
     if critical_count:
-
         recommendations.append("Immediately review all Critical Risk clauses before submission.")
 
     if high_count:
-
         recommendations.append("Verify payment terms,"
         "eligibility criteria and compliance requirements.")
 
@@ -525,8 +465,7 @@ def generate_ai_recommendations(clause_results):
 #  Confidence Score
 # =========================================================
 
-def generate_confidence_score(result,
-        weighted_similarity):
+def generate_confidence_score(result,weighted_similarity):
     """
     Estimate AI confidence using:
 
@@ -542,19 +481,15 @@ def generate_confidence_score(result,
     """
 
     total_clauses = result.get("total_clauses", 0)
-
     matched_clauses = result.get("matched_clauses", 0)
 
     if total_clauses:
-
         clause_coverage = (matched_clauses / total_clauses) * 100
 
     else:
-
         clause_coverage = 0
 
     confidence = (weighted_similarity * 0.70 + clause_coverage * 0.30)
-
     confidence = max(60, min(confidence, 99.9))
 
     return round(confidence, 2)
@@ -573,16 +508,11 @@ def generate_processing_summary(result):
     """
 
     return (
-
         "Comparison performed using Sentence Transformers "
-
         "(all-MiniLM-L6-v2) semantic embeddings, "
-
         "cosine similarity optimization, clause extraction, "
-
         "risk analysis and AI-assisted executive summarization."
-
-    )
+)
 
 # =========================================================
 # Generate AI Executive Summary
@@ -703,27 +633,43 @@ def generate_ai_summary(result):
 
     dashboard_cards = [
 
-        {
-            "title": "Weighted Similarity",
-            "value": f"{weighted_similarity}%"
-        },
+    {
+        "title": "Weighted Similarity",
+        "value": f"{weighted_similarity}%"
+    },
 
-        {
-            "title": "Total Clauses",
-            "value": result.get("total_clauses", 0)
-        },
+    {
+        "title": "Total Clauses",
+        "value": result.get("total_clauses", 0)
+    },
 
-        {
-            "title": "Matched Clauses",
-            "value": result.get("matched_clauses", 0)
-        },
+    {
+        "title": "Matched Clauses",
+        "value": result.get("matched_clauses", 0)
+    },
 
-        {
-            "title": "Confidence Score",
-            "value": f"{confidence_score}%"
-        }
+    {
+        "title": "Confidence Score",
+        "value": f"{confidence_score}%"
+    }
 
-    ]
+]
+
+    # -----------------------------------------
+    # Analysis Report
+    # -----------------------------------------
+
+    if result.get("similarity", 0) >= 90:
+        analysis_message = ("✔ The documents are highly similar with only minor wording differences.")
+
+    elif result.get("similarity", 0) >= 70:
+        analysis_message = ("✔ Most clauses match successfully. Manual verification of commercial and financial sections is recommended.")
+
+    elif result.get("similarity", 0) >= 50:
+        analysis_message = ("⚠ Several clauses differ significantly. Technical and eligibility requirements should be reviewed carefully.")
+
+    else:
+        analysis_message = ("❌ Major differences detected. Complete manual verification is strongly recommended.")
     
     # -----------------------------------------------------
     # Final Summary
@@ -803,6 +749,8 @@ def generate_ai_summary(result):
 
         "summary_cards": summary_cards,
 
-        "dashboard_cards":dashboard_cards
+        "dashboard_cards":dashboard_cards,
+
+        "analysis_message":analysis_message
 
     }

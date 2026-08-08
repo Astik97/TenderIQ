@@ -4,7 +4,6 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Tender Comparison Report</title>
-        
         <link rel="stylesheet"href="{{ url_for('static',filename='css/compare.css') }}">
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     </head>
@@ -48,26 +47,6 @@
                                 {{ tender2 }}
                             </strong>
                         </p>
-                    </div>
-
-                    <div class="overview-card">
-                        <span class="overview-title">Total Clauses</span>
-                        <h3>{{ comparison.total_clauses }}</h3>
-                    </div>
-
-                    <div class="overview-card">
-                        <span class="overview-title">Matched Clauses</span>
-                        <h3>{{ comparison.matched_clauses }}</h3>
-                    </div>
-
-                    <div class="overview-card">
-                        <span class="overview-title">Overall Similarity</span>
-                        <h3>{{ comparison.similarity }}%</h3>
-                    </div>
-
-                    <div class="overview-card">
-                        <span class="overview-title">Weighted Similarity</span>
-                        <h3>{{ ai_summary.weighted_similarity }}%</h3>
                     </div>
 
                     <div class="overview-card">
@@ -132,35 +111,12 @@
                     
                     <div class="stat-card">
                         <h4>{{ card.title }}</h4>
-                        <p>{{ card.value }}</p>
+                        <h2>{{ card.value }}</h2>
                     </div>
                     
                     {% endfor %}
                 
                 </div>
-
-                    <div class="stat-card">
-
-                        <div class="stat-icon">⚠️</div>
-
-                        <h4>Risk Level</h4>
-
-                        <span class="badge bg-{{ ai_summary.risk_badge }}">
-                            {{ ai_summary.risk_icon }}
-                            {{ ai_summary.risk_level }}
-                        </span>
-
-                    </div>
-
-                    <div class="stat-card">
-
-                        <div class="stat-icon">📉</div>
-
-                        <h4>Difference</h4>
-
-                        <h2>{{ ai_summary.difference_percentage }}%</h2>
-
-                    </div>
 
                     <div class="stat-card">
 
@@ -413,7 +369,7 @@
 
                             <br>
 
-                            Similarity
+                            <b>Similarity:</b>
 
                             <span class="score good">
                                 {{ clause.similarity }}%
@@ -464,7 +420,7 @@
 
                             <br>
 
-                            Similarity
+                            <b>Similarity:</b>
 
                             <span class="score danger">
                                 {{ clause.similarity }}%
@@ -479,36 +435,6 @@
                 </div>
 
             </section>
-            
-            <div class="ranking-summary">
-
-                <h3>Ranking Summary</h3>
-
-                <div class="summary-grid">
-
-                    <div>
-                        <strong>Highest Match</strong>
-                        <p>{{ ranking_summary.highest_similarity }}%</p>
-                    </div>
-
-                    <div>
-                        <strong>Lowest Match</strong>
-                        <p>{{ ranking_summary.lowest_similarity }}%</p>
-                    </div>
-
-                    <div>
-                        <strong>Average Similarity</strong>
-                        <p>{{ ranking_summary.average_similarity }}%</p>
-                    </div>
-
-                    <div>
-                        <strong>Highest Risk</strong>
-                        <p>{{ ranking_summary.highest_risk }}</p>
-                    </div>
-
-                </div>
-
-            </div>
 
             <!-- ========================= -->
             <!-- Analytics Charts -->
@@ -594,20 +520,14 @@
                     <div class="clause-header">
                         
                         <div>
-                            
                             <h3>Clause {{ loop.index }}</h3>
                             <strong>{{ clause.clause }}</strong>
-
                         </div>
                         
                         <div class="clause-summary">
                             
                             <span class="badge {{ clause.color }}">
                                 {{ clause.similarity }}%
-                            </span>
-
-                            <span class="badge bg-{{ clause.risk_badge }}">
-                                {{ clause.risk.level }}
                             </span>
 
                             <p>Match Level :
@@ -717,7 +637,6 @@
                             {% for item in recommendation_summary.submission_checklist %}
 
                             <tr>
-
                                 <td>{{ item.task }}</td>
 
                                 <td>
@@ -743,6 +662,7 @@
                     <h3>Clause Recommendations</h3>
 
                     <table>
+
                         <thead>
                             <tr>
                                 <th>Clause</th>
@@ -754,7 +674,6 @@
                         </thead>
 
                         <tbody>
-
                         {% for item in recommendation_summary.clause_recommendations %}
 
                             <tr>
@@ -766,22 +685,9 @@
                             </tr>
 
                         {% endfor %}
-
                         </tbody>
 
                     </table>
-
-                </div>
-
-                <!-- Final Recommendation -->
-
-                <div class="final-decision">
-
-                    <h2>Final AI Recommendation</h2>
-
-                    <p>
-                        {{ recommendation_summary.final_recommendation }}
-                    </p>
 
                 </div>
 
@@ -812,34 +718,10 @@
                     </p>
 
                     <br>
-                    
-                    {% if comparison.similarity >= 90 %}
-                    
-                    <p>
-                        ✔ The documents are highly similar with only minor wording differences.
-                    </p>
-                    
-                    {% elif comparison.similarity >= 70 %}
 
                     <p>
-                        ✔ Most clauses match successfully. Manual verification of commercial
-                        and financial sections is recommended.
+                        {{ ai_summary.analysis_message }}
                     </p>
-
-                    {% elif comparison.similarity >= 50 %}
-
-                    <p>
-                        ⚠ Several clauses differ significantly. Technical and eligibility
-                        requirements should be reviewed carefully.
-                    </p>
-
-                    {% else %}
-
-                    <p>
-                        ❌ Major differences detected. Complete manual verification is strongly recommended.
-                    </p>
-
-                    {% endif %}
 
                 </div>
             
