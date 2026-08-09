@@ -572,7 +572,7 @@ body{
 .decision-grid{
     display:grid;
     grid-template-columns:1fr 1fr;
-    gap:25px;
+    gap:10px;
 }
 
 .decision-card{
@@ -608,11 +608,6 @@ body{
 .full-width td{
     padding:12px;
     border-bottom:1px solid #eee;
-}
-
-.pending{
-    color:#ff9800;
-    font-weight:bold;
 }
 
 .final-decision{

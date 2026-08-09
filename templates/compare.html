@@ -607,7 +607,7 @@
 
                     <!-- Strength & Weakness -->
 
-                    <div class="decision-card">
+                    <span class="decision-card">
 
                         <h3>Key Strengths</h3>
                         
@@ -627,33 +627,29 @@
                             {% endfor %}
                         </ul>
 
-                    </div>
+                        <hr>
+
+                        <h3>Tender Decision</h3>
+                        
+                        <h4>{{ insights.tender_decision }}</h4>
+                        
+                        <p>
+                            {{ insights.final_recommendation }}
+                        </p>
+
+                    </span>
 
                     <!-- Submission Checklist -->
 
                     <div class="decision-card">
 
-                        <h3>Tender Decision</h3>
-                        
-                        <div class="decision-box">
-
-                            <h4>{{ insights.tender_decision }}</h4>
-
-                            <p>
-                                {{ insights.final_recommendation }}
-                            </p>
-
-                        </div>
-                        
-                        <br>
-
                         <h3>Major Clause Changes</h3>
                         
                         {% for change in insights.top_changes %}
 
-                        <div class="mini-card">
+                        <span class="mini-card">
                             {{ change }}
-                        </div>
+                        </span>
 
                         {% endfor %}
                     
