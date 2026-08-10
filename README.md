@@ -1,4 +1,4 @@
-# 🚀 TenderIQ - AI-Powered Tender Comparison & Analysis System
+# 🚀 TenderIQ - AI-Powered Tender Comparison & Analysis Platform
 
 <p align="center">
 
@@ -14,80 +14,100 @@
 
 # 📖 Overview
 
-TenderIQ is an **AI-powered Tender Comparison & Analysis System** designed to automate the process of evaluating multiple tender documents.
+TenderIQ is an **AI-powered Tender Comparison & Analysis Platform** designed to automate the process of evaluating multiple tender documents
+using Natural Language Processing (NLP) and semantic similarity techniques.
 
-Instead of manually reading hundreds of pages, users can upload multiple tender documents and allow the system to extract text, compare documents, analyze similarities, and generate intelligent recommendations.
+The system enables users to upload tender documents in **PDF, DOCX, and TXT** formats, automatically extracts and preprocesses document content, performs **transformer-based semantic clause comparison** using Sentence Transformers, identifies similarities and differences, assesses procurement risks, and generates structured comparison reports with executive summaries and actionable recommendations.
 
-The project combines **Backend Engineering**, **Natural Language Processing (NLP)**, and **Machine Learning** to simplify tender evaluation for procurement teams and organizations.
+Built using **Python, Flask, MySQL, Sentence Transformers, Scikit-learn, and HTML, CSS, JS**, TenderIQ transforms a traditionally manual and time-consuming tender review process into an intelligent, efficient, and data-driven decision support system for procurement teams.
 
-> **Project Status:** 🚧 Currently Under Active Development
+> **Project Status:** 🚧 Version 1.0
 
 ---
 
+# ⭐ Key Highlights
+
+- AI-assisted Tender Comparison
+- Transformer-based Semantic Analysis
+- Clause-Level Matching
+- Procurement Risk Assessment
+- Automated Executive Summary
+- Rule-based Recommendation Engine
+- Interactive Analytics Dashboard
+- Secure Flask Backend
+- MySQL Database Integration
+- Professional Comparison Reports
+
 # 🎯 Problem Statement
 
-Organizations often receive multiple tender documents from different vendors.
+Organizations and procurement teams often receive multiple tender documents that contain hundreds of technical, commercial, and legal clauses.
 
-Manual comparison is:
+Traditional tender evaluation is:
 
-- Time-consuming
-- Error-prone
-- Difficult to scale
-- Inefficient for large documents
+- Time-consuming and resource-intensive
+- Prone to human errors and inconsistent decisions
+- Difficult to scale for large or multiple documents
+- Unable to understand semantic similarities between clauses
 
-TenderIQ automates this workflow by extracting document content and providing AI-assisted comparison and recommendations.
+TenderIQ addresses these challenges by automating document comparison using NLP-powered semantic analysis, enabling faster, more accurate, and data-driven procurement decisions.
 
 ---
 
 # ✨ Features
 
-## 🔐 Authentication
+## 🔐 Core Features
 
-- User Registration
-- Secure Login
-- Logout
+- Secure User Authentication
+- User Registration & Login
+- Password Hashing using Bcrypt
 - Session Management
-- Password Encryption using Bcrypt
+- Multi-format Document Upload (PDF, DOCX, TXT)
+- Automatic Document Storage
+- Document Text Extraction
+- Text Cleaning & Preprocessing
 
 ---
 
-## 📂 Tender Management
+## 🤖 AI & NLP Engine
 
-- Upload Multiple Tender Documents
-- PDF Support
-- DOCX Support
-- TXT Support
-- MySQL Database Integration
-- Document Storage
-
----
-
-## 📄 Document Processing
-
-- Automatic Text Extraction
-- Text Cleaning
-- Preprocessing
-- Document Parsing
+- Transformer-based Sentence Embeddings
+- Semantic Clause Comparison
+- Cosine Similarity Analysis
+- Weighted Similarity Calculation
+- Clause-Level Matching
+- Confidence Score Generation
+- Procurement Risk Assessment
+- Automated Executive Summary
+- Rule-based Recommendation Engine
+- Procurement Insights Generation
+- Interactive Analytics Dashboard
 
 ---
 
-## 🤖 AI-Powered Comparison
+## 📊 Reporting
 
-Current Features
-
-- Compare Multiple Documents
-- Similarity Analysis
-- Comparison Report
-- Recommendation Generation
-
-Upcoming
-
-- Semantic Search
-- Clause Matching
-- LLM-based Analysis
-- Intelligent Ranking
+- Detailed Comparison Reports
+- Clause-Level Analysis
+- Similarity Statistics
+- Procurement Risk Visualization
+- Dashboard Analytics
+- Printable Report Generation
 
 ---
+
+# 📈 Project Statistics
+
+| Statistic | Value |
+|-----------|-------|
+| Python Modules | 20+ |
+| Database Tables | 3 |
+| Supported File Formats | 3 |
+| NLP Model | all-MiniLM-L6-v2 |
+| Risk Levels | 5 |
+| Dashboard Widgets | 4 |
+| Comparison Type | Semantic Clause-Level |
+| Authentication | Secure Session-Based |
+| Report Generation | Automated |
 
 # Screenshots
 
@@ -126,10 +146,25 @@ Upcoming
 
 ---
 
+# 📊 Performance Metrics
+
+| Metric | Value |
+|---------|-------|
+| Supported Document Formats | PDF, DOCX, TXT |
+| NLP Model | Sentence Transformers (all-MiniLM-L6-v2) |
+| Similarity Technique | Semantic Cosine Similarity |
+| Comparison Level | Clause-Level |
+| Risk Classification Levels | 5 |
+| Dashboard Analytics | 4 Interactive Widgets |
+| Authentication | Secure Session-based |
+| Database | MySQL |
+| Report Generation | Automated |
+
+---
+
 # ⚙ System Workflow
 
-```
-User Login
+Authentication
       │
       ▼
 Upload Tender Documents
@@ -138,86 +173,111 @@ Upload Tender Documents
 Extract Text
       │
       ▼
-Preprocess Documents
+Text Preprocessing
       │
       ▼
-Compare Tender Files
+Clause Segmentation
       │
       ▼
-Generate Similarity Score
+Sentence Embedding Generation
       │
       ▼
-AI Recommendation
+Semantic Similarity Analysis
+      │
+      ▼
+Clause-Level Matching
+      │
+      ▼
+Weighted Similarity Calculation
+      │
+      ▼
+Procurement Risk Assessment
+      │
+      ▼
+Automated Executive Summary
+      │
+      ▼
+Analytics Dashboard
       │
       ▼
 Comparison Report
-```
 
 ---
 
 # 🏗 Project Architecture
 
-```
-TenderIQ/
-
-│── app.py
-│── config.py
-│── requirements.txt
-│── README.md
-
-├── backend/
-│   ├── models/
-│   ├── routes/
-│   ├── services/
-│   └── utils/
-
-├── database/
-
-├── static/
-
-├── templates/
-
-├── uploads/
-
-├── tests/
-```
+Frontend (HTML • CSS • JavaScript)
+                │
+                ▼
+Flask Routes
+                │
+                ▼
+Business Services
+                │
+                ▼
+Document Processing Engine
+                │
+                ▼
+NLP Engine
+                │
+                ▼
+Sentence Transformer
+                │
+                ▼
+Semantic Comparison Engine
+                │
+                ▼
+Risk Assessment Engine
+                │
+                ▼
+Recommendation Engine
+                │
+                ▼
+Report Generation Engine
+                │
+                ▼
+MySQL Database
 
 ---
 
 # 💻 Tech Stack
 
 ## Backend
-
 - Python
 - Flask
 
 ## Database
-
 - MySQL
 - PyMySQL
 
-## Authentication
+## AI / NLP
+- Sentence Transformers
+- all-MiniLM-L6-v2
+- Transformers
 
-- Bcrypt
+## Machine Learning
+- Scikit-learn
+- Cosine Similarity
+- NumPy
+- PyTorch
 
 ## Document Processing
-
 - pdfplumber
 - docx2txt
 
-## Machine Learning
-
-- Scikit-learn
-- Sentence Transformers
-- Transformers
-- PyTorch
-- NumPy
-
 ## Frontend
+- HTML5
+- CSS3
+- JavaScript
 
-- HTML
-- CSS *(Basic UI - Under Improvement)*
-- JavaScript *(Currently Minimal)*
+## Authentication
+- Flask Sessions
+- Bcrypt
+
+## Developer Tools
+- Git
+- GitHub
+- VS Code
 
 ---
 
@@ -315,7 +375,9 @@ SECRET_KEY=your_secret_key
 Import
 
 ```
-database/schema.sql
+database/tender_system_db_comparison_reports.sql,
+database/tender_system_db_tenders.sql,
+database/tender_system_db_users.sql
 ```
 
 into MySQL.
@@ -336,73 +398,71 @@ http://127.0.0.1:5000
 
 ---
 
-# 📊 Current Development Status
+# ✅ Completed Features
 
-## ✅ Completed
-
-- Flask Backend
-- User Authentication
-- Session Management
-- MySQL Integration
-- Multi-file Upload
-- PDF Processing
-- DOCX Processing
-- TXT Processing
-- Document Storage
-- Basic Similarity Analysis
-- Comparison Report
-
----
-
-## 🚧 In Progress
-
-- NLP Pipeline
-- AI Recommendation Engine
-- Clause-Level Comparison
-- Semantic Search
-- Report Optimization
-
----
+- User Authentication & Authorization
+- Secure Password Hashing
+- Multi-format Document Upload
+- PDF, DOCX & TXT Processing
+- Automatic Text Extraction
+- Text Cleaning & Preprocessing
+- Clause Segmentation
+- Transformer-based Sentence Embeddings
+- Semantic Similarity Analysis
+- Cosine Similarity Calculation
+- Clause-Level Matching
+- Weighted Similarity Scoring
+- Procurement Risk Assessment
+- Automated Executive Summary
+- Rule-based Recommendation Engine
+- Interactive Analytics Dashboard
+- Comparison Report Generation
+- MySQL Database Integration
 
 ## 🔮 Future Roadmap
 
-- Docker Deployment
-- AWS Deployment
-- REST API
-- JWT Authentication
-- OCR for Scanned PDFs
-- Admin Dashboard
-- Multi-user Support
-- PDF Report Export
-- Enterprise Deployment
-- LLM Integration
-- Role-Based Access Control
+- Docker Containerization
+- AWS Cloud Deployment
+- OCR Support for Scanned Documents
+- Multi-language Tender Comparison
+- Role-Based Access Control (RBAC)
+- LLM-powered Clause Explanation
+- Vendor Ranking System
+- Contract Compliance Checking
+- Email Notifications
+- AI Procurement Chat Assistant
 
 ---
 
 # 🔒 Security
 
+TenderIQ follows secure backend development practices including:
+
 - Password Hashing using Bcrypt
 - Session-based Authentication
-- Environment Variables
-- SQL Injection Protection
-- Secure Database Connectivity
+- Environment Variable Configuration
+- Parameterized SQL Queries
+- Secure MySQL Connectivity
+- Protected User Sessions
 
 ---
 
 # 🧪 Testing
 
-Current test modules include
+The application has been manually tested for:
 
-- Text Extraction
-- Document Processing
-- Similarity Functions
-
-Additional automated testing will be added in future releases.
+- User Authentication
+- Session Management
+- Document Upload
+- PDF/DOCX/TXT Processing
+- Semantic Similarity Validation
+- Clause-Level Comparison
+- Report Generation
+- MySQL Database Operations
 
 ---
 
-# 🤝 Contributing
+# 🤝 Contribution
 
 Contributions, suggestions, and feedback are always welcome.
 
@@ -423,7 +483,6 @@ Government College of Engineering, Keonjhar
 - Python Developer
 - Flask Developer
 - Backend Developer
-- AI Backend Developer
 
 📧 astikm7007@gmail.com
 
@@ -444,7 +503,3 @@ If you found this project useful, please consider giving it a ⭐ on GitHub.
 Your support motivates future development of TenderIQ.
 
 ---
-
-## 📌 Disclaimer
-
-This project is currently under active development. New AI capabilities, REST APIs, Docker support, cloud deployment, and advanced NLP features will be added in future releases.
