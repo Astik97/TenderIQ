@@ -1,4 +1,4 @@
-# 🚀 TenderIQ - AI-Powered Tender Comparison & Analysis Platform
+# 🚀 TenderIQ - AI-Assisted Tender Comparison & Analysis Platform
 
 <p align="center">
 
@@ -14,7 +14,7 @@
 
 # 📖 Overview
 
-TenderIQ is an **AI-powered Tender Comparison & Analysis Platform** designed to automate the process of evaluating multiple tender documents
+TenderIQ is an **AI-Assisted Tender Comparison & Analysis Platform** designed to automate the process of evaluating multiple tender documents
 using Natural Language Processing (NLP) and semantic similarity techniques.
 
 The system enables users to upload tender documents in **PDF, DOCX, and TXT** formats, automatically extracts and preprocesses document content, performs **transformer-based semantic clause comparison** using Sentence Transformers, identifies similarities and differences, assesses procurement risks, and generates structured comparison reports with executive summaries and actionable recommendations.
