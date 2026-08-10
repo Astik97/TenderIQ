@@ -2,15 +2,11 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>View Tender | TenderIQ</title>
-
+    
     <link rel="stylesheet" href="{{ url_for('static', filename='css/view_tender.css') }}">
-
 </head>
 
 <body>
@@ -18,11 +14,8 @@
 <div class="container">
 
     <header>
-
         <h1>📄 Tender Details</h1>
-
         <p>Review uploaded tender information</p>
-
     </header>
 
     <div class="card">
@@ -30,27 +23,18 @@
         <div class="info">
 
             <div>
-
                 <label>Tender Name</label>
-
                 <p>{{ tender[0] }}</p>
-
             </div>
 
             <div>
-
                 <label>Stored File</label>
-
                 <p>{{ tender[1] }}</p>
-
             </div>
 
             <div>
-
                 <label>Upload Date</label>
-
                 <p>{{ tender[3] }}</p>
-
             </div>
 
             <div>
@@ -58,9 +42,7 @@
                 <label>File Type</label>
 
                 <span class="badge">
-
                     {{ tender[1].split('.')[-1].upper() }}
-
                 </span>
 
             </div>
@@ -78,31 +60,24 @@
             <div>
 
                 <button id="copyBtn">
-
                     📋 Copy
-
                 </button>
 
                 <button id="downloadBtn">
-
                     ⬇ Download
-
                 </button>
 
             </div>
 
         </div>
 
-        <textarea
-            id="tenderText"
-            readonly>{{ tender[2] }}</textarea>
+        <textarea id="tenderText" readonly>
+            {{ tender[2] }}
+        </textarea>
 
         <div class="stats">
-
             <span id="wordCount"></span>
-
             <span id="charCount"></span>
-
         </div>
 
     </div>
@@ -110,13 +85,9 @@
     <div class="actions">
 
         <a href="/dashboard">
-
             <button>
-
                 ← Back to Dashboard
-
             </button>
-
         </a>
 
     </div>
@@ -124,9 +95,7 @@
 </div>
 
 <div id="toast">
-
-Copied Successfully!
-
+    Copied Successfully!
 </div>
 
 <script src="{{ url_for('static', filename='js/view_tender.js') }}"></script>

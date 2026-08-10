@@ -2,17 +2,12 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Login | TenderIQ</title>
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-
 </head>
 
 <body>
@@ -28,9 +23,7 @@
                 {% for category, message in messages %}
 
                     <div class="alert {{ category }}">
-
                         {{ message }}
-                        
                     </div>
                     
                 {% endfor %}
@@ -60,8 +53,7 @@
                     placeholder="Enter your password" required>
 
                     <span class="toggle-password"
-                    onclick="togglePassword('password', this)">
-                    
+                        onclick="togglePassword('password', this)">
                         <i class="fa-solid fa-eye"></i>
                     </span>
 
@@ -72,11 +64,8 @@
             <div class="form-options">
 
                 <label>
-
                     <input type="checkbox" name="remember" required>
-
                     Remember Me
-
                 </label>
 
                 <a href="/forgot-password">Forgot Password?</a>
@@ -88,17 +77,12 @@
         </form>
 
         <div class="auth-footer">
-
             Don't have an account?
-
             <a href="/register">Register</a>
-
         </div>
 
         <div class="home-link">
-
             <a href="/">← Back to Home</a>
-
         </div>
 
     </div>
