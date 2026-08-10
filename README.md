@@ -5,7 +5,7 @@
 ![Python](https://img.shields.io/badge/Python-3.10.11-blue?style=for-the-badge&logo=python)
 ![Flask](https://img.shields.io/badge/Flask-3.1-black?style=for-the-badge&logo=flask)
 ![MySQL](https://img.shields.io/badge/MySQL-Database-blue?style=for-the-badge&logo=mysql)
-![Status](https://img.shields.io/badge/Status-Active%20Development-success?style=for-the-badge)
+![Status](https://img.shields.io/badge/Status-Version%201.0-success?style=for-the-badge)
 ![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 
 </p>
@@ -21,7 +21,7 @@ The system enables users to upload tender documents in **PDF, DOCX, and TXT** fo
 
 Built using **Python, Flask, MySQL, Sentence Transformers, Scikit-learn, and HTML, CSS, JS**, TenderIQ transforms a traditionally manual and time-consuming tender review process into an intelligent, efficient, and data-driven decision support system for procurement teams.
 
-> **Project Status:** 🚧 Version 1.0
+> **Project Status:** 🚧 **Version 1.0**
 
 ---
 
@@ -375,9 +375,12 @@ SECRET_KEY=your_secret_key
 Import
 
 ```
-database/tender_system_db_comparison_reports.sql,
-database/tender_system_db_tenders.sql,
-database/tender_system_db_users.sql
+database
+      │
+      ▼
+tender_system_db_users.sql,
+tender_system_db_tenders.sql,
+tender_system_db_comparison_reports.sql
 ```
 
 into MySQL.
