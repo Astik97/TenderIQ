@@ -12,9 +12,7 @@ from flask import (
 )
 
 from werkzeug.utils import secure_filename
-
 from backend.utils.db import get_connection
-
 from backend.services.dashboard_service import generate_dashboard_summary
 
 from backend.services.document_service import (
@@ -24,7 +22,6 @@ from backend.services.document_service import (
 )
 
 from backend.services.text_preprocessing import clean_text
-
 from backend.services.clause_extraction import extract_clauses
 
 # =========================================================
@@ -85,7 +82,6 @@ def dashboard():
     try:
 
         conn = get_connection()
-
         cursor = conn.cursor()
 
         cursor.execute(
@@ -99,14 +95,14 @@ def dashboard():
             WHERE user_id=%s
             ORDER BY upload_date DESC
             """,
-            (session["user_id"],)
+            (
+                session["user_id"],
+            )
         )
 
         tenders = cursor.fetchall()
 
-        dashboard_summary = generate_dashboard_summary(
-            session["user_id"]
-        )
+        dashboard_summary = generate_dashboard_summary(session["user_id"])
 
         return render_template(
             "dashboard.html",
@@ -149,7 +145,6 @@ def view_tender(tender_id):
     try:
 
         conn = get_connection()
-
         cursor = conn.cursor()
 
         cursor.execute(
@@ -177,10 +172,7 @@ def view_tender(tender_id):
 
             return redirect("/dashboard")
 
-        return render_template(
-            "view_tender.html", 
-            tender=tender
-        )
+        return render_template("view_tender.html", tender=tender)
 
     except Exception as e:
 
@@ -217,7 +209,6 @@ def delete_tender(tender_id):
     try:
 
         conn = get_connection()
-
         cursor = conn.cursor()
 
         cursor.execute(
@@ -241,22 +232,15 @@ def delete_tender(tender_id):
 
             return redirect("/dashboard")
 
-        filepath = os.path.join(
-            UPLOAD_FOLDER,
-            result[0]
-        )
+        filepath = os.path.join(UPLOAD_FOLDER,result[0])
 
         if os.path.exists(filepath):
 
             try:
-
                 os.remove(filepath)
 
             except Exception as e:
-
-                logger.warning(
-                    f"Unable to delete file: {filepath} ({e})"
-                )
+                logger.warning(f"Unable to delete file: {filepath} ({e})")
 
         cursor.execute(
             """
@@ -391,9 +375,7 @@ def upload():
 
                 duplicate_files.append(filename)
 
-                logger.info(
-                    f"Duplicate skipped : {filename}"
-                )
+                logger.info(f"Duplicate skipped : {filename}")
 
                 continue
 
@@ -403,28 +385,20 @@ def upload():
 
             extension = filename.rsplit(".", 1)[1].lower()
 
-            unique_filename = (
-                f"{uuid.uuid4()}_{filename}"
-            )
+            unique_filename = (f"{uuid.uuid4()}_{filename}")
 
-            filepath = os.path.join(
-                UPLOAD_FOLDER,
-                unique_filename
-            )
+            filepath = os.path.join(UPLOAD_FOLDER,unique_filename)
 
             # --------------------------------------------
             # Save Uploaded File
             # --------------------------------------------
 
             try:
-
                 file.save(filepath)
 
             except Exception as e:
 
-                logger.exception(
-                    f"Unable to save {filename}"
-                )
+                logger.exception(f"Unable to save {filename}")
 
                 failed_files.append(filename)
 
@@ -437,26 +411,20 @@ def upload():
             try:
 
                 if extension == "pdf":
-
                     raw_text = extract_pdf(filepath)
 
                 elif extension == "docx":
-
                     raw_text = extract_docx(filepath)
 
                 elif extension == "txt":
-
                     raw_text = extract_txt(filepath)
 
                 else:
-
                     raw_text = ""
 
             except Exception as e:
 
-                logger.exception(
-                    f"Extraction failed : {filename}"
-                )
+                logger.exception(f"Extraction failed : {filename}")
 
                 failed_files.append(filename)
 
@@ -474,9 +442,7 @@ def upload():
 
             clauses = extract_clauses(extracted_text)
 
-            logger.info(
-                f"{filename} : {len(clauses)} clauses extracted"
-            )
+            logger.info(f"{filename} : {len(clauses)} clauses extracted")
 
             # --------------------------------------------
             # Skip Empty Documents
@@ -484,9 +450,7 @@ def upload():
 
             if not extracted_text.strip():
 
-                logger.warning(
-                    f"No text extracted : {filename}"
-                )
+                logger.warning(f"No text extracted : {filename}")
 
                 failed_files.append(filename)
 
@@ -526,15 +490,11 @@ def upload():
 
                 uploaded_files.append(filename)
 
-                logger.info(
-                    f"Successfully uploaded : {filename}"
-                )
+                logger.info(f"Successfully uploaded : {filename}")
 
             except Exception as e:
 
-                logger.exception(
-                    f"Database insert failed : {filename}"
-                )
+                logger.exception(f"Database insert failed : {filename}")
 
                 failed_files.append(filename)
 
@@ -544,6 +504,7 @@ def upload():
 
                     try:
                         os.remove(filepath)
+
                     except Exception:
                         pass
 
@@ -562,32 +523,16 @@ def upload():
         # =================================================
 
         if uploaded_files:
-
-            flash(
-                f"{len(uploaded_files)} file(s) uploaded successfully.",
-                "success"
-            )
+            flash(f"{len(uploaded_files)} file(s) uploaded successfully.","success")
 
         if duplicate_files:
-
-            flash(
-                f"{len(duplicate_files)} duplicate file(s) skipped.",
-                "warning"
-            )
+            flash(f"{len(duplicate_files)} duplicate file(s) skipped.","warning")
 
         if invalid_files:
-
-            flash(
-                f"{len(invalid_files)} invalid file(s) ignored.",
-                "warning"
-            )
+            flash(f"{len(invalid_files)} invalid file(s) ignored.","warning")
 
         if failed_files:
-
-            flash(
-                f"{len(failed_files)} file(s) failed during processing.",
-                "error"
-            )
+            flash(f"{len(failed_files)} file(s) failed during processing.","error")
 
         if (
             not uploaded_files
@@ -596,10 +541,7 @@ def upload():
             and not failed_files
         ):
 
-            flash(
-                "No files were processed.",
-                "warning"
-            )
+            flash("No files were processed.","warning")
 
     # =====================================================
     # Global Exception
@@ -608,15 +550,11 @@ def upload():
     except Exception as e:
 
         if conn:
-
             conn.rollback()
 
         logger.exception("Upload Route Error")
 
-        flash(
-            f"Upload failed: {str(e)}",
-            "error"
-        )
+        flash(f"Upload failed: {str(e)}","error")
 
     # =====================================================
     # Cleanup
@@ -625,11 +563,9 @@ def upload():
     finally:
 
         if cursor:
-
             cursor.close()
 
         if conn:
-
             conn.close()
 
     # =====================================================
@@ -646,26 +582,26 @@ def upload():
     logger.info(f"Failed Files    : {len(failed_files)}")
 
     if uploaded_files:
-
         logger.info("Uploaded:")
+
         for file in uploaded_files:
             logger.info(f"  ✔ {file}")
 
     if duplicate_files:
-
         logger.info("Duplicates:")
+
         for file in duplicate_files:
             logger.info(f"  ✖ {file}")
 
     if invalid_files:
-
         logger.info("Invalid:")
+
         for file in invalid_files:
             logger.info(f"  ✖ {file}")
 
     if failed_files:
-
         logger.info("Failed:")
+
         for file in failed_files:
             logger.info(f"  ✖ {file}")
 

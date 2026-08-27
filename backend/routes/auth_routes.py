@@ -6,6 +6,7 @@ from flask import (
     redirect, 
     flash
 )
+
 import bcrypt
 from backend.utils.db import get_connection
 
@@ -21,7 +22,6 @@ def login():
     if request.method == 'POST':
 
         email = request.form['email'].strip().lower()
-        
         password = request.form['password']
         
         conn = get_connection()
@@ -34,7 +34,6 @@ def login():
         """
 
         cursor.execute(query,(email,))
-
         user = cursor.fetchone()
 
         cursor.close()
@@ -49,7 +48,6 @@ def login():
                 stored_hash.encode('utf-8')):
                 
                 session['user_id'] = user[0]
-
                 session["username"] = user[1]
 
                 flash(f"Welcome back, {user[1]}!","success")
@@ -66,13 +64,10 @@ def register():
     if request.method == "POST":
 
         username = request.form["username"].strip()
-
         email = request.form["email"].strip().lower()
-
         password = request.form["password"]
 
         conn = get_connection()
-
         cursor = conn.cursor()
 
         # ----------------------------
@@ -102,7 +97,6 @@ def register():
         if existing_user:
 
             cursor.close()
-
             conn.close()
 
             flash("Email already exists. Please use a different email.", "error")
@@ -136,12 +130,12 @@ def register():
                 username,
                 email,
                 hashed_password
-            ))
+            )
+        )
 
         conn.commit()
 
         cursor.close()
-
         conn.close()
 
         flash("Registration successful! Please log in.", "success")
@@ -156,5 +150,5 @@ def logout():
     session.clear()
 
     flash("Logged out successfully.","success")
-
+    
     return redirect('/login')

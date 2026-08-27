@@ -66,7 +66,7 @@ def calculate_risk_distribution(clause_results):
         "Medium Risk":0,
         "High Risk":0,
         "Critical Risk":0
-}
+    }
     
     if not clause_results:
         return risk_level
@@ -93,7 +93,7 @@ def calculate_match_distribution(clause_results):
         "Good": 0,
         "Moderate": 0,
         "Poor": 0
-}
+    }
 
     if not clause_results:
         return distribution
@@ -165,11 +165,8 @@ def calculate_clause_statistics(clause_results):
         }
 
     similarities = [
-
         clause.get("similarity", 0)
-
         for clause in clause_results
-
     ]
 
     return {
