@@ -41,17 +41,13 @@ def get_added_words(original, matched):
     """
 
     original_words = set(tokenize(original))
-
     matched_words = set(tokenize(matched))
-    
     added = list(matched_words - original_words)
 
-    added = [
-        word
+    added = [word
         for word in added
         if len(word) > 2
-        and word not in STOP_WORDS
-    ]
+        and word not in STOP_WORDS]
 
     return sorted(added)
 
@@ -61,17 +57,13 @@ def get_removed_words(original, matched):
     """
 
     original_words = set(tokenize(original))
-
     matched_words = set(tokenize(matched))
-    
     removed = list(original_words - matched_words)
 
-    removed = [
-        word
-        for word in removed
-        if len(word) > 2
-        and word not in STOP_WORDS
-    ]
+    removed = [word 
+            for word in removed 
+            if len(word) > 2 
+            and word not in STOP_WORDS]
 
     return sorted(removed)
 
@@ -99,9 +91,7 @@ def build_summary(added, removed):
         if len(removed) > 3:
             preview += "..."
 
-        summary.append(
-            f"Removed ({len(removed)}): {preview}"
-        )
+        summary.append(f"Removed ({len(removed)}): {preview}")
 
     return " | ".join(summary)
 
@@ -111,22 +101,14 @@ def compare_clauses(original, matched):
     """
 
     added = get_added_words(original,matched)
-
     removed = get_removed_words(original,matched)
 
     return {
-
     "changed": bool(added or removed),
-
     "added": added,
-
     "removed": removed,
-
     "summary": build_summary(added,removed),
-
     "added_count": len(added),
-
     "removed_count": len(removed),
-
     "total_changes": len(added) + len(removed)
 }

@@ -36,9 +36,7 @@ def get_total_tenders(user_id):
     cursor = None
 
     try:
-
         conn = get_connection()
-
         cursor = conn.cursor()
 
         query = """
@@ -48,15 +46,11 @@ def get_total_tenders(user_id):
         """
 
         cursor.execute(query, (user_id,))
-
         result = cursor.fetchone()[0]
-
         return result if result else 0
 
     except Exception as e:
-
         print(f"[Dashboard Service] {e}")
-
         return 0
 
     finally:
@@ -89,9 +83,7 @@ def get_total_comparisons(user_id):
     cursor = None
 
     try:
-
         conn = get_connection()
-
         cursor = conn.cursor()
 
         query = """
@@ -101,15 +93,11 @@ def get_total_comparisons(user_id):
         """
 
         cursor.execute(query, (user_id,))
-
         result = cursor.fetchone()[0]
-
         return result if result else 0
 
     except Exception as e:
-
         print(f"[Dashboard Service] {e}")
-
         return 0
 
     finally:
@@ -137,77 +125,47 @@ def get_similarity_statistics(user_id):
     cursor = None
 
     try:
-
         conn = get_connection()
-
         cursor = conn.cursor(dictionary=True)
 
         query = """
         SELECT COUNT(*) AS total_comparisons,
-
-            ROUND(AVG(similarity_score),2)
-                AS average_similarity,
-
-            ROUND(MAX(similarity_score),2)
-                AS highest_similarity,
-
-            ROUND(MIN(similarity_score),2)
-                AS lowest_similarity
-
+        ROUND(AVG(similarity_score),2)AS average_similarity,
+        ROUND(MAX(similarity_score),2)AS highest_similarity,
+        ROUND(MIN(similarity_score),2)AS lowest_similarity
         FROM comparison_reports
-
         WHERE user_id=%s
         """
 
         cursor.execute(query, (user_id,))
-
         stats = cursor.fetchone()
 
         if not stats:
 
             return {
-
                 "total_comparisons": 0,
-
                 "average_similarity": 0,
-
                 "highest_similarity": 0,
-
                 "lowest_similarity": 0,
-
                 "similarity_range": 0
-
             }
 
         stats["average_similarity"] = stats["average_similarity"] or 0
-
         stats["highest_similarity"] = stats["highest_similarity"] or 0
-
         stats["lowest_similarity"] = stats["lowest_similarity"] or 0
-
-        stats["similarity_range"] = round(
-            stats["highest_similarity"] - 
-            stats["lowest_similarity"],
-            2)
+        stats["similarity_range"] = round(stats["highest_similarity"] - stats["lowest_similarity"],2)
 
         return stats
 
     except Exception as e:
-
         print(f"[Dashboard Service] {e}")
 
         return {
-
             "total_comparisons": 0,
-
             "average_similarity": 0,
-
             "highest_similarity": 0,
-
             "lowest_similarity": 0,
-
             "similarity_range": 0
-
         }
 
     finally:
@@ -231,9 +189,7 @@ def get_total_excellent_matches(user_id):
     cursor = None
 
     try:
-
         conn = get_connection()
-
         cursor = conn.cursor()
 
         query = """
@@ -244,15 +200,11 @@ def get_total_excellent_matches(user_id):
         """
 
         cursor.execute(query, (user_id,))
-
         result = cursor.fetchone()
-
         return result[0] if result else 0
 
     except Exception as e:
-
         print(f"[Dashboard Service] {e}")
-
         return 0
 
     finally:
@@ -276,9 +228,7 @@ def get_total_good_matches(user_id):
     cursor = None
 
     try:
-
         conn = get_connection()
-
         cursor = conn.cursor()
 
         query = """
@@ -289,15 +239,11 @@ def get_total_good_matches(user_id):
         """
 
         cursor.execute(query, (user_id,))
-
         result = cursor.fetchone()
-
         return result[0] if result else 0
 
     except Exception as e:
-
         print(f"[Dashboard Service] {e}")
-
         return 0
 
     finally:
@@ -321,9 +267,7 @@ def get_total_moderate_matches(user_id):
     cursor = None
 
     try:
-
         conn = get_connection()
-
         cursor = conn.cursor()
 
         query = """
@@ -334,15 +278,11 @@ def get_total_moderate_matches(user_id):
         """
 
         cursor.execute(query, (user_id,))
-
         result = cursor.fetchone()[0]
-
         return result if result else 0
 
     except Exception as e:
-
         print(f"[Dashboard Service] {e}")
-
         return 0
 
     finally:
@@ -366,9 +306,7 @@ def get_total_poor_matches(user_id):
     cursor = None
 
     try:
-
         conn = get_connection()
-
         cursor = conn.cursor()
 
         query = """
@@ -385,9 +323,7 @@ def get_total_poor_matches(user_id):
         return result[0] if result else 0
 
     except Exception as e:
-
         print(f"[Dashboard Service] {e}")
-
         return 0
 
     finally:
@@ -412,9 +348,7 @@ def get_total_high_risk_reports(user_id):
     cursor = None
 
     try:
-
         conn = get_connection()
-
         cursor = conn.cursor()
 
         query = """
@@ -426,15 +360,11 @@ def get_total_high_risk_reports(user_id):
         """
 
         cursor.execute(query, (user_id,))
-
         result = cursor.fetchone()
-
         return result[0] if result else 0
 
     except Exception as e:
-
         print(f"[Dashboard Service] {e}")
-
         return 0
 
     finally:
@@ -459,9 +389,7 @@ def get_total_critical_risk_reports(user_id):
     cursor = None
 
     try:
-
         conn = get_connection()
-
         cursor = conn.cursor()
 
         query = """
@@ -472,15 +400,11 @@ def get_total_critical_risk_reports(user_id):
         """
 
         cursor.execute(query, (user_id,))
-
         result = cursor.fetchone()
-
         return result[0] if result else 0
 
     except Exception as e:
-
         print(f"[Dashboard Service] {e}")
-
         return 0
 
     finally:
@@ -514,9 +438,7 @@ def get_recent_tenders(user_id, limit=5):
     cursor = None
 
     try:
-
         conn = get_connection()
-
         cursor = conn.cursor(dictionary=True)
 
         query = """
@@ -529,15 +451,11 @@ def get_recent_tenders(user_id, limit=5):
         """
 
         cursor.execute(query,(user_id,limit))
-
         tenders = cursor.fetchall()
-
         return tenders
 
     except Exception as e:
-
         print(f"[Dashboard Service] {e}")
-
         return []
 
     finally:
@@ -571,9 +489,7 @@ def get_recent_comparisons(user_id, limit=5):
     cursor = None
 
     try:
-
         conn = get_connection()
-
         cursor = conn.cursor(dictionary=True)
 
         query = """
@@ -591,15 +507,11 @@ def get_recent_comparisons(user_id, limit=5):
         """
 
         cursor.execute(query,(user_id,limit))
-
         comparisons = cursor.fetchall()
-
         return comparisons
 
     except Exception as e:
-
         print(f"[Dashboard Service] {e}")
-
         return []
 
     finally:
@@ -627,57 +539,33 @@ def get_monthly_statistics(user_id):
     cursor = None
 
     try:
-
         conn = get_connection()
-
         cursor = conn.cursor(dictionary=True)
 
         query = """
-        SELECT
-
-            DATE_FORMAT(created_at,'%Y-%m') AS month,
-
-            COUNT(*) AS total_comparisons,
-
-            ROUND(AVG(similarity_score),2)
-                AS average_similarity,
-
-            ROUND(MAX(similarity_score),2)
-                AS highest_similarity,
-
-            ROUND(MIN(similarity_score),2)
-                AS lowest_similarity
-
+        SELECT DATE_FORMAT(created_at,'%Y-%m') AS month,
+        COUNT(*) AS total_comparisons,
+        ROUND(AVG(similarity_score),2)AS average_similarity,
+        ROUND(MAX(similarity_score),2)AS highest_similarity,
+        ROUND(MIN(similarity_score),2)AS lowest_similarity
         FROM comparison_reports
-
         WHERE user_id=%s
-
         GROUP BY DATE_FORMAT(created_at,'%Y-%m')
-
         ORDER BY month DESC
         """
 
         cursor.execute(query, (user_id,))
-
         monthly = cursor.fetchall()
 
         for row in monthly:
-
             row["average_similarity"] = row["average_similarity"] or 0
-
             row["highest_similarity"] = row["highest_similarity"] or 0
-
             row["lowest_similarity"] = row["lowest_similarity"] or 0
-
-            row["similarity_range"] = round(
-                row["highest_similarity"] - 
-                row["lowest_similarity"],
-                2)
+            row["similarity_range"] = round(row["highest_similarity"] - row["lowest_similarity"],2)
 
         return monthly
 
     except Exception as e:
-
         print(f"[Dashboard Service] {e}")
 
         return []
@@ -712,7 +600,6 @@ def generate_dashboard_summary(user_id):
     # ----------------------------------
 
     total_tenders = get_total_tenders(user_id)
-
     total_comparisons = get_total_comparisons(user_id)
 
     # ----------------------------------
@@ -720,7 +607,6 @@ def generate_dashboard_summary(user_id):
     # ----------------------------------
 
     similarity_statistics = get_similarity_statistics(user_id)
-
     average = similarity_statistics["average_similarity"]
 
     # ----------------------------------
@@ -728,11 +614,8 @@ def generate_dashboard_summary(user_id):
     # ----------------------------------
 
     excellent_matches = get_total_excellent_matches(user_id)
-
     good_matches = get_total_good_matches(user_id)
-
     moderate_matches = get_total_moderate_matches(user_id)
-
     poor_matches = get_total_poor_matches(user_id)
 
     # ----------------------------------
@@ -740,7 +623,6 @@ def generate_dashboard_summary(user_id):
     # ----------------------------------
 
     recent_tenders = get_recent_tenders(user_id)
-
     recent_comparisons = get_recent_comparisons(user_id)
 
     # ----------------------------------
@@ -754,7 +636,6 @@ def generate_dashboard_summary(user_id):
     # ----------------------------------
 
     high_risk_reports = get_total_high_risk_reports(user_id)
-
     critical_risk_reports = get_total_critical_risk_reports(user_id)
 
     # ----------------------------------
@@ -762,11 +643,9 @@ def generate_dashboard_summary(user_id):
     # ----------------------------------
 
     return {
-
         # Basic Statistics
 
         "total_tenders": total_tenders,
-
         "total_comparisons": total_comparisons,
 
         # Similarity Statistics
@@ -776,17 +655,13 @@ def generate_dashboard_summary(user_id):
         # Match Statistics
 
         "excellent_matches": excellent_matches,
-
         "good_matches": good_matches,
-
         "moderate_matches": moderate_matches,
-
         "poor_matches": poor_matches,
 
         # Recent Activity
 
         "recent_tenders": recent_tenders,
-
         "recent_comparisons": recent_comparisons,
 
         # Monthly Statistics
@@ -796,7 +671,5 @@ def generate_dashboard_summary(user_id):
         # Risk Statistics
 
         "high_risk_reports": high_risk_reports,
-
         "critical_risk_reports": critical_risk_reports
-
     }

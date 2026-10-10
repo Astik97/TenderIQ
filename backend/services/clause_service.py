@@ -68,23 +68,15 @@ def remove_page_numbers(text):
         return ""
 
     patterns = [
-
         r"Page\s+\d+\s+of\s+\d+",
         r"Page\s+\d+",
         r"Page No\.?\s*\d+",
         r"^\d+$",
         r"^\d+\s+of\s+\d+$"
-
     ]
 
     for pattern in patterns:
-
-        text = re.sub(
-            pattern,
-            "",
-            text,
-            flags=re.IGNORECASE | re.MULTILINE
-        )
+        text = re.sub(pattern,"",text,flags=re.IGNORECASE | re.MULTILINE)
 
     return text
 
@@ -112,13 +104,7 @@ def remove_headers_and_footers(text):
     ]
 
     for pattern in patterns:
-
-        text = re.sub(
-            pattern,
-            "",
-            text,
-            flags=re.IGNORECASE
-        )
+        text = re.sub(pattern,"",text,flags=re.IGNORECASE)
 
     return text
 
@@ -134,11 +120,8 @@ def remove_table_of_contents(text):
         return ""
 
     toc_pattern = re.compile(
-
         r"contents.*?(?=\n\s*(1\.|section|chapter|introduction))",
-
         flags=re.IGNORECASE | re.DOTALL
-
     )
 
     return toc_pattern.sub("", text)
@@ -185,7 +168,6 @@ def split_into_clauses(text):
     """,
 
     text,
-
     flags=re.VERBOSE | re.IGNORECASE
 
 )
@@ -213,21 +195,16 @@ def split_into_clauses(text):
 def merge_short_clauses(clauses):
 
     merged = []
-
     i = 0
 
     while i < len(clauses):
-
         current = clauses[i].strip()
 
         if len(current.split()) < 8 and i + 1 < len(clauses):
-
             current += "\n\n" + clauses[i + 1].strip()
-
             i += 1
 
         merged.append(current)
-
         i += 1
 
     return merged
@@ -243,11 +220,9 @@ def remove_empty_clauses(clauses):
     cleaned = []
 
     for clause in clauses:
-
         clause = clause.strip()
 
         if clause:
-
             cleaned.append(clause)
 
     return cleaned
@@ -270,23 +245,17 @@ def extract_clauses(text):
     """
 
     text = clean_text(text)
-
     text = remove_page_numbers(text)
-
     text = remove_headers_and_footers(text)
-
     text = remove_table_of_contents(text)
 
     clauses = split_into_clauses(text)
 
     for i, clause in enumerate(clauses, 1):
-
         print(f"\nClause {i}")
-
         print(clause[:500])
 
     clauses = remove_empty_clauses(clauses)
-
     clauses = merge_short_clauses(clauses)
 
     return clauses

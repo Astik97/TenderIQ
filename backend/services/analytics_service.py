@@ -153,15 +153,10 @@ def calculate_clause_statistics(clause_results):
     """
 
     if not clause_results:
-
         return {
-
             "highest_similarity":0,
-
             "lowest_similarity":0,
-
             "average_similarity":0
-
         }
 
     similarities = [
@@ -170,13 +165,9 @@ def calculate_clause_statistics(clause_results):
     ]
 
     return {
-
         "highest_similarity": round(max(similarities),2),
-
         "lowest_similarity": round(min(similarities),2),
-
         "average_similarity": round(mean(similarities),2)
-
     }
 
 # =========================================================
@@ -189,25 +180,17 @@ def calculate_dashboard_statistics(result):
     """
 
     clause_results = result.get("clause_results", [])
-
+    
     statistics = calculate_clause_statistics(clause_results)
 
     return {
-
         "total_clauses": result.get("total_clauses", 0),
-
         "matched_clauses": result.get("matched_clauses", 0),
-
         "overall_similarity": result.get("similarity", 0),
-
         "weighted_similarity": result.get("weighted_similarity", 0),
-
         "highest_similarity": statistics.get("highest_similarity", 0),
-
         "lowest_similarity": statistics.get("lowest_similarity", 0),
-
         "average_similarity": statistics.get("average_similarity", 0)
-
     }
 
 # =========================================================
@@ -222,17 +205,10 @@ def generate_analytics_summary(result):
     clause_results = result.get("clause_results", [])
 
     return {
-
         "similarity_distribution": calculate_similarity_distribution(clause_results),
-
         "risk_distribution": calculate_risk_distribution(clause_results),
-
         "clause_statistics": calculate_clause_statistics(clause_results),
-
         "match_distribution": calculate_match_distribution(clause_results),
-
         "priority_distribution": calculate_priority_distribution(clause_results),
-
         "dashboard_statistics": calculate_dashboard_statistics(result)
-
     }

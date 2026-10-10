@@ -86,7 +86,6 @@ def calculate_similarity_matrix(embeddings1, embeddings2):
     Parameters
     ----------
     embeddings1 : numpy.ndarray
-
     embeddings2 : numpy.ndarray
 
     Returns

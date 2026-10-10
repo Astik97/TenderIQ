@@ -28,9 +28,7 @@ def generate_strengths(clause_results):
     ]
 
     if excellent:
-        strengths.append(
-            f"{len(excellent)} clauses are almost identical."
-        )
+        strengths.append(f"{len(excellent)} clauses are almost identical.")
 
     technical = [
         clause for clause in clause_results
@@ -38,9 +36,7 @@ def generate_strengths(clause_results):
     ]
 
     if len(technical) >= 5:
-        strengths.append(
-            "Technical requirements are highly aligned."
-        )
+        strengths.append("Technical requirements are highly aligned.")
 
     low_risk = [
         clause for clause in clause_results
@@ -49,14 +45,10 @@ def generate_strengths(clause_results):
     ]
 
     if len(low_risk) >= len(clause_results) * 0.7:
-        strengths.append(
-            "Most clauses have low procurement risk."
-        )
+        strengths.append("Most clauses have low procurement risk.")
 
     if not strengths:
-        strengths.append(
-            "No major strengths identified."
-        )
+        strengths.append("No major strengths identified.")
 
     return strengths
 
@@ -73,9 +65,7 @@ def generate_weaknesses(clause_results):
     ]
 
     if changed:
-        weaknesses.append(
-            f"{len(changed)} clauses differ significantly."
-        )
+        weaknesses.append(f"{len(changed)} clauses differ significantly.")
 
     high_risk = [
         clause for clause in clause_results
@@ -84,14 +74,10 @@ def generate_weaknesses(clause_results):
     ]
 
     if high_risk:
-        weaknesses.append(
-            f"{len(high_risk)} clauses require manual review."
-        )
+        weaknesses.append(f"{len(high_risk)} clauses require manual review.")
 
     if not weaknesses:
-        weaknesses.append(
-            "No significant weaknesses detected."
-        )
+        weaknesses.append("No significant weaknesses detected.")
 
     return weaknesses
 
@@ -100,25 +86,16 @@ def generate_top_changes(clause_results, top_n=5):
     Return clauses with the largest changes.
     """
 
-    sorted_changes = sorted(
-        clause_results,
-        key=lambda x: x["similarity"]
-    )
-
+    sorted_changes = sorted(clause_results,key=lambda x: x["similarity"])
     results = []
 
     for clause in sorted_changes[:top_n]:
 
         results.append({
-
             "clause": clause["clause"][:80] + "...",
-
             "similarity": clause["similarity"],
-
             "risk": clause["risk"]["level"],
-
             "summary": clause["difference"]["summary"]
-
         })
 
     return results
@@ -150,13 +127,9 @@ def generate_procurement_risk_summary(clause_results):
         overall = "Low"
 
     return {
-
         "overall": overall,
-
         "high": high,
-
         "critical": critical
-
     }
 
 def generate_ai_insights(comparison):
@@ -165,7 +138,7 @@ def generate_ai_insights(comparison):
     """
 
     similarity = comparison["similarity"]
-
+    
     insights = []
 
     if similarity >= 90:
@@ -190,7 +163,6 @@ def generate_final_recommendation(comparison,procurement_risk):
     """
 
     similarity = comparison["similarity"]
-
     risk = procurement_risk["overall"]
 
     if similarity >= 90 and risk == "Low":
@@ -210,7 +182,6 @@ def generate_tender_decision(comparison,procurement_risk):
     """
 
     similarity = comparison["similarity"]
-
     risk = procurement_risk["overall"]
 
     if similarity >= 90 and risk == "Low":
@@ -230,23 +201,14 @@ def generate_complete_insight(comparison):
     """
 
     clause_results = comparison["clause_results"]
-
     procurement_risk = generate_procurement_risk_summary(clause_results)
 
     return {
-
         "strengths": generate_strengths(clause_results),
-
         "weaknesses": generate_weaknesses(clause_results),
-
         "top_changes": generate_top_changes(clause_results),
-
         "procurement_risk": procurement_risk,
-
         "ai_insights": generate_ai_insights(comparison),
-
         "final_recommendation": generate_final_recommendation(comparison,procurement_risk),
-
         "tender_decision": generate_tender_decision(comparison,procurement_risk)
-
     }
