@@ -1,134 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register | TenderIQ</title>
-
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 </head>
-
 <body>
+    <div class="auth-container">
+        <div class="auth-card">
 
-<div class="auth-container">
+            <h1>Create Your Account</h1>
 
-    <div class="auth-card">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert {{ category }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
 
-        <h1>Create Your Account</h1>
+            <p>Register to start TenderIQ</p>
 
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
+            <form method="POST" id="registerForm">
 
-                    <div class="alert {{ category }}">
-                        {{ message }}
+                <div class="input-group">
+                    <label for="username">Username</label>
+
+                    <input type="text" name="username" id="username" placeholder="Enter your username" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="email">Email Address</label>
+
+                    <input type="email" name="email" id="email" placeholder="Enter your email" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="password">Password</label>
+
+                    <div class="password-box">
+                        <input type="password" id="password" name="password" placeholder="Create password" required>
+
+                        <span class="toggle-password" onclick="togglePassword('password', this)">
+                            <i class="fa-solid fa-eye"></i>
+                        </span>
                     </div>
-                    
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
-
-        <p>Register to start TenderIQ</p>
-
-        <form method="POST" id="registerForm">
-
-            <div class="input-group">
-
-                <label for="username">Username</label>
-
-                <input type="text" name="username" id="username"
-                placeholder="Enter your username" required>
-
-            </div>
-
-            <div class="input-group">
-
-                <label for="email">Email Address</label>
-
-                <input type="email" name="email" id="email"
-                placeholder="Enter your email" required>
-                
-            </div>
-
-            <div class="input-group">
-
-                <label for="password">Password</label>
-
-                <div class="password-box">
-
-                    <input type="password" 
-                    id="password" name="password" 
-                    placeholder="Create password" required>
-
-                    <span class="toggle-password"
-                        onclick="togglePassword('password', this)">
-
-                        <i class="fa-solid fa-eye"></i>
-
-                    </span>
-
                 </div>
 
-            </div>
+                <div class="input-group">
+                    <label for="confirm_password">Confirm Password</label>
 
-            <div class="input-group">
+                    <div class="password-box">
+                        <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm password" required>
 
-                <label for="confirm_password">Confirm Password</label>
-
-                <div class="password-box">
-
-                    <input type="password" 
-                    id="confirm_password" name="confirm_password"
-                    placeholder="Confirm password" required>
-
-                    <span class="toggle-password"
-                        onclick="togglePassword('confirm_password', this)">
-
-                        <i class="fa-solid fa-eye"></i>
-
-                    </span>
-
+                        <span class="toggle-password"
+                              onclick="togglePassword('confirm_password', this)">
+                            <i class="fa-solid fa-eye"></i>
+                        </span>
+                    </div>
                 </div>
 
+                <div id="passwordStrength" class="password-strength">
+                    Password Strength
+                </div>
+
+                <div class="form-options">
+                    <label>
+                        <input type="checkbox" required>
+                        I agree to the Terms & Conditions
+                    </label>
+                </div>
+
+                <button type="submit" class="btn btn-primary">
+                    Create Account
+                </button>
+
+            </form>
+
+            <div class="auth-footer">
+                Already have an account?
+                <a href="/login">Login</a>
             </div>
 
-            <div id="passwordStrength" 
-                class="password-strength">
-                Password Strength
+            <div class="home-link">
+                <a href="/">← Back to Home</a>
             </div>
 
-            <div class="form-options">
-
-                <label>
-                    <input type="checkbox" required>
-                    I agree to the Terms & Conditions
-                </label>
-
-            </div>
-
-            <button type="submit" class="btn btn-primary">
-                Create Account
-            </button>
-
-        </form>
-
-        <div class="auth-footer">
-            Already have an account?
-            <a href="/login">Login</a>
         </div>
-
-        <div class="home-link">
-            <a href="/">← Back to Home</a>
-        </div>
-
     </div>
 
-</div>
-
-<script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
-
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
 </body>
-
 </html>
