@@ -16,16 +16,13 @@ DEFAULT_TOP_N = 5
 # Highest Matching Clause Ranking
 # =========================================================
 
-def get_highest_matching_clauses(
-        clause_results, 
-        top_n=DEFAULT_TOP_N):
+def get_highest_matching_clauses(clause_results, top_n=DEFAULT_TOP_N):
     """
     Returns the top N highest matching clauses.
 
     Parameters
     ----------
     clause_results : list
-
     top_n : int
 
     Returns
@@ -34,17 +31,12 @@ def get_highest_matching_clauses(
     """
 
     if not clause_results:
-        
         return []
 
     ranked = sorted(
-
         clause_results,
-
-        key=lambda x: x.get("similarity", 0),
-
+        key = lambda x: x.get("similarity", 0),
         reverse=True
-
     )
 
     return ranked[:top_n]
@@ -53,16 +45,13 @@ def get_highest_matching_clauses(
 # Lowest Matching Clause Ranking
 # =========================================================
 
-def get_lowest_matching_clauses(
-        clause_results, 
-        top_n=DEFAULT_TOP_N):
+def get_lowest_matching_clauses(clause_results, top_n=DEFAULT_TOP_N):
     """
     Returns the lowest similarity clauses.
 
     Parameters
     ----------
     clause_results : list
-
     top_n : int
 
     Returns
@@ -71,15 +60,11 @@ def get_lowest_matching_clauses(
     """
 
     if not clause_results:
-
         return []
 
     ranked = sorted(
-
         clause_results,
-
-        key=lambda x: x.get("similarity", 0)
-
+        key = lambda x: x.get("similarity", 0)
     )
 
     return ranked[:top_n]
@@ -88,48 +73,34 @@ def get_lowest_matching_clauses(
 # Highest Risk Clause Ranking
 # =========================================================
 
-def get_highest_risk_clauses(
-        clause_results, 
-        top_n=DEFAULT_TOP_N):
+def get_highest_risk_clauses(clause_results, top_n=DEFAULT_TOP_N):
     """
     Returns clauses having the highest risk.
-
-    Risk Priority
-
-    Critical,High,Medium,Low
+    Risk Priority:-
+    1.Critical, 
+    2.High,
+    3.Medium,
+    4.Low
     """
 
     if not clause_results:
-
         return []
-
+    
     risk_priority = {
-
-    "Critical Risk":5,
-
-    "High Risk":4,
-
-    "Medium Risk":3,
-
-    "Low Risk":2,
-
-    "Very Low Risk":1
-
-}
+        "Critical Risk":5,
+        "High Risk":4,
+        "Medium Risk":3,
+        "Low Risk":2,
+        "Very Low Risk":1
+    }
 
     ranked = sorted(
-
         clause_results,
-
-        key=lambda x: (
-
-            risk_priority.get(
-                x.get("risk", {}).get("level", "Very Low Risk"), 
-                1),
-
-                -x.get("similarity", 0)),
-
-                reverse=True
+        key = lambda x:
+        (risk_priority.get
+        (x.get("risk", {}).get("level", "Very Low Risk"), 1),
+        -x.get("similarity", 0)),
+        reverse=True
     )
 
     return ranked[:top_n]
@@ -148,47 +119,18 @@ def get_ranking_summary(clause_results):
     """
 
     if not clause_results:
-
         return {
-
             "highest_match": None,
-
             "lowest_match": None,
-
             "highest_risk": None
-
         }
 
-    highest_match = get_highest_matching_clauses(
-
-        clause_results,
-
-        top_n=1
-
-    )[0]
-
-    lowest_match = get_lowest_matching_clauses(
-
-        clause_results,
-
-        top_n=1
-
-    )[0]
-
-    highest_risk = get_highest_risk_clauses(
-
-        clause_results,
-
-        top_n=1
-
-    )[0]
+    highest_match = get_highest_matching_clauses(clause_results,top_n=1)[0]
+    lowest_match = get_lowest_matching_clauses(clause_results,top_n=1)[0]
+    highest_risk = get_highest_risk_clauses(clause_results,top_n=1)[0]
 
     return {
-
         "highest_match": highest_match,
-
         "lowest_match": lowest_match,
-
         "highest_risk": highest_risk
-
     }

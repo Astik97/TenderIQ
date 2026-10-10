@@ -7,7 +7,6 @@ def normalize_whitespace(text):
 
     # Normalize line endings
     text = text.replace("\r\n", "\n")
-
     text = text.replace("\r", "\n")
 
     # Remove repeated spaces and tabs
@@ -40,9 +39,7 @@ def clean_text(text):
     """Complete preprocessing pipeline."""
 
     text = convert_to_lowercase(text)
-
     text = remove_special_characters(text)
-
     text = normalize_whitespace(text)
 
     return text

@@ -39,7 +39,6 @@ def get_risk_level(similarity):
 def get_risk_color(level):
 
     colors = {
-
         "Very Low Risk": "green",
 
         "Low Risk": "blue",
@@ -49,7 +48,6 @@ def get_risk_color(level):
         "High Risk": "orange",
 
         "Critical Risk": "red"
-
     }
 
     return colors.get(level, "gray")
@@ -71,7 +69,7 @@ def calculate_risk_score(similarity):
 def get_risk_reason(difference):
 
     added = difference.get("added", [])
-
+    
     removed = difference.get("removed", [])
 
     if not added and not removed:
@@ -94,7 +92,6 @@ def get_risk_reason(difference):
 def get_recommendation(level):
 
     recommendations = {
-
         "Very Low Risk": "Clause is almost identical. Manual review is optional.",
 
         "Low Risk": "Minor wording changes detected. Quick verification recommended.",
@@ -104,7 +101,6 @@ def get_recommendation(level):
         "High Risk": "Major changes detected. Detailed manual verification is recommended.",
 
         "Critical Risk": "Clause differs significantly. Immediate review is required."
-
     }
 
     return recommendations.get(level,"Review manually.")
@@ -118,7 +114,6 @@ def analyze_risk(similarity, difference):
     level = get_risk_level(similarity)
 
     return {
-
         "score": calculate_risk_score(similarity),
 
         "level": level,
@@ -128,5 +123,4 @@ def analyze_risk(similarity, difference):
         "reason": get_risk_reason(difference),
 
         "recommendation": get_recommendation(level)
-
     }

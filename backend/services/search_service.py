@@ -41,9 +41,7 @@ def search_by_keyword(user_id, keyword):
     cursor = None
 
     try:
-
         conn = get_connection()
-
         cursor = conn.cursor(dictionary=True)
 
         query = """
@@ -53,30 +51,18 @@ def search_by_keyword(user_id, keyword):
         upload_date
         FROM tenders
         WHERE user_id = %s
-        AND 
-        (
-            tender_name LIKE %s
-
-            OR
-
-            extracted_text LIKE %s
-        )
-
+        AND (tender_name LIKE %s OR extracted_text LIKE %s)
         ORDER BY upload_date DESC
         """
 
         pattern = f"%{keyword}%"
-
         cursor.execute(query,(user_id,pattern,pattern))
-
         results = cursor.fetchall()
 
         return results
 
     except Exception as e:
-        
         print(f"[Search Service] {e}")
-
         return []
 
     finally:
@@ -127,7 +113,6 @@ def search_by_embedding(user_id, query, threshold=50):
             return []
 
         conn = get_connection()
-
         cursor = conn.cursor(dictionary=True)
 
         query_sql = """
@@ -140,9 +125,7 @@ def search_by_embedding(user_id, query, threshold=50):
         """
 
         cursor.execute(query_sql, (user_id,))
-
         tenders = cursor.fetchall()
-
         results = []
 
         # ----------------------------------
@@ -150,47 +133,32 @@ def search_by_embedding(user_id, query, threshold=50):
         # ----------------------------------
 
         for tender in tenders:
-
             text = tender.get("extracted_text", "")
 
             if not text.strip():
                 continue
 
             document_embedding = generate_embedding(text)
-
-            score = cosine_similarity(
-                [query_embedding],
-                [document_embedding]
-            )[0][0]
-
+            score = cosine_similarity([query_embedding],[document_embedding])[0][0]
             similarity = round(score * 100, 2)
 
             if similarity >= threshold:
-
                 results.append({
-
                     "id": tender["id"],
-
                     "tender_name": tender["tender_name"],
-
                     "similarity": similarity,
-
                     "upload_date": tender["upload_date"]
-
                 })
 
         # ----------------------------------
         # Highest Similarity First
         # ----------------------------------
 
-        results.sort(key=lambda x: x["similarity"],reverse=True)
-
+        results.sort(key = lambda x: x["similarity"],reverse=True)
         return results
 
     except Exception as e:
-
         print(f"[Search Service] {e}")
-
         return []
 
     finally:
@@ -246,51 +214,34 @@ def search_clauses(user_id, query, threshold=50):
     # Add keyword matches first
 
     for result in keyword_results:
-
         merged[result["id"]] = {
-
             "id": result["id"],
-
             "tender_name": result["tender_name"],
-
             "upload_date": result["upload_date"],
-
             "similarity": 100,
-
             "search_type": "Keyword"
-
         }
 
     # Add semantic matches
 
     for result in semantic_results:
-
         tender_id = result["id"]
 
         if tender_id in merged:
-
             merged[tender_id]["similarity"] = max(
-
                 merged[tender_id]["similarity"],
-
-                result["similarity"])
+                result["similarity"]
+            )
 
             merged[tender_id]["search_type"] = "Keyword + Semantic"
 
         else:
-
             merged[tender_id] = {
-
                 "id": tender_id,
-
                 "tender_name": result["tender_name"],
-
                 "upload_date": result["upload_date"],
-
                 "similarity": result["similarity"],
-
                 "search_type": "Semantic"
-
             }
 
     return list(merged.values())
@@ -317,7 +268,7 @@ def rank_search_results(results):
         return []
 
     ranked = sorted(results,
-        key=lambda x: (x["similarity"],x["upload_date"]),
+        key = lambda x: (x["similarity"],x["upload_date"]),
         reverse=True
     )
 
@@ -341,23 +292,14 @@ def generate_search_summary(results):
     """
 
     if not results:
-
         return {
-
             "total_results": 0,
-
             "keyword_matches": 0,
-
             "semantic_matches": 0,
-
             "hybrid_matches": 0,
-
             "highest_similarity": 0,
-
             "average_similarity": 0,
-
             "best_match": None
-
         }
 
     # --------------------------------------
@@ -371,9 +313,7 @@ def generate_search_summary(results):
     similarities = []
 
     for result in results:
-
         similarities.append(result["similarity"])
-
         search_type = result.get("search_type", "")
 
         if search_type == "Keyword":
@@ -389,26 +329,18 @@ def generate_search_summary(results):
     # Best Match
     # --------------------------------------
 
-    best_match = max(results,key=lambda x: x["similarity"])
+    best_match = max(results,key = lambda x: x["similarity"])
 
     # --------------------------------------
     # Summary
     # --------------------------------------
 
     return {
-
         "total_results": len(results),
-
         "keyword_matches": keyword_matches,
-
         "semantic_matches": semantic_matches,
-
         "hybrid_matches": hybrid_matches,
-
         "highest_similarity": round(max(similarities), 2),
-
         "average_similarity": round(sum(similarities) / len(similarities),2),
-
         "best_match": best_match
-
     }

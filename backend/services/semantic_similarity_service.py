@@ -42,13 +42,5 @@ def generate_embeddings(texts):
 # =========================================================
 
 def calculate_similarity(embedding1, embedding2):
-
-    similarity = cosine_similarity(
-
-        [embedding1],
-
-        [embedding2]
-
-    )[0][0]
-
+    similarity = cosine_similarity([embedding1],[embedding2])[0][0]
     return round(similarity * 100, 2)

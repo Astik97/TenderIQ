@@ -42,13 +42,11 @@ def generate_header(tender1_name, tender2_name):
 def generate_summary(comparison):
 
     similarity = comparison["similarity"]
-
     level = comparison["level"]
 
     if similarity >= 90:
 
         conclusion = "Highly Similar Documents"
-
         recommendation = (
             "These tenders are almost identical.\n"
             "Only a quick manual verification is recommended."
@@ -57,7 +55,6 @@ def generate_summary(comparison):
     elif similarity >= 70:
 
         conclusion = "Good Overall Match"
-
         recommendation = (
             "Most clauses match successfully.\n"
             "Review financial and commercial clauses."
@@ -66,7 +63,6 @@ def generate_summary(comparison):
     elif similarity >= 50:
 
         conclusion = "Moderately Similar Documents"
-
         recommendation = (
             "Several clauses differ.\n"
             "Carefully review eligibility and technical sections."
@@ -75,7 +71,6 @@ def generate_summary(comparison):
     elif similarity >= 30:
 
         conclusion = "Low Similarity"
-
         recommendation = (
             "Large differences detected.\n"
             "Detailed manual verification is recommended."
@@ -84,7 +79,6 @@ def generate_summary(comparison):
     else:
 
         conclusion = "Very Low Similarity"
-
         recommendation = (
             "The tenders differ significantly.\n"
             "Perform a complete clause-by-clause review."
@@ -219,13 +213,9 @@ def generate_clause_analysis(comparison):
 
     report = "\nClause Analysis\n"
 
-    for index, clause in enumerate(
-        comparison["clause_results"],
-        start=1
-    ):
+    for index, clause in enumerate(comparison["clause_results"],start=1):
 
         difference = clause["difference"]
-
         risk = clause["risk"]
 
         if difference["added"]:
@@ -336,13 +326,9 @@ def generate_report(tender1_name,tender2_name,comparison):
     report = ""
 
     report += generate_header(tender1_name,tender2_name)
-
     report += generate_summary(comparison)
-
     report += generate_statistics(comparison)
-
     report += generate_clause_analysis(comparison)
-
     report += generate_footer(comparison)
 
     return report

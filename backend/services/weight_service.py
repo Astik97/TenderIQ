@@ -17,42 +17,42 @@ Responsible for
 
 CLAUSE_WEIGHTS = {
 
-    "payment": 10,
-    "payment terms": 10,
-    "emd": 10,
-    "earnest money": 10,
-    "bid security": 10,
-    "eligibility": 10,
-    "qualification": 10,
+    "Payment": 10,
+    "Payment Terms": 10,
+    "EMD": 10,
+    "Earnest Money": 10,
+    "Bid Security": 10,
+    "Eligibility": 10,
+    "Qualification": 10,
 
-    "technical": 9,
-    "technical specification": 9,
-    "specification": 9,
-    "scope": 9,
-    "experience": 9,
+    "Technical": 9,
+    "Technical Specification": 9,
+    "Specification": 9,
+    "Scope": 9,
+    "Experience": 9,
 
-    "warranty": 8,
-    "guarantee": 8,
-    "penalty": 8,
-    "liquidated damages": 8,
-    "contract": 8,
-    "termination": 8,
+    "Warranty": 8,
+    "Guarantee": 8,
+    "Penalty": 8,
+    "Liquidated Damages": 8,
+    "Contract": 8,
+    "Termination": 8,
 
-    "delivery": 7,
-    "timeline": 7,
-    "completion": 7,
+    "Delivery": 7,
+    "Timeline": 7,
+    "Completion": 7,
 
-    "invoice": 6,
-    "price": 6,
-    "gst": 6,
-    "tax": 6,
+    "Invoice": 6,
+    "Price": 6,
+    "GST": 6,
+    "Tax": 6,
 
-    "address": 2,
-    "contact": 2,
+    "Address": 2,
+    "Contact": 2,
 
-    "email": 1,
-    "phone": 1,
-    "website": 1
+    "Email": 1,
+    "Phone": 1,
+    "Website": 1
 }
 
 # =========================================================
@@ -60,11 +60,8 @@ CLAUSE_WEIGHTS = {
 # =========================================================
 
 DEFAULT_WEIGHT = 5
-
 CRITICAL_WEIGHT = 10
-
 HIGH_WEIGHT = 8
-
 MEDIUM_WEIGHT = 5
 
 # =========================================================
@@ -111,13 +108,9 @@ def calculate_weighted_similarity(clause_results):
     total_weight = 0
 
     for clause in clause_results:
-
         weight = get_clause_weight(clause.get("clause", ""))
-
         similarity = clause.get("similarity", 0)
-
         weighted_sum += similarity * weight
-
         total_weight += weight
 
     if total_weight == 0:
@@ -135,49 +128,28 @@ def calculate_weighted_statistics(clause_results):
     """
 
     if not clause_results:
-
         return {
-
             "weighted_similarity": 0,
-
             "total_weight": 0,
-
             "average_weight": 0,
-
             "highest_weight": 0,
-
             "lowest_weight": 0
-
         }
 
     weights = [
-
-    get_clause_weight(clause.get("clause", ""))
-
-    for clause in clause_results
-
+        get_clause_weight(clause.get("clause", ""))
+        for clause in clause_results
     ]
-
     weighted_similarity = calculate_weighted_similarity(clause_results)
-
     difference_percentage = round(100 - weighted_similarity,2)
 
     return {
-
         "weighted_similarity": weighted_similarity,
-
         "difference_percentage": difference_percentage,
-
         "total_weight": sum(weights),
-
-        "average_weight": round(
-            sum(weights) / len(weights),
-            2),
-
+        "average_weight": round(sum(weights) / len(weights),2),
         "highest_weight": max(weights),
-
         "lowest_weight": min(weights)
-
     }
 
 # =========================================================
@@ -190,29 +162,17 @@ def get_weight_summary(clause_results):
     """
 
     if not clause_results:
-
         return {
-
             "weighted_similarity": 0,
-
             "total_weight": 0,
-
             "average_weight": 0,
-
             "highest_weight": 0,
-
             "lowest_weight": 0,
-
             "critical_clauses": 0,
-
             "high_priority_clauses": 0,
-
             "medium_priority_clauses": 0,
-
             "low_priority_clauses": 0,
-
             "critical_percentage": 0
-
         }
 
     statistics = calculate_weighted_statistics(clause_results)
@@ -238,23 +198,13 @@ def get_weight_summary(clause_results):
             low += 1
 
     total_clauses = len(clause_results)
-
-    critical_percentage = round(
-        (critical / total_clauses) * 100,
-        2)
-
+    critical_percentage = round((critical / total_clauses) * 100,2)
+    
     return {
-
-    **statistics,
-
-    "critical_clauses": critical,
-
-    "high_priority_clauses": high,
-
-    "medium_priority_clauses": medium,
-
-    "low_priority_clauses": low,
-
-    "critical_percentage": critical_percentage
-
-} 
+        **statistics,
+        "critical_clauses": critical,
+        "high_priority_clauses": high,
+        "medium_priority_clauses": medium,
+        "low_priority_clauses": low,
+        "critical_percentage": critical_percentage
+    } 
