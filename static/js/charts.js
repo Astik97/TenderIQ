@@ -2,9 +2,7 @@
 // Read JSON from compare.html
 // ======================================
 
-const chartData = JSON.parse(
-    document.getElementById("chart-data").textContent
-);
+const chartData = JSON.parse(document.getElementById("chart-data").textContent);
 
 // ======================================
 // Similarity Chart
