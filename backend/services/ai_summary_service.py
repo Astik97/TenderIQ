@@ -32,11 +32,9 @@ def calculate_risk_distribution(clause_results):
     }
 
     for clause in clause_results:
-
         risk = clause.get("risk", {}).get("level", "Low")
 
         if risk in distribution:
-
             distribution[risk] += 1
 
     return distribution
@@ -58,7 +56,6 @@ def calculate_risk_level(clause_results):
     }
 
     for clause in clause_results:
-
         risk = clause.get("risk", {}).get("level", "Low")
 
         if risk in risk_count:
@@ -113,7 +110,6 @@ def count_match_levels(clause_results):
 def find_best_clause(clause_results):
 
     if not clause_results:
-
         return None
 
     return max(clause_results,
@@ -169,34 +165,19 @@ def extract_major_differences(clause_results):
 def generate_recommendation(overall_similarity,risk_level):
 
     if overall_similarity >= 90:
-        return (
-            "The tenders are highly similar. "
-            "Minor verification before submission is sufficient."
-        )
+        return ("The tenders are highly similar. ""Minor verification before submission is sufficient.")
 
     elif overall_similarity >= 75:
-        return (
-            "Most clauses are similar. "
-            "Review payment terms, eligibility and timelines."
-        )
+        return ("Most clauses are similar. ""Review payment terms, eligibility and timelines.")
 
     elif overall_similarity >= 50:
-        return (
-            "Moderate similarity detected. "
-            "Manual review is strongly recommended."
-        )
+        return ("Moderate similarity detected. ""Manual review is strongly recommended.")
 
     elif risk_level == "Critical":
-        return (
-            "Critical differences detected. "
-            "Do not proceed without detailed review."
-        )
+        return ("Critical differences detected. ""Do not proceed without detailed review.")
 
     else:
-        return (
-            "Large differences detected between the tenders. "
-            "Carefully verify all important clauses."
-        )
+        return ("Large differences detected between the tenders. ""Carefully verify all important clauses.")
 
 # =========================================================
 #  Overall Assessment
@@ -218,30 +199,26 @@ def generate_overall_assessment(result):
 
     if similarity >= 90:
         assessment = (
-            "The two tender documents are highly consistent with only "
-            "minor wording differences. Most contractual, technical and "
-            "administrative clauses remain unchanged."
+            "The two tender documents are highly consistent with only minor wording differences. "
+            "Most contractual, technical and administrative clauses remain unchanged."
         )
 
     elif similarity >= 75:
         assessment = (
-            "The tenders show good overall similarity. Most important "
-            "clauses remain aligned, although a few sections require "
-            "manual verification."
+            "The tenders show good overall similarity. Most important clauses remain aligned, "
+            "although a few sections require manual verification."
         )
 
     elif similarity >= 50:
         assessment = (
-            "The tenders have moderate similarity. Several clauses differ "
-            "in wording or content. A detailed manual review is recommended "
-            "before making any procurement decision."
+            "The tenders have moderate similarity. Several clauses differ in wording or content. "
+            "A detailed manual review is recommended before making any procurement decision."
         )
 
     else:
         assessment = (
             "Significant differences exist between the two tenders. "
-            "Multiple contractual or technical clauses have changed, "
-            "requiring comprehensive review before proceeding."
+            "Multiple contractual or technical clauses have changed, requiring comprehensive review before proceeding."
         )
 
     return (
@@ -356,9 +333,7 @@ def generate_critical_findings(clause_results):
         risk = clause.get("risk", {}).get("level", "Low")
 
         if risk in ["Critical Risk", "High Risk"]:
-
             findings.append(f"{risk}: "
-
                 f"{clause['clause'][:120]}...")
 
     if not findings:
@@ -539,11 +514,8 @@ def generate_ai_summary(result):
     # -----------------------------------------------------
 
     best_clause = find_best_clause(clause_results)
-
     highest_risk_clause = find_highest_risk_clause(clause_results)
-
     risk_level = calculate_risk_level(clause_results)
-
     major_differences = extract_major_differences(clause_results)
 
     # -----------------------------------------------------
@@ -551,7 +523,6 @@ def generate_ai_summary(result):
     # -----------------------------------------------------
 
     risk_distribution = calculate_risk_distribution(clause_results)
-
     match_distribution = count_match_levels(clause_results)
 
     # -----------------------------------------------------
@@ -559,17 +530,11 @@ def generate_ai_summary(result):
     # -----------------------------------------------------
 
     overall_assessment = generate_overall_assessment(result)
-
     key_findings = generate_key_findings(result)
-
     positive_highlights = generate_positive_highlights(result)
-
     critical_findings = generate_critical_findings(clause_results)
-
     review_priority = generate_review_priority(clause_results)
-
     recommendation = generate_recommendation(result.get("similarity", 0),risk_level)
-
     recommendations = generate_ai_recommendations(clause_results)
 
     # -----------------------------------------------------
@@ -577,7 +542,6 @@ def generate_ai_summary(result):
     # -----------------------------------------------------
 
     weighted_similarity = result.get("weighted_similarity", 0)
-
     weight_summary = result.get("weight_summary", {})
 
     # -----------------------------------------------------
@@ -585,7 +549,6 @@ def generate_ai_summary(result):
     # -----------------------------------------------------
 
     confidence_score = generate_confidence_score(result,weighted_similarity)
-
     processing_summary = generate_processing_summary(result)
 
     # -----------------------------------------
@@ -682,13 +645,9 @@ def generate_ai_summary(result):
         # ==========================================
 
         "overall_similarity": result.get("similarity", 0),
-
         "overall_assessment": overall_assessment,
-
         "risk_level": risk_level,
-
         "confidence_score": confidence_score,
-
         "processing_summary": processing_summary,
 
         # ==========================================
@@ -696,11 +655,8 @@ def generate_ai_summary(result):
         # ==========================================
 
         "total_clauses": result.get("total_clauses", 0),
-
         "matched_clauses": result.get("matched_clauses", 0),
-
         "risk_distribution": risk_distribution,
-
         "match_distribution": match_distribution,
 
         # ==========================================
@@ -708,9 +664,7 @@ def generate_ai_summary(result):
         # ==========================================
 
         "highest_matching_clause": best_clause,
-
         "highest_risk_clause": highest_risk_clause,
-
         "major_differences": major_differences,
 
         # ==========================================
@@ -718,9 +672,7 @@ def generate_ai_summary(result):
         # ==========================================
 
         "key_findings": key_findings,
-
         "positive_highlights": positive_highlights,
-
         "critical_findings": critical_findings,
 
         # ==========================================
@@ -728,9 +680,7 @@ def generate_ai_summary(result):
         # ==========================================
 
         "weighted_similarity": weighted_similarity,
-
         "weight_summary": weight_summary,
-
         "difference_percentage": weight_summary.get("difference_percentage", 0),
 
         # ==========================================
@@ -738,9 +688,7 @@ def generate_ai_summary(result):
         # ==========================================
 
         "review_priority": review_priority,
-
         "recommendation": recommendation,
-
         "recommendations": recommendations,
 
         # ==========================================
@@ -748,9 +696,7 @@ def generate_ai_summary(result):
         # ==========================================
 
         "summary_cards": summary_cards,
-
         "dashboard_cards":dashboard_cards,
-
         "analysis_message":analysis_message
 
     }

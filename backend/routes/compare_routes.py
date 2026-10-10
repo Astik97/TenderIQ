@@ -47,9 +47,7 @@ def compare():
     selected = request.form.getlist("selected_tenders")
 
     if len(selected) != 2:
-
         flash("Please select exactly two tenders.","error")
-
         return redirect("/dashboard")
 
     tender1_id, tender2_id = selected
@@ -58,7 +56,6 @@ def compare():
     cursor = None
 
     try:
-
         conn = get_connection()
         cursor = conn.cursor()
 
@@ -75,13 +72,10 @@ def compare():
         # -----------------------------
 
         cursor.execute(query,(tender1_id,))
-
         row1 = cursor.fetchone()
 
         if row1 is None:
-
             flash("First tender not found.","error")
-
             return redirect("/dashboard")
 
         tender_name1, text1 = row1
@@ -91,13 +85,10 @@ def compare():
         # -----------------------------
 
         cursor.execute(query,(tender2_id,))
-
         row2 = cursor.fetchone()
 
         if row2 is None:
-
             flash("Second tender not found.","error")
-
             return redirect("/dashboard")
 
         tender_name2, text2 = row2
@@ -109,9 +100,7 @@ def compare():
         conn = None
 
     except Exception as e:
-
         flash(f"Database Error : {e}","error")
-
         return redirect("/dashboard")
 
     # -----------------------------------------
@@ -119,27 +108,17 @@ def compare():
     # -----------------------------------------
 
     comparison = compare_tenders(text1,text2)
-
     similarity = comparison.get("similarity", 0)
-
     match_level = comparison.get("level", "Unknown")
-
     total_clauses = comparison.get("total_clauses", 0)
-
     matched_clauses = comparison.get("matched_clauses", 0)
-
     clause_results = comparison.get("clause_results", [])
 
     for clause in clause_results:
-
         risk = clause.get("risk", {})
-
         risk_level = risk.get("level", "Very Low Risk")
-
         clause["risk_badge"] = get_risk_badge(risk_level)
-
         clause["risk_icon"] = get_risk_icon(risk_level)
-
         clause["risk_class"] = get_risk_class(risk_level)
 
     # -----------------------------------------
@@ -147,11 +126,8 @@ def compare():
     # -----------------------------------------
 
     highest_matches = get_highest_matching_clauses(clause_results)
-
     highest_risks = get_highest_risk_clauses(clause_results)
-
     lowest_matches = get_lowest_matching_clauses(clause_results)
-
     ranking_summary = get_ranking_summary(clause_results)
 
     # -----------------------------------------
@@ -159,11 +135,8 @@ def compare():
     # -----------------------------------------
     
     ai_summary = generate_ai_summary(comparison)
-
     risk_level = ai_summary.get("risk_level", "Very Low Risk")
-
     ai_summary["risk_badge"] = get_risk_badge(risk_level)
-
     ai_summary["risk_icon"] = get_risk_icon(risk_level)
 
     # -----------------------------------------
@@ -195,32 +168,29 @@ def compare():
     # -----------------------------------------
 
     print("========== COMPARISON RESULT ==========")
-
     print(f"Similarity Score: {similarity}")
-
     print(f"Match Level: {match_level}")
-
     print(f"Total Clauses: {total_clauses}")
-
     print(f"Matched Clauses: {matched_clauses}")
-
     print(f"Total Risks: {len(clause_results)}")
         
     # -----------------------------------------
     # Report
     # -----------------------------------------
     try:
-
         report = generate_report(
             tender_name1,
             tender_name2,
-            comparison
+            comparison,
+            ai_summary,
+            analytics,
+            insights,
+            chart_data,
+            recommendation_summary
         )
 
     except Exception as e:
-
         report = "Report generation failed. Please try again later."
-
         flash(f"Failed to generate report: {e}", "error")
 
     try:
@@ -280,35 +250,19 @@ def compare():
     # -----------------------------------------
 
     return render_template(
-
         "compare.html",
-
         tender1=tender_name1,
-
         tender2=tender_name2,
-
         comparison=comparison,
-
         highest_matches=highest_matches,
-
         highest_risks=highest_risks,
-
         lowest_matches=lowest_matches,
-
         ranking_summary=ranking_summary,
-
         report=report,
-
         analytics=analytics,
-
         insights=insights,
-
         chart_data=chart_data,
-
         ai_engine=ai_engine,
-
         ai_summary=ai_summary,
-
         recommendation_summary=recommendation_summary
-
-)
+    )

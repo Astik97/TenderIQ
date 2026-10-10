@@ -60,7 +60,6 @@ def allowed_file(filename):
         return False
 
     extension = filename.rsplit(".", 1)[1].lower()
-
     return extension in ALLOWED_EXTENSIONS
 
 # =========================================================
@@ -71,37 +70,30 @@ def allowed_file(filename):
 def dashboard():
 
     if "user_id" not in session:
-
         flash("Please login first.", "error")
-
         return redirect("/login")
 
     conn = None
     cursor = None
 
     try:
-
         conn = get_connection()
         cursor = conn.cursor()
 
         cursor.execute(
             """
-            SELECT
-                id,
-                tender_name,
-                file_name,
-                upload_date
+            SELECT id,
+            tender_name,
+            file_name,
+            upload_date
             FROM tenders
             WHERE user_id=%s
             ORDER BY upload_date DESC
             """,
-            (
-                session["user_id"],
-            )
+            (session["user_id"],)
         )
 
         tenders = cursor.fetchall()
-
         dashboard_summary = generate_dashboard_summary(session["user_id"])
 
         return render_template(
@@ -111,11 +103,8 @@ def dashboard():
         )
 
     except Exception as e:
-
         logger.exception("Dashboard Error")
-
         flash(f"Unable to load dashboard: {e}", "error")
-
         return redirect("/login")
 
     finally:
@@ -149,37 +138,28 @@ def view_tender(tender_id):
 
         cursor.execute(
             """
-            SELECT
-                tender_name,
-                file_name,
-                extracted_text,
-                upload_date
+            SELECT tender_name,
+            file_name,
+            extracted_text,
+            upload_date
             FROM tenders
             WHERE id=%s
             AND user_id=%s
             """,
-            (
-                tender_id,
-                session["user_id"]
-            )
+            (tender_id,session["user_id"])
         )
 
         tender = cursor.fetchone()
 
         if tender is None:
-
             flash("Tender not found.", "error")
-
             return redirect("/dashboard")
 
         return render_template("view_tender.html", tender=tender)
 
     except Exception as e:
-
         logger.exception("View Tender Error")
-
         flash(f"Unable to open tender: {e}", "error")
-
         return redirect("/dashboard")
 
     finally:
@@ -198,16 +178,13 @@ def view_tender(tender_id):
 def delete_tender(tender_id):
 
     if "user_id" not in session:
-
         flash("Please login first.", "error")
-
         return redirect("/login")
 
     conn = None
     cursor = None
 
     try:
-
         conn = get_connection()
         cursor = conn.cursor()
 
@@ -218,18 +195,13 @@ def delete_tender(tender_id):
             WHERE id=%s
             AND user_id=%s
             """,
-            (
-                tender_id,
-                session["user_id"]
-            )
+            (tender_id,session["user_id"])
         )
 
         result = cursor.fetchone()
 
         if result is None:
-
             flash("Tender not found.", "error")
-
             return redirect("/dashboard")
 
         filepath = os.path.join(UPLOAD_FOLDER,result[0])
@@ -248,16 +220,12 @@ def delete_tender(tender_id):
             WHERE id=%s
             AND user_id=%s
             """,
-            (
-                tender_id,
-                session["user_id"]
-            )
+            (tender_id,session["user_id"])
         )
 
         conn.commit()
 
         flash("Tender deleted successfully.", "success")
-
         return redirect("/dashboard")
 
     except Exception as e:
@@ -266,9 +234,7 @@ def delete_tender(tender_id):
             conn.rollback()
 
         logger.exception("Delete Tender Error")
-
         flash(f"Unable to delete tender: {e}", "error")
-
         return redirect("/dashboard")
 
     finally:
@@ -291,9 +257,7 @@ def upload():
     # -----------------------------------------------------
 
     if "user_id" not in session:
-
         flash("Please login first.", "error")
-
         return redirect("/login")
 
     # -----------------------------------------------------
@@ -301,13 +265,10 @@ def upload():
     # -----------------------------------------------------
 
     os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-
     files = request.files.getlist("tender_files")
 
     if not files:
-
         flash("No files selected.", "warning")
-
         return redirect("/dashboard")
 
     conn = None
@@ -319,9 +280,7 @@ def upload():
     failed_files = []
 
     try:
-
         conn = get_connection()
-
         cursor = conn.cursor()
 
         # =================================================
@@ -335,11 +294,9 @@ def upload():
             # --------------------------------------------
 
             if file.filename == "":
-
                 continue
 
             filename = secure_filename(file.filename)
-
             logger.info(f"Processing : {filename}")
 
             # --------------------------------------------
@@ -347,11 +304,8 @@ def upload():
             # --------------------------------------------
 
             if not allowed_file(filename):
-
                 invalid_files.append(filename)
-
                 logger.warning(f"Invalid file : {filename}")
-
                 continue
 
             # --------------------------------------------
@@ -365,18 +319,12 @@ def upload():
                 WHERE user_id=%s
                 AND tender_name=%s
                 """,
-                (
-                    session["user_id"],
-                    filename
-                )
+                (session["user_id"],filename)
             )
 
             if cursor.fetchone():
-
                 duplicate_files.append(filename)
-
                 logger.info(f"Duplicate skipped : {filename}")
-
                 continue
 
             # --------------------------------------------
@@ -384,9 +332,7 @@ def upload():
             # --------------------------------------------
 
             extension = filename.rsplit(".", 1)[1].lower()
-
             unique_filename = (f"{uuid.uuid4()}_{filename}")
-
             filepath = os.path.join(UPLOAD_FOLDER,unique_filename)
 
             # --------------------------------------------
@@ -397,11 +343,8 @@ def upload():
                 file.save(filepath)
 
             except Exception as e:
-
                 logger.exception(f"Unable to save {filename}")
-
                 failed_files.append(filename)
-
                 continue
 
             # --------------------------------------------
@@ -441,7 +384,6 @@ def upload():
             # --------------------------------------------
 
             clauses = extract_clauses(extracted_text)
-
             logger.info(f"{filename} : {len(clauses)} clauses extracted")
 
             # --------------------------------------------
@@ -449,11 +391,8 @@ def upload():
             # --------------------------------------------
 
             if not extracted_text.strip():
-
                 logger.warning(f"No text extracted : {filename}")
-
                 failed_files.append(filename)
-
                 continue
 
             # --------------------------------------------
@@ -553,7 +492,6 @@ def upload():
             conn.rollback()
 
         logger.exception("Upload Route Error")
-
         flash(f"Upload failed: {str(e)}","error")
 
     # =====================================================

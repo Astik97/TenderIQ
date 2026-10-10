@@ -51,11 +51,9 @@ def login():
                 session["username"] = user[1]
 
                 flash(f"Welcome back, {user[1]}!","success")
-
                 return redirect('/dashboard')
             
             flash("Unable to login. Please try again.", "error")
-
     return render_template('login.html')
 
 @auth_bp.route("/register", methods=["GET", "POST"])
@@ -75,9 +73,7 @@ def register():
         # ----------------------------
         
         if len(password) < 8:
-            
             flash("Password must be at least 8 characters long.","error")
-
             return redirect("/register")
 
         # ----------------------------
@@ -90,7 +86,8 @@ def register():
             FROM users
             WHERE email=%s
             """,
-            (email,))
+            (email,)
+        )
 
         existing_user = cursor.fetchone()
 
@@ -100,7 +97,6 @@ def register():
             conn.close()
 
             flash("Email already exists. Please use a different email.", "error")
-            
             return redirect("/register")
 
         # ----------------------------
@@ -139,16 +135,11 @@ def register():
         conn.close()
 
         flash("Registration successful! Please log in.", "success")
-
         return redirect("/login")
-
     return render_template("register.html")
 
 @auth_bp.route('/logout')
 def logout():
-
     session.clear()
-
     flash("Logged out successfully.","success")
-    
     return redirect('/login')
